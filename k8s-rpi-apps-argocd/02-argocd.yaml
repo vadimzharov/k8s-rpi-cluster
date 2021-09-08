@@ -3270,6 +3270,7 @@ items:
         containers:
         - command:
           - argocd-server
+          - --insecure
           - --staticassets
           - /shared/app
           - '--redis'

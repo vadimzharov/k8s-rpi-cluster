@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-config
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/godaddy"
+data:
+  traefik.yaml: |  
+    global:
+      checkNewVersion: false
+      sendAnonymousUsage: false
+    entryPoints:
+      ping:
+        address: ":9009"
+      web:
+        address: ":8008"
+      websecure:
+        address: ":8443"
+      websecure-external:
+        address: ":6443"
+    providers:
+      providersThrottleDuration: 10s
+      kubernetesCRD:
+        namespaces: []
+        allowCrossNamespace: false
+        ingressClass: traefik
+        throttleDuration: 10s
+    serversTransport:
+      insecureSkipVerify: true
+    api:
+      insecure: true
+      dashboard: true
+      debug: true
+    ping:
+      entryPoint: ping
+    log:
+      level: INFO
+    tracing:
+    hostResolver:
+    certificatesResolvers:
+      godaddy:
+        acme:
+          email: <email>
+          storage: /certs/acme.json
+          dnsChallenge:
+            provider: godaddy
+            delayBeforeCheck: 42
+            disablePropagationCheck: true

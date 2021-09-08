@@ -3192,7 +3192,10 @@ items:
             name: argocd-repo-server-tls
           - name: custom-tools
             mountPath: /usr/local/bin/argocd-vault-plugin
-            subPath: argocd-vault-plugin            
+            subPath: argocd-vault-plugin
+          envFrom:
+          - secretRef:
+              name: vault-configuration                        
         initContainers:
         - name: download-tools
           image: alpine:3.8

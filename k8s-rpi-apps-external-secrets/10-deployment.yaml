@@ -1,0 +1,59 @@
+---
+# Source: kubernetes-external-secrets/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-rpi-kubernetes-external-secrets
+  namespace: "external-secrets"
+  labels:
+    app.kubernetes.io/name: kubernetes-external-secrets
+    helm.sh/chart: kubernetes-external-secrets-8.2.2
+    app.kubernetes.io/instance: k8s-rpi
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kubernetes-external-secrets
+      app.kubernetes.io/instance: k8s-rpi
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kubernetes-external-secrets
+        app.kubernetes.io/instance: k8s-rpi
+    spec:
+      serviceAccountName: k8s-rpi-kubernetes-external-secrets
+      containers:
+        - name: kubernetes-external-secrets
+          image: "ghcr.io/external-secrets/kubernetes-external-secrets:8.2.2"
+          ports:
+          - name: prometheus
+            containerPort: 3001
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 100m
+              memory: 256Mi
+          env:
+          - name: "LOG_LEVEL"
+            value: "debug"
+          - name: "LOG_MESSAGE_KEY"
+            value: "msg"
+          - name: "METRICS_PORT"
+            value: "3001"
+          - name: "POLLER_INTERVAL_MILLISECONDS"
+            value: "10000"
+          - name: "VAULT_ADDR"
+            value: "http://vault-ui.vault.svc.cluster.local:8200"
+          - name: "DEFAULT_VAULT_ROLE"
+            value: "k8s-rpi-auth-role"
+          - name: "DEFAULT_VAULT_MOUNT_POINT"            
+            value: "k8s-rpi"
+          - name: "WATCH_TIMEOUT"
+            value: "60000"
+          # Params for env vars populated from k8s secrets
+      securityContext:
+        runAsNonRoot: true

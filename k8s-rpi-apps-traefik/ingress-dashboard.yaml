@@ -4,7 +4,7 @@ metadata:
   name: traefik-ingress
   annotations:
     kubernetes.io/ingress.class: traefik  
-    avp.kubernetes.io/path: "k8secrets/argocd"    
+    avp.kubernetes.io/path: "k8secrets/traefik"    
 spec:
   entryPoints:
     - websecure

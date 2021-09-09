@@ -26,7 +26,6 @@ spec:
       maxUnavailable: 1
   template: 
     metadata:
-      annotations:
       labels:
         app.kubernetes.io/name: traefik
         helm.sh/chart: traefik-10.1.1

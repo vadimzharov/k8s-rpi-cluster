@@ -15,4 +15,4 @@ spec:
     - name: vault-ui
       port: 8200
   tls:
-    certResolver: godaddy      
+

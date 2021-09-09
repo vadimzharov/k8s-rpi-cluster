@@ -7,7 +7,7 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/traefik"    
 spec:
   entryPoints:
-    - websecure
+    - web
   routes:
   - match: Host(`<traefikdashhostname>`)
     kind: Rule

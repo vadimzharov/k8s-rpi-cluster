@@ -1,0 +1,18 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: vault-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik  
+    avp.kubernetes.io/path: "k8secrets/vault"    
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`<vaulthostname>`)
+    kind: Rule
+    services:
+    - name: vault-ui
+      port: 8200
+  tls:
+    certResolver: godaddy      

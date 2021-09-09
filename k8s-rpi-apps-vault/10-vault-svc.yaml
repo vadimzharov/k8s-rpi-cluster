@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: vault
+    app.kubernetes.io/name: vault
+  name: vault-ui
+  namespace: vault
+spec:
+  ports:
+    - name: http
+      port: 8200
+      protocol: TCP
+      targetPort: 8200
+  selector:
+    app.kubernetes.io/name: vault

@@ -6,3 +6,4 @@ resources:
 - secret.yaml
 patchesStrategicMerge:
 - config_with_godaddy.yaml
+- deployment.yaml

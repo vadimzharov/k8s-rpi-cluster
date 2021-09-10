@@ -8,9 +8,9 @@ spec:
   source:
     repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
     targetRevision: HEAD
-    path: k8s-rpi-apps-k8s-dashboard
+    path: k8s-rpi-apps-k8s-dashboard/overlays/k8s-test/
     plugin:
-      name: argocd-vault-plugin    
+      name: argocd-vault-plugin-kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard

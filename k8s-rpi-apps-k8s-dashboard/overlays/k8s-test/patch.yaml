@@ -1,0 +1,5 @@
+kind: Deployment
+apiVersion: apps/v1
+  name: kubernetes-dashboard
+spec:
+  replicas: 0

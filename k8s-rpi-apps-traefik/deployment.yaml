@@ -39,6 +39,17 @@ spec:
       - image: "traefik:2.4.9"
         imagePullPolicy: IfNotPresent
         name: traefik
+        env:
+          - name: GODADDY_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: godaddy-api-key
+                key: key
+          - name: GODADDY_API_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: godaddy-api-key
+                key: token        
         resources:
           requests:
             cpu: 150m

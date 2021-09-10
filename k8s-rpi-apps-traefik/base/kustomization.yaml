@@ -16,6 +16,7 @@ resources:
 - serverstransports.yaml
 - serviceaccount.yaml
 - service.yaml
+- secret.yaml
 - tlsoptions.yaml
 - tlsstores.yaml
 - traefikservices.yaml

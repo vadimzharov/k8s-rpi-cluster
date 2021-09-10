@@ -5,4 +5,3 @@ bases:
 patchesStrategicMerge:
 - config_with_godaddy.yaml
 - deployment.yaml
-- secret.yaml

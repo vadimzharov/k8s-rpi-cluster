@@ -173,7 +173,6 @@ metadata:
   labels:
     k8s-app: kubernetes-dashboard
   name: kubernetes-dashboard
-  namespace: kubernetes-dashboard
 spec:
   replicas: 1
   revisionHistoryLimit: 10

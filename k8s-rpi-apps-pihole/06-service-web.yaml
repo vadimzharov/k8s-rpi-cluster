@@ -1,0 +1,27 @@
+---
+# Source: pihole/templates/service-web.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-rpi-pihole-web
+  labels:
+    app: pihole
+    chart: pihole-2.0.1
+    release: k8s-rpi
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 443
+      targetPort: https
+      protocol: TCP
+      name: https
+  selector:
+    app: pihole
+    release: k8s-rpi
+---
+

@@ -1,0 +1,26 @@
+---
+# Source: pihole/templates/service-dns-tcp.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-rpi-pihole-dns-tcp
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+    avp.kubernetes.io/path: "k8secrets/pihole"    
+  labels:
+    app: pihole
+    chart: pihole-2.0.1
+    release: k8s-rpi
+    heritage: Helm
+spec:
+  type: LoadBalancer
+  loadBalancerIP: <piholeip>
+  externalTrafficPolicy: Local
+  ports:
+    - port: 53
+      targetPort: dns
+      protocol: TCP
+      name: dns
+  selector:
+    app: pihole
+    release: k8s-rpi

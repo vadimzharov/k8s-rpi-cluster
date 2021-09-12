@@ -9,6 +9,8 @@ metadata:
     chart: pihole-2.0.1
     release: k8s-rpi
     heritage: Helm
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/pihole"        
 spec:
   replicas: 1
   strategy:

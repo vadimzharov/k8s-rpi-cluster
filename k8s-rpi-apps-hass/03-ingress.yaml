@@ -7,12 +7,12 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/hass"    
 spec:
   entryPoints:
-    - websecure
+    - web
   routes:
   - match: Host(`<hasshostname>`)
     kind: Rule
     services:
     - name: home-assistant
       port: 8123
-  tls: {}
+
  

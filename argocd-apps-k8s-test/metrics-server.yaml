@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: k8s-rpi-apps-metrics-server
+  name: metrics-server
   namespace: argocd
 spec:
   project: k8s-rpi-apps

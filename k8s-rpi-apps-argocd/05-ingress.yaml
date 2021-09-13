@@ -16,3 +16,6 @@ spec:
       port: 80
   tls:
     certResolver: godaddy
+    domains:
+    - main: <argocddomainname>
+    

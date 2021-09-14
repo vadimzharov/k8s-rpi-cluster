@@ -34,7 +34,7 @@ data:
     ping:
       entryPoint: ping
     log:
-      level: DEBUG
+      level: INFO
     tracing:
     hostResolver:
     certificatesResolvers:

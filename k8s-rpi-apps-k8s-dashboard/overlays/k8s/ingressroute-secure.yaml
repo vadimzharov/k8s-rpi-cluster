@@ -9,6 +9,9 @@ spec:
   routes:
   - match: Host(`<k8sdashboardhostname>`)
     kind: Rule
+    services:
+    - name: kubernetes-dashboard
+      port: 443    
     middlewares:
       - name: basic-auth
         namespace: traefik-v2

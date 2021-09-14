@@ -4,5 +4,6 @@ metadata:
   name: kubernetes-dashboard
   annotations:
     kubernetes.io/ingress.class: traefik  
+spec:
   tls:
     certResolver: godaddy

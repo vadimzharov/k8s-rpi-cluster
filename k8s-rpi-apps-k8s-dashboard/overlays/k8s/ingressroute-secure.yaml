@@ -6,12 +6,11 @@ metadata:
     kubernetes.io/ingress.class: traefik
     avp.kubernetes.io/path: "k8secrets/k8s-dashboard"    
 spec:
-  entryPoints:
-    - websecure
   routes:
   - match: Host(`<k8sdashboardhostname>`)
     kind: Rule
-    services:
-    - name: kubernetes-dashboard
-      port: 443
-  tls: {}
+    middlewares:
+      - name: basic-auth
+        namespace: traefik-v2
+  tls:
+    certResolver: godaddy

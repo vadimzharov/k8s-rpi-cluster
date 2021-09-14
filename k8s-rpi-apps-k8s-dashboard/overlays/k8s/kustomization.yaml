@@ -3,4 +3,4 @@ kind: Kustomization
 bases:
 - ../../base/
 patchesStrategicMerge:
-- patch.yaml
+- ingressroute-secure.yaml

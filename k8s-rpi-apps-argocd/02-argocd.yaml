@@ -3160,10 +3160,10 @@ items:
           name: argocd-repo-server
           resources:
             requests:
-              cpu: 50m
+              cpu: 150m
               memory: 64Mi
             limits:
-              cpu: 150m
+              cpu: 700m
               memory: 256Mi          
           ports:
           - containerPort: 8081

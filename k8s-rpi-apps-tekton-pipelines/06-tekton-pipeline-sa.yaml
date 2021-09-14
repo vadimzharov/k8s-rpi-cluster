@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pipeline-sa
+secrets:
+  - name: registry-creds
+  - name: github-creds
+imagePullSecrets:
+- name: registry-creds

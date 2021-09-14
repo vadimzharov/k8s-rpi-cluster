@@ -1,0 +1,21 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: tekton-dashboard
+  annotations:
+    kubernetes.io/ingress.class: traefik  
+    avp.kubernetes.io/path: "k8secrets/tekton"    
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`<tektonhostname>`)
+    kind: Rule
+    services:
+    - name: tekton-dashboard
+      port: 9097
+    middlewares:
+      - name: basic-auth
+        namespace: traefik-v2
+  tls:
+    certResolver: godaddy

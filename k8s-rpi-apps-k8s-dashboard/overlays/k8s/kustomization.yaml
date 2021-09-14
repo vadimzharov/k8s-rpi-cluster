@@ -4,3 +4,5 @@ bases:
 - ../../base/
 patchesStrategicMerge:
 - ingressroute-secure.yaml
+- htpasswd-secret.yaml
+- middleware-basicauth.yaml

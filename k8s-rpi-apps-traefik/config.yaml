@@ -46,3 +46,7 @@ data:
             provider: godaddy
             delayBeforeCheck: 42
             disablePropagationCheck: true
+            resolvers:
+              - "ns31.domaincontrol.com:53"
+              - "ns32.domaincontrol.com:53"
+              

@@ -22,7 +22,7 @@ data:
       providersThrottleDuration: 10s
       kubernetesCRD:
         namespaces: []
-        allowCrossNamespace: false
+        allowCrossNamespace: true
         ingressClass: traefik
         throttleDuration: 10s
     serversTransport:
@@ -49,4 +49,4 @@ data:
             resolvers:
               - "ns31.domaincontrol.com:53"
               - "ns32.domaincontrol.com:53"
-              
+

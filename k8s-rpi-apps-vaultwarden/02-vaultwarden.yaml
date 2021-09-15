@@ -1,0 +1,193 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vaultwarden
+  labels:
+    app.kubernetes.io/name: vaultwarden
+    app.kubernetes.io/instance: vaultwarden
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app.kubernetes.io/name: vaultwarden
+    app.kubernetes.io/instance: vaultwarden
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vaultwarden-ws
+  labels:
+    app.kubernetes.io/name: vaultwarden
+    app.kubernetes.io/instance: vaultwarden
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3012
+    targetPort: websockets
+    protocol: TCP
+    name: websockets
+  selector:
+    app.kubernetes.io/name: vaultwarden
+    app.kubernetes.io/instance: vaultwarden    
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultwarden
+  labels:
+    app.kubernetes.io/name: vaultwarden
+    app.kubernetes.io/instance: vaultwarden
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vaultwarden
+      app.kubernetes.io/instance: vaultwarden
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vaultwarden
+        app.kubernetes.io/instance: vaultwarden
+    spec:
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 90
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      volumes:
+        - name: vw-workingdir
+          emptyDir: {}
+      containers:
+        - name: vaultwarden
+          env:
+          - name: LOG_LEVEL
+            value: info 
+          - name: WEBSOCKET_ENABLED
+            value: 'true'
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 100m
+              memory: 256Mi        
+          image: "docker.io/vaultwarden/server:latest"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: false
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: websockets
+              containerPort: 3012
+              protocol: TCP              
+          volumeMounts:
+            - name: vw-workingdir
+              mountPath: /data
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 30
+            failureThreshold: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 30
+            failureThreshold: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+        - name: vw-backup-daemon
+          image: quay.io/vadimzharov/dirbackup:latest
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/usr/local/bin/dirbackup", "backup"]
+          command: ["dirbackup"]
+          args: ["backup-daemon"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+          volumeMounts:
+            - name: vw-workingdir
+              mountPath: /data
+          env:
+          - name: AWS_BUCKET
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awsbucket
+          - name: AWS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awskey
+          - name: AWS_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awssecretkey
+          - name: S3_BUCKET_FOLDER
+            value: "vaultwarden-backup"
+          - name: S3_FILE_PREFIX
+            value: "vw-backup"
+          - name: DIR_TO_BACKUP
+            value: "/data"
+          - name: BACKUP_INTERVAL
+            value: "43200"
+          - name: COPIES_TO_KEEP
+            value: "35"
+          - name: ENCRYPT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: encryptpassword            
+      initContainers:
+        - name: vw-restore
+          image: quay.io/vadimzharov/dirbackup:latest
+          command: ["dirbackup"]
+          args: ["restore"]
+          volumeMounts:
+            - name: vw-workingdir
+              mountPath: /data
+          env:
+          - name: AWS_BUCKET
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awsbucket
+          - name: AWS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awskey
+          - name: AWS_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awssecretkey
+          - name: S3_BUCKET_FOLDER
+            value: "vaultwarden-backup"
+          - name: S3_FILE_PREFIX
+            value: "vw-backup"
+          - name: DIR_TO_RESTORE
+            value: "/data"
+          - name: ENCRYPT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: encryptpassword            
+
+

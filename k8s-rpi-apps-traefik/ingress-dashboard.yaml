@@ -15,6 +15,7 @@ spec:
     - name: traefik-dashboard
       port: 8080
     middlewares:
-      - name: basic-auth      
+      - name: basic-auth
+        namespace: traefik-v2      
   tls:
     certResolver: godaddy  

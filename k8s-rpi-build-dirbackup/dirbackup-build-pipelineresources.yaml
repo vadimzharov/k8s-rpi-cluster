@@ -19,3 +19,26 @@ spec:
   params:
     - name: url
       value: "quay.io/vadimzharov/dirbackup:latest"
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: dirbackup-git-testbranch
+spec:
+  type: git
+  params:
+    - name: revision
+      value: feature/force-restore
+    - name: url
+      value: "git@github.com:vadimzharov/dirbackup.git"
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: dirbackup-image
+spec:
+  type: image
+  params:
+    - name: url
+      value: "quay.io/vadimzharov/dirbackup:test"
+      

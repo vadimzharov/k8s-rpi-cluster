@@ -15,7 +15,7 @@ spec:
     - name: tekton-dashboard
       port: 9097
     middlewares:
-      - name: basic-auth
+      - name: basic-auth-remove-header
         namespace: traefik-v2
   tls:
     certResolver: godaddy

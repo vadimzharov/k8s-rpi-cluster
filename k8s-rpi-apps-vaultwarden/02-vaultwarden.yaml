@@ -190,5 +190,5 @@ spec:
                 name: backup-restore-creds
                 key: encryptpassword            
           - name: FORCE_RESTORE
-            value: "True"  
+            value: "False"  
 

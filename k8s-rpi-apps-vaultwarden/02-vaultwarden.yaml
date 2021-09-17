@@ -106,7 +106,7 @@ spec:
             timeoutSeconds: 1
             periodSeconds: 10
         - name: vw-backup-daemon
-          image: quay.io/vadimzharov/dirbackup:latest
+          image: quay.io/vadimzharov/dirbackup:test
           lifecycle:
             preStop:
               exec:
@@ -156,7 +156,7 @@ spec:
                 key: encryptpassword            
       initContainers:
         - name: vw-restore
-          image: quay.io/vadimzharov/dirbackup:latest
+          image: quay.io/vadimzharov/dirbackup:test
           command: ["dirbackup"]
           args: ["restore"]
           volumeMounts:

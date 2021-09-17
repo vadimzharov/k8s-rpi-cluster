@@ -149,6 +149,8 @@ spec:
             value: "43200"
           - name: COPIES_TO_KEEP
             value: "35"
+          - name: FORCE_RESTORE
+            value: "True"    
           - name: ENCRYPT_PASSWORD
             valueFrom:
               secretKeyRef:

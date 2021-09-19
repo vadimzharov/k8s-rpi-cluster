@@ -3040,7 +3040,7 @@ items:
           - -n
           - /usr/local/bin/argocd
           - /shared/argocd-dex
-          image: alinbalutoiu/argocd:v2.0.3
+          image: alinbalutoiu/argocd:v2.0.5
           imagePullPolicy: IfNotPresent
           name: copyutil
           volumeMounts:
@@ -3148,7 +3148,7 @@ items:
           - argocd-repo-server
           - '--redis'
           - argocd-redis:6379
-          image: alinbalutoiu/argocd:v2.0.3
+          image: alinbalutoiu/argocd:v2.0.5
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -3275,7 +3275,7 @@ items:
           - /shared/app
           - '--redis'
           - argocd-redis:6379          
-          image: alinbalutoiu/argocd:v2.0.3
+          image: alinbalutoiu/argocd:v2.0.5
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -3378,7 +3378,7 @@ items:
           - "10"
           - "--redis"
           - argocd-redis:6379          
-          image: alinbalutoiu/argocd:v2.0.3
+          image: alinbalutoiu/argocd:v2.0.5
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  annotations:
+    pipeline.tekton.dev/release: v0.23.0
+    argocd.argoproj.io/hook: Skip
+  labels:
+    app.kubernetes.io/managed-by: tekton-pipelines
+    tekton.dev/task: build-minidlna-image
+  generateName: build-minidlna-image-taskrun-
+  namespace: tekton-pipelines
+spec:
+  params:
+  - name: pathToDockerFile
+    value: $(resources.inputs.docker-source.path)/k8s-rpi-build-minidlna/dockerbuild/Dockerfile
+  - name: pathToContext
+    value: $(resources.inputs.docker-source.path)
+  resources:
+    inputs:
+    - name: docker-source
+      resourceRef:
+        name: minidlna-git
+    outputs:
+    - name: builtImage
+      resourceRef:
+        name: minidlna-image
+  serviceAccountName: pipeline-sa
+  taskRef:
+    kind: Task
+    name: build-docker-image
+  timeout: 1h0m0s

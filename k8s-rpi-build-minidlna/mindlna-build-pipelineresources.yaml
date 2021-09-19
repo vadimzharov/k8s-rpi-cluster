@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: minidlna-git
+spec:
+  type: git
+  params:
+    - name: revision
+      value: main
+    - name: url
+      value: "git@github.com:vadimzharov/k8s-rpi-cluster.git"
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: minidlna-image
+spec:
+  type: image
+  params:
+    - name: url
+      value: "quay.io/vadimzharov/minidlna:latest"

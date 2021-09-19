@@ -3384,7 +3384,7 @@ items:
             httpGet:
               path: /healthz
               port: 8082
-            initialDelaySeconds: 5
+            initialDelaySeconds: 60
             periodSeconds: 10
           name: argocd-application-controller
           resources:

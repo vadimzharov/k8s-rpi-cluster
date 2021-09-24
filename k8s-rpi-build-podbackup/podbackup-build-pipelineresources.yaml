@@ -1,0 +1,44 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: podbackup-git
+spec:
+  type: git
+  params:
+    - name: revision
+      value: main
+    - name: url
+      value: "git@github.com:vadimzharov/podbackup.git"
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: podbackup-image
+spec:
+  type: image
+  params:
+    - name: url
+      value: "quay.io/vadimzharov/podbackup:latest"
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: podbackup-git-testbranch
+spec:
+  type: git
+  params:
+    - name: revision
+      value: feature/database-backup
+    - name: url
+      value: "git@github.com:vadimzharov/podbackup.git"
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: podbackup-test-image
+spec:
+  type: image
+  params:
+    - name: url
+      value: "quay.io/vadimzharov/podbackup:test"
+

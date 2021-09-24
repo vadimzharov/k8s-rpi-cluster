@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dirbackup-build-pipelines
+  name: podbackup-build-pipelines
   namespace: argocd
 spec:
   project: k8s-rpi-apps
   source:
     repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
     targetRevision: HEAD
-    path: k8s-rpi-build-dirbackup
+    path: k8s-rpi-build-podbackup
   destination:
     server: https://kubernetes.default.svc
     namespace: tekton-pipelines

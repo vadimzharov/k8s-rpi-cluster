@@ -55,6 +55,11 @@ spec:
                 secretKeyRef:
                   name: nextcloud-creds
                   key: nextcloudadminpassword
+            - name: NEXTCLOUD_TRUSTED_DOMAINS
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-creds
+                  key: nextcloudhostname                  
             - name: OBJECTSTORE_S3_BUCKET
               valueFrom:
                 secretKeyRef:
@@ -129,10 +134,10 @@ spec:
                   key: encryptpassword
           resources:
             limits:
-              cpu: 150m
+              cpu: 800m
               memory: 128Mi
             requests:
-              cpu: 50m
+              cpu: 350m
               memory: 64Mi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File

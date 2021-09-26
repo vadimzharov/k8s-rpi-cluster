@@ -1,0 +1,121 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      volumes:
+        - name: mysql-storage
+          emptyDir: {}
+        - name: mysql-dump
+          emptyDir: {}
+      containers:
+        - name: mysql
+          image: 'docker.io/library/mariadb:10.5.12'
+          ports:
+            - name: mysql
+              containerPort: 3306
+              protocol: TCP
+          env:
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-creds
+                  key: mysqlrootpassword
+          resources:
+            limits:
+              cpu: 150m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+        - name: mysql-backup-daemon
+          image: 'quay.io/vadimzharov/podbackup:latest'
+          command:
+            - podbackup
+          args:
+            - backup-sql-daemon
+          env:
+            - name: AWS_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: backup-restore-creds
+                  key: awsbucket
+            - name: AWS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backup-restore-creds
+                  key: awskey
+            - name: AWS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backup-restore-creds
+                  key: awssecretkey
+            - name: S3_BUCKET_FOLDER
+              value: nextcloudmysql
+            - name: S3_FILE_PREFIX
+              value: nextcloud-mysql
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-creds
+                  key: mysqlrootpassword
+            - name: BACKUP_INTERVAL
+              value: '3600'
+            - name: COPIES_TO_KEEP
+              value: '35'
+            - name: ENCRYPT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: backup-restore-creds
+                  key: encryptpassword
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+            requests:
+              cpu: 150m
+              memory: 128Mi
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - podbackup
+                  - restore-sql
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

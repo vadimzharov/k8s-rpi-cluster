@@ -140,6 +140,41 @@ spec:
           volumeMounts:
             - name: nextcloud-storage
               mountPath: /nextcloud
+      initContainers:
+        - name: nextcloud-restore
+          image: quay.io/vadimzharov/podbackup:latest
+          command: ["podbackup"]
+          args: ["restore"]
+          volumeMounts:
+            - name: nextcloud-storage
+              mountPath: /nextcloud
+          env:
+          - name: AWS_BUCKET
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awsbucket
+          - name: AWS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awskey
+          - name: AWS_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awssecretkey
+          - name: S3_BUCKET_FOLDER
+            value: nextclouddata
+          - name: S3_FILE_PREFIX
+            value: nextcloud-backup
+          - name: DIR_TO_BACKUP
+            value: "/nextcloud"
+          - name: ENCRYPT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: encryptpassword              
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

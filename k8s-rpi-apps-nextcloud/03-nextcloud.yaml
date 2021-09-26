@@ -168,7 +168,7 @@ spec:
             value: nextclouddata
           - name: S3_FILE_PREFIX
             value: nextcloud-backup
-          - name: DIR_TO_BACKUP
+          - name: DIR_TO_RESTORE
             value: "/nextcloud"
           - name: ENCRYPT_PASSWORD
             valueFrom:

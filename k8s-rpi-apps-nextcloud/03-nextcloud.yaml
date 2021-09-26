@@ -28,7 +28,7 @@ spec:
           emptyDir: {}
       containers:
         - name: nextcloud
-          image: 'docker.io/library/nextcloud:stable-fpm'
+          image: 'docker.io/library/nextcloud:stable'
           ports:
             - name: nextcloud-ui
               containerPort: 80

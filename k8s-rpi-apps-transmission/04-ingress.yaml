@@ -30,6 +30,6 @@ spec:
   - match: Host(`<minidlnahostname>`)
     kind: Rule
     services:
-    - name: minidlna-ui
+    - name: k8s-rpi-minidlna-ui
       port: 8200
 

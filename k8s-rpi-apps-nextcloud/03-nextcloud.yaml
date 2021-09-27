@@ -180,8 +180,6 @@ spec:
               secretKeyRef:
                 name: backup-restore-creds
                 key: encryptpassword
-          - name: FORCE_RESTORE
-            value: "True"
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

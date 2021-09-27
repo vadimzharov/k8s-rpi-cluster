@@ -77,8 +77,6 @@ spec:
                   key: s3secret
             - name: OBJECTSTORE_S3_REGION
               value: us-east-1
-            - name: OVERWRITEPROTOCOL
-              value: https
           resources:
             limits:
               cpu: 500m

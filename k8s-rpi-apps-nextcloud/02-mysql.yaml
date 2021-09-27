@@ -44,10 +44,10 @@ spec:
           resources:
             limits:
               cpu: 150m
-              memory: 128Mi
+              memory: 256Mi
             requests:
               cpu: 50m
-              memory: 64Mi
+              memory: 128Mi
           volumeMounts:
             - name: mysql-storage
               mountPath: /var/lib/mysql
@@ -94,6 +94,8 @@ spec:
                 secretKeyRef:
                   name: backup-restore-creds
                   key: encryptpassword
+            - name: FORCE_RESTORE
+              value: "True"                  
           resources:
             limits:
               cpu: 150m

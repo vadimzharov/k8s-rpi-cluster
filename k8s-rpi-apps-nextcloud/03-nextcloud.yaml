@@ -14,7 +14,7 @@ kind: Deployment
 metadata:
   name: nextcloud
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: nextcloud
@@ -77,6 +77,8 @@ spec:
                   key: s3secret
             - name: OBJECTSTORE_S3_REGION
               value: us-east-1
+            - name: OVERWRITEPROTOCOL
+              value: https
           resources:
             limits:
               cpu: 500m
@@ -180,6 +182,8 @@ spec:
               secretKeyRef:
                 name: backup-restore-creds
                 key: encryptpassword
+          - name: FORCE_RESTORE
+            value: "True"
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

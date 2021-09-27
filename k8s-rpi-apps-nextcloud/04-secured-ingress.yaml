@@ -9,7 +9,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`<nextcloudhostname>`)
+  - match: Host(`<nextcloudhostname>`) && PathPrefix(`/`)
     kind: Rule
     services:
     - name: nextcloud

@@ -14,7 +14,7 @@ kind: Deployment
 metadata:
   name: nextcloud
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: nextcloud
@@ -91,7 +91,7 @@ spec:
           terminationMessagePolicy: File
           imagePullPolicy: Always
         - name: nextcloud-backup-daemon
-          image: 'quay.io/vadimzharov/podbackup:latest'
+          image: 'quay.io/vadimzharov/podbackup:test'
           command:
             - podbackup
           args:
@@ -118,6 +118,8 @@ spec:
               value: nextcloud-backup
             - name: DIR_TO_BACKUP
               value: "/nextcloud"
+            - name: ARCHIVE_TYPE
+              value: "tarzip"              
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -175,6 +177,8 @@ spec:
             value: nextcloud-backup
           - name: DIR_TO_RESTORE
             value: "/nextcloud"
+          - name: ARCHIVE_TYPE
+            value: "tarzip"             
           - name: ENCRYPT_PASSWORD
             valueFrom:
               secretKeyRef:

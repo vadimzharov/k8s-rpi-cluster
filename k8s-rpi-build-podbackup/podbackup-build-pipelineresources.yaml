@@ -28,7 +28,7 @@ spec:
   type: git
   params:
     - name: revision
-      value: feature/database-backup
+      value: test
     - name: url
       value: "git@github.com:vadimzharov/podbackup.git"
 ---

@@ -14,10 +14,25 @@ data:
         address: ":9009"
       web:
         address: ":8008"
+        forwardedHeaders:
+          trustedIPs:
+            - "127.0.0.1/32"
+            - "10.244.0.0/16"
+            - "192.168.88.0/24"        
       websecure:
         address: ":8443"
+        forwardedHeaders:
+          trustedIPs:
+            - "127.0.0.1/32"
+            - "10.244.0.0/16"
+            - "192.168.88.0/24"
       websecure-external:
         address: ":6443"
+        forwardedHeaders:
+          trustedIPs:
+            - "127.0.0.1/32"
+            - "10.244.0.0/16"
+            - "192.168.88.0/24"        
     providers:
       providersThrottleDuration: 10s
       kubernetesCRD:

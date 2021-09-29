@@ -18,18 +18,21 @@ data:
           trustedIPs:
             - "127.0.0.1/32"
             - "10.244.0.0/16"
+            - "10.96.0.0/12"
       websecure:
         address: ":8443"
         forwardedHeaders:
           trustedIPs:
             - "127.0.0.1/32"
             - "10.244.0.0/16"
+            - "10.96.0.0/12"
       websecure-external:
         address: ":6443"
         forwardedHeaders:
           trustedIPs:
             - "127.0.0.1/32"
             - "10.244.0.0/16"
+            - "10.96.0.0/12"
     providers:
       providersThrottleDuration: 10s
       kubernetesCRD:

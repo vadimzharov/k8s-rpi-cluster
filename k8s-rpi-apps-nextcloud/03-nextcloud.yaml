@@ -105,7 +105,7 @@ spec:
               mountPath: /nextcloud
       initContainers:
         - name: nextcloud-restore
-          image: quay.io/vadimzharov/podbackup:latest
+          image: quay.io/vadimzharov/podbackup:test
           command: ["podbackup"]
           args: ["restore"]
           volumeMounts:

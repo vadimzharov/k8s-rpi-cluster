@@ -33,50 +33,6 @@ spec:
             - name: nextcloud-ui
               containerPort: 80
               protocol: TCP
-          env:
-            - name: MYSQL_DATABASE
-              value: nextcloud-db
-            - name: MYSQL_USER
-              value: root
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: nextcloud-creds
-                  key: mysqlrootpassword
-            - name: MYSQL_HOST
-              value: mysql
-            - name: NEXTCLOUD_ADMIN_USER
-              valueFrom:
-                secretKeyRef:
-                  name: nextcloud-creds
-                  key: nextcloudadminuser
-            - name: NEXTCLOUD_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: nextcloud-creds
-                  key: nextcloudadminpassword
-            - name: NEXTCLOUD_TRUSTED_DOMAINS
-              valueFrom:
-                secretKeyRef:
-                  name: nextcloud-creds
-                  key: nextcloudhostname                  
-            - name: OBJECTSTORE_S3_BUCKET
-              valueFrom:
-                secretKeyRef:
-                  name: nextcloud-creds
-                  key: s3bucket
-            - name: OBJECTSTORE_S3_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: nextcloud-creds
-                  key: s3key
-            - name: OBJECTSTORE_S3_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: nextcloud-creds
-                  key: s3secret
-            - name: OBJECTSTORE_S3_REGION
-              value: us-east-1
           resources:
             limits:
               cpu: 500m

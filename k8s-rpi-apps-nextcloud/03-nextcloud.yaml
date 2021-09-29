@@ -140,6 +140,13 @@ spec:
               secretKeyRef:
                 name: backup-restore-creds
                 key: encryptpassword
+          resources:
+            limits:
+              cpu: 800m
+              memory: 256Mi
+            requests:
+              cpu: 150m
+              memory: 64Mi                
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

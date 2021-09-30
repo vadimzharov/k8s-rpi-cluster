@@ -86,7 +86,7 @@ spec:
                   name: nextcloud-creds
                   key: mysqlrootpassword
             - name: BACKUP_INTERVAL
-              value: '3600'
+              value: '43200'
             - name: COPIES_TO_KEEP
               value: '35'
             - name: ENCRYPT_PASSWORD
@@ -94,6 +94,8 @@ spec:
                 secretKeyRef:
                   name: backup-restore-creds
                   key: encryptpassword
+            - name: FORCE_RESTORE
+              value: "True"                  
           resources:
             limits:
               cpu: 150m
@@ -117,5 +119,5 @@ spec:
       schedulerName: default-scheduler
   strategy:
     type: Recreate
-  revisionHistoryLimit: 10
+  revisionHistoryLimit: 5
   progressDeadlineSeconds: 600

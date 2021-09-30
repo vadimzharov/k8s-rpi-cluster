@@ -145,7 +145,7 @@ spec:
           - name: DIR_TO_BACKUP
             value: "/hass-workdir"
           - name: BACKUP_INTERVAL
-            value: "43200"
+            value: "86400"
           - name: COPIES_TO_KEEP
             value: "35"         
           - name: ENCRYPT_PASSWORD

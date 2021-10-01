@@ -516,7 +516,6 @@ metadata:
     version: "v0.28.1"
 spec:
   group: tekton.dev
-  preserveUnknownFields: false
   versions:
     - name: v1alpha1
       served: true
@@ -649,7 +648,6 @@ metadata:
     version: "v0.28.1"
 spec:
   group: tekton.dev
-  preserveUnknownFields: false
   versions:
     - name: v1alpha1
       served: true
@@ -729,7 +727,6 @@ metadata:
     version: "v0.28.1"
 spec:
   group: tekton.dev
-  preserveUnknownFields: false
   versions:
     - name: v1alpha1
       served: true
@@ -891,7 +888,6 @@ metadata:
     version: "v0.28.1"
 spec:
   group: tekton.dev
-  preserveUnknownFields: false
   versions:
     - name: v1alpha1
       served: true
@@ -958,7 +954,6 @@ metadata:
     version: "v0.28.1"
 spec:
   group: tekton.dev
-  preserveUnknownFields: false
   versions:
     - name: v1alpha1
       served: true
@@ -1038,7 +1033,6 @@ metadata:
     version: "v0.28.1"
 spec:
   group: tekton.dev
-  preserveUnknownFields: false
   versions:
     - name: v1alpha1
       served: true

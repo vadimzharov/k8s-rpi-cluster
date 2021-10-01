@@ -3400,8 +3400,8 @@ items:
             httpGet:
               path: /healthz
               port: 8082
-            initialDelaySeconds: 60
-            periodSeconds: 10
+            initialDelaySeconds: 120
+            periodSeconds: 20
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

@@ -3393,14 +3393,14 @@ items:
               memory: 64Mi
             limits:
               cpu: 1000m
-              memory: 1.5Gi
+              memory: 2Gi
           ports:
           - containerPort: 8082
           readinessProbe:
             httpGet:
               path: /healthz
               port: 8082
-            initialDelaySeconds: 300
+            initialDelaySeconds: 600
             periodSeconds: 20
           securityContext:
             allowPrivilegeEscalation: false

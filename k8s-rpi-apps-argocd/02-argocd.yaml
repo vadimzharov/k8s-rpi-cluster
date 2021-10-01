@@ -3380,20 +3380,8 @@ items:
           - argocd-redis:6379          
           image: alinbalutoiu/argocd:v2.0.5
           imagePullPolicy: IfNotPresent
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8082
-            initialDelaySeconds: 60
-            periodSeconds: 10
           name: argocd-application-controller
-          resources:
-            requests:
-              cpu: 150m
-              memory: 64Mi
-            limits:
-              cpu: 1000m
-              memory: 2Gi
+          resources: {}
           ports:
           - containerPort: 8082
           readinessProbe:
@@ -3402,6 +3390,12 @@ items:
               port: 8082
             initialDelaySeconds: 600
             periodSeconds: 20
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8082
+            initialDelaySeconds: 600
+            periodSeconds: 10            
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

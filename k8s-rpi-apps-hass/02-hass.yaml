@@ -105,12 +105,12 @@ spec:
             timeoutSeconds: 2
             periodSeconds: 5
         - name: hass-backup-daemon
-          image: quay.io/vadimzharov/dirbackup:latest
+          image: quay.io/vadimzharov/podbackup:latest
           lifecycle:
             preStop:
               exec:
-                command: ["/usr/local/bin/dirbackup", "backup"]
-          command: ["dirbackup"]
+                command: ["/usr/local/bin/podbackup", "backup"]
+          command: ["podbackup"]
           args: ["backup-daemon"]
           resources:
             requests:
@@ -146,17 +146,19 @@ spec:
             value: "/hass-workdir"
           - name: BACKUP_INTERVAL
             value: "86400"
+          - name: PRUNE_INTERVAL
+            value: "172800"            
           - name: COPIES_TO_KEEP
             value: "35"         
           - name: ENCRYPT_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: backup-restore-creds
-                key: encryptpassword            
+                key: encryptpassword
       initContainers:
         - name: hass-restore
-          image: quay.io/vadimzharov/dirbackup:latest
-          command: ["dirbackup"]
+          image: quay.io/vadimzharov/podbackup:latest
+          command: ["podbackup"]
           args: ["restore"]
           volumeMounts:
             - name: hass-workingdir
@@ -187,6 +189,8 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: backup-restore-creds
-                key: encryptpassword            
+                key: encryptpassword
+          - name: FORCE_RESTORE
+            value: "True"                            
 
 

@@ -147,6 +147,8 @@ spec:
             value: "/data"
           - name: BACKUP_INTERVAL
             value: "86400"
+          - name: PRUNE_INTERVAL
+            value: "172800"
           - name: COPIES_TO_KEEP
             value: "35"
           - name: ENCRYPT_PASSWORD

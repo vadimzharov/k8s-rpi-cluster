@@ -117,8 +117,8 @@ spec:
               cpu: 50m
               memory: 64Mi
             limits:
-              cpu: 50m
-              memory: 64Mi
+              cpu: 150m
+              memory: 128Mi
           volumeMounts:
             - name: hass-workingdir
               mountPath: /hass-workdir

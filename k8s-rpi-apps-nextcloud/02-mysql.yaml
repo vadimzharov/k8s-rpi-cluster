@@ -55,7 +55,7 @@ spec:
           terminationMessagePolicy: File
           imagePullPolicy: Always
         - name: mysql-backup-daemon
-          image: 'quay.io/vadimzharov/podbackup:test'
+          image: 'quay.io/vadimzharov/podbackup:latest'
           command:
             - podbackup
           args:
@@ -87,6 +87,8 @@ spec:
                   key: mysqlrootpassword
             - name: BACKUP_INTERVAL
               value: '43200'
+            - name: PRUNE_INTERVAL
+              value: "172800"              
             - name: COPIES_TO_KEEP
               value: '35'
             - name: ENCRYPT_PASSWORD

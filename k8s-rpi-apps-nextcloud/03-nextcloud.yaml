@@ -47,7 +47,7 @@ spec:
           terminationMessagePolicy: File
           imagePullPolicy: Always
         - name: nextcloud-backup-daemon
-          image: 'quay.io/vadimzharov/podbackup:test'
+          image: 'quay.io/vadimzharov/podbackup:latest'
           command:
             - podbackup
           args:
@@ -74,6 +74,8 @@ spec:
               value: nextcloud-backup
             - name: DIR_TO_BACKUP
               value: "/nextcloud"
+            - name: PRUNE_INTERVAL
+              value: "172800"              
             - name: ARCHIVE_TYPE
               value: "tarzip"              
             - name: MYSQL_PASSWORD
@@ -105,7 +107,7 @@ spec:
               mountPath: /nextcloud
       initContainers:
         - name: nextcloud-restore
-          image: quay.io/vadimzharov/podbackup:test
+          image: quay.io/vadimzharov/podbackup:latest
           command: ["podbackup"]
           args: ["restore"]
           volumeMounts:

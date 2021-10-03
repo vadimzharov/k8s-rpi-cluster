@@ -25,6 +25,10 @@ spec:
       resourceRef:
         name: podbackup-test-image
   serviceAccountName: pipeline-sa
+  workspaces:
+  - name: dockerconfig
+    secret:
+      secretName: registry-creds
   taskRef:
     kind: Task
     name: build-docker-image

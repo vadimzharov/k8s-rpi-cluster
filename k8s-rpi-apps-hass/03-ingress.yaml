@@ -8,6 +8,7 @@ metadata:
 spec:
   entryPoints:
     - web
+    - websecure
   routes:
   - match: Host(`<hasshostname>`)
     kind: Rule

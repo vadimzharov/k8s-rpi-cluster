@@ -1,0 +1,87 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: podbackup-el
+spec:
+  serviceAccountName: pipeline-sa
+  triggers:
+    - name: podbackup-test-el
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: github-wh-secret
+                secretKey: secretToken
+            - name: "eventTypes"
+              value: ["push"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref == 'refs/heads/test'"
+      template:
+        ref: podbackup-trigger-testbranch
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: podbackup-el-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    avp.kubernetes.io/path: "k8secrets/externalroutes"
+spec:
+  entryPoints:
+    - websecure-external
+  routes:
+  - match: Host(`<externalhostname>`) && PathPrefix(`<podbackup-wh-pathprefix>`)
+    kind: Rule
+    services:
+    - name: el-podbackup-el
+      port: 8080
+  tls:
+    certResolver: godaddy
+---
+
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: podbackup-trigger-testbranch
+spec:
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: TaskRun
+      metadata:
+        annotations:
+          pipeline.tekton.dev/release: v0.23.0
+          argocd.argoproj.io/hook: Skip
+        labels:
+          app.kubernetes.io/managed-by: tekton-pipelines
+          tekton.dev/task: build-podbackup-image
+        generateName: build-podbackup-image-taskrun-
+        namespace: tekton-pipelines
+      spec:
+        params:
+        - name: pathToDockerFile
+          value: $(resources.inputs.docker-source.path)/Dockerfile
+        - name: pathToContext
+          value: $(resources.inputs.docker-source.path)
+        resources:
+          inputs:
+          - name: docker-source
+            resourceRef:
+              name: podbackup-git-testbranch
+          outputs:
+          - name: builtImage
+            resourceRef:
+              name: podbackup-test-image
+        serviceAccountName: pipeline-sa
+        workspaces:
+        - name: dockerconfig
+          secret:
+            secretName: registry-creds          
+        taskRef:
+          kind: Task
+          name: build-docker-image
+        timeout: 2h0m0s

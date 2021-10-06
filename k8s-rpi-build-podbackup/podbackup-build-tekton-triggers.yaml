@@ -13,7 +13,7 @@ spec:
             - name: "secretRef"
               value:
                 secretName: github-wh-secret
-                secretKey: secretToken
+                secretKey: github-wh-secret
             - name: "eventTypes"
               value: ["push"]
         - ref:

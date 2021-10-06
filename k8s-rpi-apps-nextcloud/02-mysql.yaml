@@ -86,9 +86,9 @@ spec:
                   name: nextcloud-creds
                   key: mysqlrootpassword
             - name: BACKUP_INTERVAL
-              value: '43200'
+              value: '12h'
             - name: PRUNE_INTERVAL
-              value: "172800"              
+              value: "96h"
             - name: COPIES_TO_KEEP
               value: '35'
             - name: ENCRYPT_PASSWORD

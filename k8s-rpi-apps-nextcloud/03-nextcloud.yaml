@@ -75,7 +75,7 @@ spec:
             - name: DIR_TO_BACKUP
               value: "/nextcloud"
             - name: PRUNE_INTERVAL
-              value: "172800"              
+              value: "96h"              
             - name: ARCHIVE_TYPE
               value: "tarzip"              
             - name: MYSQL_PASSWORD
@@ -84,7 +84,7 @@ spec:
                   name: nextcloud-creds
                   key: mysqlrootpassword
             - name: BACKUP_INTERVAL
-              value: '86400'
+              value: '24h'
             - name: COPIES_TO_KEEP
               value: '35'
             - name: ENCRYPT_PASSWORD

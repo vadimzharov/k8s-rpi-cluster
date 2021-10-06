@@ -23,6 +23,24 @@ spec:
               value: "body.ref == 'refs/heads/test'"
       template:
         ref: podbackup-trigger-testbranch
+    - name: podbackup-main-el
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: github-wh-secret
+                secretKey: github-wh-secret
+            - name: "eventTypes"
+              value: ["push"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref == 'refs/heads/main'"
+      template:
+        ref: podbackup-trigger-mainbranch        
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -43,7 +61,6 @@ spec:
   tls:
     certResolver: godaddy
 ---
-
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
@@ -54,7 +71,6 @@ spec:
       kind: TaskRun
       metadata:
         annotations:
-          pipeline.tekton.dev/release: v0.23.0
           argocd.argoproj.io/hook: Skip
         labels:
           app.kubernetes.io/managed-by: tekton-pipelines
@@ -76,6 +92,47 @@ spec:
           - name: builtImage
             resourceRef:
               name: podbackup-test-image
+        serviceAccountName: pipeline-sa
+        workspaces:
+        - name: dockerconfig
+          secret:
+            secretName: registry-creds          
+        taskRef:
+          kind: Task
+          name: build-docker-image
+        timeout: 2h0m0s
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: podbackup-trigger-mainbranch
+spec:
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: TaskRun
+      metadata:
+        annotations:
+          argocd.argoproj.io/hook: Skip
+        labels:
+          app.kubernetes.io/managed-by: tekton-pipelines
+          tekton.dev/task: build-podbackup-image
+        generateName: build-podbackup-image-taskrun-
+        namespace: tekton-pipelines
+      spec:
+        params:
+        - name: pathToDockerFile
+          value: $(resources.inputs.docker-source.path)/Dockerfile
+        - name: pathToContext
+          value: $(resources.inputs.docker-source.path)
+        resources:
+          inputs:
+          - name: docker-source
+            resourceRef:
+              name: podbackup-git
+          outputs:
+          - name: builtImage
+            resourceRef:
+              name: podbackup-image
         serviceAccountName: pipeline-sa
         workspaces:
         - name: dockerconfig

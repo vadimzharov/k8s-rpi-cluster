@@ -106,7 +106,7 @@ spec:
             timeoutSeconds: 1
             periodSeconds: 10
         - name: vw-backup-daemon
-          image: quay.io/vadimzharov/podbackup:latest
+          image: quay.io/vadimzharov/podbackup:test
           lifecycle:
             preStop:
               exec:
@@ -146,9 +146,9 @@ spec:
           - name: DIR_TO_BACKUP
             value: "/data"
           - name: BACKUP_INTERVAL
-            value: "86400"
+            value: "2h"
           - name: PRUNE_INTERVAL
-            value: "172800"
+            value: "24h"
           - name: COPIES_TO_KEEP
             value: "35"
           - name: ENCRYPT_PASSWORD
@@ -158,7 +158,7 @@ spec:
                 key: encryptpassword            
       initContainers:
         - name: vw-restore
-          image: quay.io/vadimzharov/podbackup:latest
+          image: quay.io/vadimzharov/podbackup:test
           command: ["podbackup"]
           args: ["restore"]
           volumeMounts:

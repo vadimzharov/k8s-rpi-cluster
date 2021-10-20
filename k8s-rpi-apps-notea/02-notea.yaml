@@ -38,6 +38,8 @@ spec:
               cpu: 50m
               memory: 64Mi
           env:
+            - name: BASE_URL	
+              value: <externalhostname><noteapathprefix>
             - name: STORE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:

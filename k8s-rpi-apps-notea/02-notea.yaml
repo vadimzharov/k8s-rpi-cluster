@@ -41,7 +41,7 @@ spec:
               memory: 64Mi
           env:
             - name: BASE_URL	
-              value: <externalhostname><noteapathprefix>
+              value: <noteaexternalhostname>
             - name: STORE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:

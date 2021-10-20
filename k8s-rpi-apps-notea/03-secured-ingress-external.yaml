@@ -9,12 +9,10 @@ spec:
   entryPoints:
     - websecure-external
   routes:
-  - match: Host(`<externalhostname>`) && PathPrefix(`<noteapathprefix>`)
+  - match: Host(`<noteaexternalhostname>`)
     kind: Rule
     services:
     - name: notea
       port: 3000
-    middlewares:
-      - name: notea-replaceprefix
   tls:
     certResolver: godaddy

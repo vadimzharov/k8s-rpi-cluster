@@ -70,6 +70,8 @@ spec:
             value: info 
           - name: WEBSOCKET_ENABLED
             value: 'true'
+          - name: SIGNUPS_ALLOWED
+            value: 'false'
           resources:
             requests:
               cpu: 50m

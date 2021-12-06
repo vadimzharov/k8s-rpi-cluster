@@ -72,6 +72,11 @@ spec:
             value: 'true'
           - name: SIGNUPS_ALLOWED
             value: 'false'
+          - name: ADMIN_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: vw-admin-key
+                key: vwadminkey
           resources:
             requests:
               cpu: 50m

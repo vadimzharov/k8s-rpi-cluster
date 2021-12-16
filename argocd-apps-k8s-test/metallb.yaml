@@ -22,7 +22,7 @@ spec:
             - <addresspool>
     repoURL: https://metallb.github.io/metallb
     chart: metallb
-    targetRevision: HEAD
+    targetRevision: 0.11.0
     plugin:
       name: argocd-vault-plugin-helm
   destination:

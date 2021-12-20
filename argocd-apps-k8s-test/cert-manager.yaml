@@ -6,9 +6,16 @@ metadata:
 spec:
   project: k8s-rpi-apps
   source:
-    repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-    targetRevision: k8s-test
-    path: k8s-rpi-apps-cert-manager
+#    repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+#    targetRevision: k8s-test
+#    path: k8s-rpi-apps-cert-manager
+    helm:
+      parameters:
+        - name: installCRDs
+          value: "true"
+    repoURL: https://charts.jetstack.io
+    chart: cert-manager
+    targetRevision: v1.6.1
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager

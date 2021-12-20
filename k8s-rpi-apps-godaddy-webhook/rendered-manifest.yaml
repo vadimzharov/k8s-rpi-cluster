@@ -236,7 +236,7 @@ spec:
 apiVersion: apiregistration.k8s.io/v1
 kind: APIService
 metadata:
-  name: v1alpha.<webhook-groupname>
+  name: v1alpha1.<webhook-groupname>
   labels:
     app.kubernetes.io/name: godaddy-webhook
     helm.sh/chart: godaddy-webhook-0.1.0
@@ -253,7 +253,7 @@ spec:
   service:
     name: godaddy-webhook
     namespace: cert-manager
-  version: v1alpha
+  version: v1alpha1
 ---
 # Source: godaddy-webhook/templates/pki.yaml
 # Generate a CA Certificate used to sign certificates for the webhook

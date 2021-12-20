@@ -236,7 +236,7 @@ spec:
 apiVersion: apiregistration.k8s.io/v1
 kind: APIService
 metadata:
-  name: v1alpha1.<webhook-groupname>
+  name: v1.<webhook-groupname>
   labels:
     app.kubernetes.io/name: godaddy-webhook
     helm.sh/chart: godaddy-webhook-0.1.0

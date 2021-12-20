@@ -253,7 +253,7 @@ spec:
   service:
     name: godaddy-webhook
     namespace: cert-manager
-  version: v1alpha1
+  version: v1
 ---
 # Source: godaddy-webhook/templates/pki.yaml
 # Generate a CA Certificate used to sign certificates for the webhook

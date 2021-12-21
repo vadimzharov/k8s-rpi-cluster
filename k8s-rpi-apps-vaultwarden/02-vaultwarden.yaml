@@ -130,39 +130,11 @@ spec:
           volumeMounts:
             - name: vw-workingdir
               mountPath: /data
-          env:
-          - name: AWS_BUCKET
-            valueFrom:
-              secretKeyRef:
-                name: backup-restore-creds
-                key: awsbucket
-          - name: AWS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: backup-restore-creds
-                key: awskey
-          - name: AWS_SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: backup-restore-creds
-                key: awssecretkey
-          - name: S3_BUCKET_FOLDER
-            value: "vaultwarden-backup"
-          - name: S3_FILE_PREFIX
-            value: "vw-backup"
-          - name: DIR_TO_BACKUP
-            value: "/data"
-          - name: BACKUP_INTERVAL
-            value: "2h"
-          - name: PRUNE_INTERVAL
-            value: "24h"
-          - name: COPIES_TO_KEEP
-            value: "35"
-          - name: ENCRYPT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: backup-restore-creds
-                key: encryptpassword            
+          envFrom:
+          - configMapRef:
+              name: backup-restore-settings
+          - secretRef:
+              name: backup-restore-aws-creds
       initContainers:
         - name: vw-restore
           image: quay.io/vadimzharov/podbackup:latest
@@ -171,33 +143,9 @@ spec:
           volumeMounts:
             - name: vw-workingdir
               mountPath: /data
-          env:
-          - name: AWS_BUCKET
-            valueFrom:
-              secretKeyRef:
-                name: backup-restore-creds
-                key: awsbucket
-          - name: AWS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: backup-restore-creds
-                key: awskey
-          - name: AWS_SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: backup-restore-creds
-                key: awssecretkey
-          - name: S3_BUCKET_FOLDER
-            value: "vaultwarden-backup"
-          - name: S3_FILE_PREFIX
-            value: "vw-backup"
-          - name: DIR_TO_RESTORE
-            value: "/data"
-          - name: ENCRYPT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: backup-restore-creds
-                key: encryptpassword            
-          - name: FORCE_RESTORE
-            value: "True"
+          envFrom:
+          - configMapRef:
+              name: backup-restore-settings
+          - secretRef:
+              name: backup-restore-aws-creds              
 

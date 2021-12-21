@@ -36,82 +36,174 @@ spec:
       terminationGracePeriodSeconds: 60
       hostNetwork: false
       containers:
-      - image: "traefik:2.4.9"
-        imagePullPolicy: IfNotPresent
-        name: traefik
-        env:
-          - name: GODADDY_API_KEY
+        - image: "traefik:2.4.9"
+          imagePullPolicy: IfNotPresent
+          name: traefik
+          env:
+            - name: GODADDY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: godaddy-api-key
+                  key: key
+            - name: GODADDY_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: godaddy-api-key
+                  key: token        
+          resources:
+            requests:
+              cpu: 150m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi     
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 9009
+            failureThreshold: 1
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 9009
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          ports:
+          - name: "metrics"
+            containerPort: 9100
+            protocol: "TCP"
+          - name: "traefik"
+            containerPort: 9009
+            protocol: "TCP"
+          - name: "api"
+            containerPort: 8080
+            protocol: "TCP"          
+          - name: "web"
+            containerPort: 8008
+            protocol: "TCP"
+          - name: "websecure"
+            containerPort: 8443
+            protocol: "TCP"
+          - name: "websecure-ext"
+            containerPort: 6443
+            protocol: "TCP"          
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsGroup: 65532
+            runAsNonRoot: true
+            runAsUser: 65532
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: tmp
+              mountPath: /tmp
+            - name: certs-store
+              mountPath: /certs
+            - mountPath: /etc/traefik/traefik.yaml
+              name: traefik-config
+              subPath: traefik.yaml
+        - name: traefik-backup-daemon
+          image: quay.io/vadimzharov/podbackup:latest
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/usr/local/bin/podbackup", "backup"]
+          command: ["podbackup"]
+          args: ["backup-daemon"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 50m
+              memory: 128Mi
+          volumeMounts:
+            - name: certs-store
+              mountPath: /certs
+          env:
+          - name: AWS_BUCKET
             valueFrom:
               secretKeyRef:
-                name: godaddy-api-key
-                key: key
-          - name: GODADDY_API_SECRET
+                name: backup-restore-creds
+                key: awsbucket
+          - name: AWS_KEY
             valueFrom:
               secretKeyRef:
-                name: godaddy-api-key
-                key: token        
-        resources:
-          requests:
-            cpu: 150m
-            memory: 128Mi
-          limits:
-            cpu: 500m
-            memory: 128Mi     
-        readinessProbe:
-          httpGet:
-            path: /ping
-            port: 9009
-          failureThreshold: 1
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 2
-        livenessProbe:
-          httpGet:
-            path: /ping
-            port: 9009
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 2
-        ports:
-        - name: "metrics"
-          containerPort: 9100
-          protocol: "TCP"
-        - name: "traefik"
-          containerPort: 9009
-          protocol: "TCP"
-        - name: "api"
-          containerPort: 8080
-          protocol: "TCP"          
-        - name: "web"
-          containerPort: 8008
-          protocol: "TCP"
-        - name: "websecure"
-          containerPort: 8443
-          protocol: "TCP"
-        - name: "websecure-ext"
-          containerPort: 6443
-          protocol: "TCP"          
-        securityContext:
-          capabilities:
-            drop:
-            - ALL
-          readOnlyRootFilesystem: true
-          runAsGroup: 65532
-          runAsNonRoot: true
-          runAsUser: 65532
-        volumeMounts:
-          - name: data
-            mountPath: /data
-          - name: tmp
-            mountPath: /tmp
-          - name: certs-store
-            mountPath: /certs
-          - mountPath: /etc/traefik/traefik.yaml
-            name: traefik-config
-            subPath: traefik.yaml
+                name: backup-restore-creds
+                key: awskey
+          - name: AWS_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awssecretkey
+          - name: S3_BUCKET_FOLDER
+            value: "traefik-k8s-test"
+          - name: S3_FILE_PREFIX
+            value: "traefik-certs-backup"
+          - name: DIR_TO_BACKUP
+            value: "/certs"
+          - name: BACKUP_INTERVAL
+            value: "24h"
+          - name: PRUNE_INTERVAL
+            value: "48h"
+          - name: COPIES_TO_KEEP
+            value: "35"
+          - name: ARCHIVE_TYPE
+            value: "tarzip"                    
+          - name: ENCRYPT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: encryptpassword
+      initContainers:
+        - name: traefik-certs-restore
+          image: quay.io/vadimzharov/podbackup:latest
+          command: ["podbackup"]
+          args: ["restore"]
+          volumeMounts:
+            - name: certs-store
+              mountPath: /certs
+          env:
+          - name: AWS_BUCKET
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awsbucket
+          - name: AWS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awskey
+          - name: AWS_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: awssecretkey
+          - name: S3_BUCKET_FOLDER
+            value: "traefik-k8s-test"
+          - name: S3_FILE_PREFIX
+            value: "traefik-certs-backup"
+          - name: DIR_TO_RESTORE
+            value: "/certs"
+          - name: ARCHIVE_TYPE
+            value: "tarzip"                
+          - name: ENCRYPT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: backup-restore-creds
+                key: encryptpassword
+          - name: FORCE_RESTORE
+            value: "True"                            
       volumes:
         - name: data
           emptyDir: {}

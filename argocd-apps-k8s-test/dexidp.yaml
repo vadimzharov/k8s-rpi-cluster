@@ -4,7 +4,7 @@ metadata:
   name: dexidp
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/dexidp"   
+    avp.kubernetes.io/path: "k8secrets/dex"   
 spec:
   project: k8s-rpi-apps
   source:

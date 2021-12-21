@@ -18,3 +18,5 @@ spec:
     middlewares:
       - name: basic-auth
         namespace: traefik-v2      
+  tls:
+    certResolver: godaddy

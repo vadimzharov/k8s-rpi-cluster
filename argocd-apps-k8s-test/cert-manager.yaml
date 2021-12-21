@@ -15,9 +15,9 @@ spec:
         extraArgs:
           - --dns01-recursive-nameservers-only
           - --dns01-recursive-nameservers=ns31.domaincontrol.com:53,ns32.domaincontrol.com:53
-#      parameters:
-#        - name: installCRDs
-#          value: "true"
+      parameters:
+        - name: installCRDs
+          value: "true"
 #        - name: extraArgs
 #          value: "{--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=ns31.domaincontrol.com:53,ns32.domaincontrol.com:53}"
 #          forceString: true

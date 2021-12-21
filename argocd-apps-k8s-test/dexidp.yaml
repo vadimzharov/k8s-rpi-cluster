@@ -32,6 +32,8 @@ spec:
         envFrom:
           - secretRef: 
               name: github-oauth-creds
+        configSecret:
+          name: dex
     repoURL: https://charts.dexidp.io
     chart: dex
     targetRevision: 0.6.3

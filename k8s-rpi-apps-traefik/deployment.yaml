@@ -147,7 +147,7 @@ spec:
                 name: backup-restore-creds
                 key: awssecretkey
           - name: S3_BUCKET_FOLDER
-            value: "traefik-k8s-test"
+            value: "traefik-certs"
           - name: S3_FILE_PREFIX
             value: "traefik-certs-backup"
           - name: DIR_TO_BACKUP
@@ -190,7 +190,7 @@ spec:
                 name: backup-restore-creds
                 key: awssecretkey
           - name: S3_BUCKET_FOLDER
-            value: "traefik-k8s-test"
+            value: "traefik-certs"
           - name: S3_FILE_PREFIX
             value: "traefik-certs-backup"
           - name: DIR_TO_RESTORE

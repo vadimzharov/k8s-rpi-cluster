@@ -8,6 +8,7 @@ metadata:
 spec:
   entryPoints:
     - websecure
+    - web
   routes:
   - match: Host(`<traefikdashhostname>`)
     kind: Rule

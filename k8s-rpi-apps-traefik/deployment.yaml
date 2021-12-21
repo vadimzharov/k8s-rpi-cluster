@@ -202,8 +202,6 @@ spec:
               secretKeyRef:
                 name: backup-restore-creds
                 key: encryptpassword
-          - name: FORCE_RESTORE
-            value: "True"                            
       volumes:
         - name: data
           emptyDir: {}

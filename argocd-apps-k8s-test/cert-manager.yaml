@@ -14,7 +14,7 @@ spec:
         - name: installCRDs
           value: "true"
         - name: extraArgs
-          value: "{--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=ns31.domaincontrol.com:53\,ns32.domaincontrol.com:53}"
+          value: "{--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=ns31.domaincontrol.com:53,ns32.domaincontrol.com:53}"
     repoURL: https://charts.jetstack.io
     chart: cert-manager
     targetRevision: v1.6.1

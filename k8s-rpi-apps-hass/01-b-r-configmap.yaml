@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backup-restore-settings
+data:
+  S3_BUCKET_FOLDER: "homehass"
+  S3_FILE_PREFIX: "hass-backup"
+  DIR_TO_BACKUP: "/hass-workdir"
+  DIR_TO_RESTORE: "/hass-workdir"  
+  BACKUP_INTERVAL: "24h"
+  PRUNE_INTERVAL: "48h"
+  COPIES_TO_KEEP: "35"
+  FORCE_RESTORE: "True"  
+

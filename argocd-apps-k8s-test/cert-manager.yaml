@@ -10,11 +10,17 @@ spec:
 #    targetRevision: k8s-test
 #    path: k8s-rpi-apps-cert-manager
     helm:
-      parameters:
-        - name: installCRDs
-          value: "true"
-        - name: extraArgs
-          value: "{--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=ns31.domaincontrol.com:53,ns32.domaincontrol.com:53}"
+      values: |
+        installCRD: true
+        extraArgs:
+          - --dns01-recursive-nameservers-only
+          - --dns01-recursive-nameservers=ns31.domaincontrol.com:53,ns32.domaincontrol.com:53
+#      parameters:
+#        - name: installCRDs
+#          value: "true"
+#        - name: extraArgs
+#          value: "{--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=ns31.domaincontrol.com:53,ns32.domaincontrol.com:53}"
+#          forceString: true
     repoURL: https://charts.jetstack.io
     chart: cert-manager
     targetRevision: v1.6.1

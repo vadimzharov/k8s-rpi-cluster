@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backup-restore-settings
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/vaultwarden"    
+data:
+  S3_BUCKET_FOLDER: "vaultwarden-backup"
+  S3_FILE_PREFIX: "vw-backup"
+  DIR_TO_BACKUP: "/data"
+  DIR_TO_RESTORE: "/data"  
+  BACKUP_INTERVAL: "2h"
+  PRUNE_INTERVAL: "24h"
+  COPIES_TO_KEEP: "35"
+  FORCE_RESTORE: "True"  
+

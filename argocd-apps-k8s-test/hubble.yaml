@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium-hubble
+  namespace: argocd
+spec:
+  project: k8s-rpi-apps
+  source:
+    repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+    targetRevision: k8s-test
+    path: k8s-rpi-apps-hubble
+    plugin:
+      name: argocd-vault-plugin        
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

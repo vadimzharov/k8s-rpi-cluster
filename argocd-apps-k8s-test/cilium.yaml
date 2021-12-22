@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  namespace: argocd
+spec:
+  project: k8s-rpi-apps
+  source:
+    helm:
+      values: |
+        debug:
+          enabled: true
+        bgp:
+          enabled: false
+          announce:
+            loadbalancerIP: false
+        operator:
+          replicas: 1
+        ipam:
+          mode: "cluster-pool"
+          operator:
+            clusterPoolIPv4PodCIDR: "10.244.0.0/16"
+            clusterPoolIPv4MaskSize: 24
+        hubble:
+          relay: 
+            enabled: true
+          ui:
+            enabled: true
+          tls:
+            auto:
+              enabled: true 
+              method: helm  
+              certValidityDuration: 1095
+    repoURL: https://helm.cilium.io/
+    chart: cilium
+    targetRevision: 1.10.6
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

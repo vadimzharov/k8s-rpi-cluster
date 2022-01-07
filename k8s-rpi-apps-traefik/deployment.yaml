@@ -114,10 +114,6 @@ spec:
             subPath: traefik.yaml
       - name: tr-backup-daemon
         image: quay.io/vadimzharov/podbackup:latest
-        lifecycle:
-          preStop:
-            exec:
-              command: ["/usr/local/bin/podbackup", "backup"]
         command: ["podbackup"]
         args: ["backup-daemon"]
         resources:

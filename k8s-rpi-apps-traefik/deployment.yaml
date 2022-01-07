@@ -112,6 +112,42 @@ spec:
           - mountPath: /etc/traefik/traefik.yaml
             name: traefik-config
             subPath: traefik.yaml
+      - name: tr-backup-daemon
+        image: quay.io/vadimzharov/podbackup:latest
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/usr/local/bin/podbackup", "backup"]
+        command: ["podbackup"]
+        args: ["backup-daemon"]
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 50m
+            memory: 64Mi
+        volumeMounts:
+          - name: certs-store
+            mountPath: /certs
+        envFrom:
+        - configMapRef:
+            name: backup-restore-settings
+        - secretRef:
+            name: backup-restore-aws-creds
+      initContainers:
+        - name: tr-restore
+          image: quay.io/vadimzharov/podbackup:latest
+          command: ["podbackup"]
+          args: ["restore"]
+          volumeMounts:
+          - name: certs-store
+            mountPath: /certs
+          envFrom:
+          - configMapRef:
+              name: backup-restore-settings
+          - secretRef:
+              name: backup-restore-aws-creds
       volumes:
         - name: data
           emptyDir: {}

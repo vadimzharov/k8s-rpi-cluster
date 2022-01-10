@@ -7,7 +7,7 @@ spec:
   project: k8s-rpi-apps
   source:
     repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-    targetRevision: k8s-main
+    targetRevision: HEAD
     path: k8s-rpi-apps-traefik
     plugin:
       name: argocd-vault-plugin

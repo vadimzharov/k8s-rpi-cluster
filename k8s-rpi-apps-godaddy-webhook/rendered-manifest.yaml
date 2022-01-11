@@ -257,7 +257,7 @@ spec:
 ---
 # Source: godaddy-webhook/templates/pki.yaml
 # Generate a CA Certificate used to sign certificates for the webhook
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: godaddy-webhook-ca
@@ -278,7 +278,7 @@ spec:
 ---
 # Source: godaddy-webhook/templates/pki.yaml
 # Finally, generate a serving certificate for the webhook to use
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: godaddy-webhook-webhook-tls

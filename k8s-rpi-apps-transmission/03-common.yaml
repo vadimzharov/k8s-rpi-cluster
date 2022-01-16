@@ -55,8 +55,8 @@ spec:
   selector:
     app.kubernetes.io/name: transmission
     app.kubernetes.io/instance: k8s-rpi
-#  type: NodePort
-  type: ClusterIP
+  type: NodePort
+#  type: ClusterIP
 ---
 # Source: transmission/templates/common.yaml
 apiVersion: apps/v1

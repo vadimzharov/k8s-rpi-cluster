@@ -29,6 +29,12 @@ spec:
                 redirectURI: <dexhostname>/callback
                 orgs:
                   - name: <oauthorg>
+          staticClients:
+          - id: dex-k8s-authenticator
+            name: dex-k8s-authenticator
+            secret: <dexk8sauthsecret>
+            redirectURIs:
+              - <dexhostname>/callback
         envFrom:
           - secretRef: 
               name: github-oauth-creds
@@ -39,7 +45,7 @@ spec:
           value: dex
     repoURL: https://charts.dexidp.io
     chart: dex
-    targetRevision: 0.6.3
+    targetRevision: 0.6.5
   destination:
     server: https://kubernetes.default.svc
     namespace: dexidp

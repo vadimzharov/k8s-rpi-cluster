@@ -24,7 +24,7 @@ spec:
             redirect_uri: <dexhostname>/callback
             k8s_ca_pem: |
               <k8scacert>
-    repoURL: https://charts.dexidp.io
+    repoURL: https://charts.sagikazarmark.dev/
     chart: dex-k8s-authenticator
     targetRevision: 1.4.0
   destination:

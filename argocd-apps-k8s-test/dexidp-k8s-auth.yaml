@@ -26,7 +26,7 @@ spec:
               <k8scacert>
     repoURL: https://charts.sagikazarmark.dev/
     chart: skm/dex-k8s-authenticator
-    targetRevision: 1.4.0
+    targetRevision: 0.0.2
   destination:
     server: https://kubernetes.default.svc
     namespace: dexidp

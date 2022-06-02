@@ -3163,8 +3163,8 @@ items:
               cpu: 150m
               memory: 64Mi
             limits:
-              cpu: 700m
-              memory: 256Mi          
+              cpu: 900m
+              memory: 512Mi          
           ports:
           - containerPort: 8081
           - containerPort: 8084

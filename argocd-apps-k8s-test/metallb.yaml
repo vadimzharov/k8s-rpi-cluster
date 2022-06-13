@@ -3,17 +3,29 @@ kind: Application
 metadata:
   name: metallb
   namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/metallb" 
 spec:
   project: k8s-rpi-apps
   source:
-    repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-    targetRevision: HEAD
-    path: k8s-rpi-apps-metallb
-    plugin:
-      name: argocd-vault-plugin    
+    helm:
+      values: |
+        configInline:
+          peers:
+          - peer-address: <peer-address>
+            peer-asn: <peer-asn>
+            my-asn: <my-asn>
+          address-pools:
+          - name: default
+            protocol: bgp
+            addresses:
+            - <addresspool>
+    repoURL: https://metallb.github.io/metallb
+    chart: metallb
+    targetRevision: 0.11.0
   destination:
     server: https://kubernetes.default.svc
-    namespace: metallb
+    namespace: metallb-system
   syncPolicy:
     automated:
       prune: true

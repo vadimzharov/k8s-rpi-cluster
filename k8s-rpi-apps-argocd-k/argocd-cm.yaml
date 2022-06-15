@@ -38,4 +38,4 @@ data:
         args: ["helm dependency build"]
       generate:
         command: [sh, -c]
-        args: ["helm template "$ARGOCD_APP_NAME" . > all.yaml && kustomize build | argocd-vault-plugin generate -"]        
+        args: ['helm template "$ARGOCD_APP_NAME" . > all.yaml && kustomize build | argocd-vault-plugin generate -'']        

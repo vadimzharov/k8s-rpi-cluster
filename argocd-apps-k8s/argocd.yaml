@@ -8,9 +8,9 @@ spec:
   source:
     repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
     targetRevision: k8s-main
-    path: k8s-rpi-apps-argocd
+    path: k8s-rpi-apps-argocd-k
     plugin:
-      name: argocd-vault-plugin    
+      name: argocd-vault-plugin-kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

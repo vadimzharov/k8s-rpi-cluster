@@ -31,3 +31,11 @@ data:
       generate:
         command: ["sh", "-c"]
         args: ["kustomize build . | argocd-vault-plugin generate -"]
+
+    - name: argocd-vault-plugin-kustomized-helm
+      init:
+        command: ["sh", "-c"]
+        args: ["helm dependency build"]
+      generate:
+        command: [sh, -c]
+        args: ["helm template "$ARGOCD_APP_NAME" . > all.yaml && kustomize build | argocd-vault-plugin generate -"]        

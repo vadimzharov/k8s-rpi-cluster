@@ -20,6 +20,8 @@ spec:
               metallb.universe.tf/allow-shared-ip: pihole-svc    
           serviceDhcp:
             enabled: false
+          extraEnvVars:
+            DNSMASQ_USER: "root"               
           DNS1: <piholeupstreamdns>
           DNS2: <piholeupstreamdns>
           adminPassword: <password>
@@ -28,9 +30,7 @@ spec:
             policy: "None"
             nameservers:
             - 127.0.0.1
-            - <piholeupstreamdns>
-          extraEnvVars:
-            DNSMASQ_USER: "root"            
+            - <piholeupstreamdns>         
     repoURL: https://mojo2600.github.io/pihole-kubernetes/
     chart: pihole
     targetRevision: 2.5.8

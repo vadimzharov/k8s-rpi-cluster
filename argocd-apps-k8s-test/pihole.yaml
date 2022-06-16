@@ -10,7 +10,6 @@ spec:
   source:
     helm:
       values: |
-        configInline:
           serviceDhcp:
             enabled: true
           serviceDns:

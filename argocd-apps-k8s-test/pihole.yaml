@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pihole
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/pihole" 
+spec:
+  project: k8s-rpi-apps
+  source:
+    helm:
+      values: |
+        configInline:
+          serviceDns:
+            type: LoadBalancer
+            loadBalancerIP: <piholeip>
+            annotations:
+              metallb.universe.tf/allow-shared-ip: pihole-svc    
+          serviceDhcp:
+            enabled: false
+          DNS1: <piholeupstreamdns>
+          DNS2: <piholeupstreamdns>
+          adminPassword: <password>
+          podDnsConfig:
+            enabled: true
+            policy: "None"
+            nameservers:
+            - 127.0.0.1
+            - <piholeupstreamdns>
+    repoURL: https://mojo2600.github.io/pihole-kubernetes/
+    chart: pihole
+    targetRevision: 2.5.8
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pihole
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      

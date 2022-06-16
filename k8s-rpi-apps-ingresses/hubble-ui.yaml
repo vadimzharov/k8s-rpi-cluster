@@ -1,16 +1,17 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: k8s-rpi-pihole-ui
+  name: hubble-ui-ingress
+  namespace: kube-system
   annotations:
     kubernetes.io/ingress.class: traefik  
-    avp.kubernetes.io/path: "k8secrets/pihole"    
+    avp.kubernetes.io/path: "k8secrets/cilium"    
 spec:
   entryPoints:
     - web
   routes:
-  - match: Host(`<piholehostname>`)
+  - match: Host(`<hubblehostname>`)
     kind: Rule
     services:
-    - name: k8s-rpi-pihole-web
+    - name: hubble-ui
       port: 80

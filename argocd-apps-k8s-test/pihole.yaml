@@ -11,6 +11,8 @@ spec:
     helm:
       values: |
         configInline:
+          serviceDhcp:
+            enabled: true
           serviceDns:
             type: LoadBalancer
             loadBalancerIP: <piholeip>
@@ -27,6 +29,8 @@ spec:
             nameservers:
             - 127.0.0.1
             - <piholeupstreamdns>
+          extraEnvVars:
+            DNSMASQ_USER: "root"            
     repoURL: https://mojo2600.github.io/pihole-kubernetes/
     chart: pihole
     targetRevision: 2.5.8

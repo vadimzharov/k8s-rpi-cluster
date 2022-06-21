@@ -9,6 +9,7 @@ resources:
 - overlays/add/secret.yaml
 - overlays/add/middleware-basicauth-removeh.yaml
 - overlays/add/middleware-basicauth.yaml
+- overlays/add/config.yaml
 
 patches:
 - overlays/replace/patch-deployment.yaml

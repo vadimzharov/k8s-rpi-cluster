@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  namespace: argocd
+spec:
+  project: k8s-rpi-apps
+  source:
+    repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+    targetRevision: k8s-test
+    path: k8s-rpi-apps-traefik-h-k
+    plugin:
+      name: argocd-vault-plugin-kustomized-helm
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: traefik-v2
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

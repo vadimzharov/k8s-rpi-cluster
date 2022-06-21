@@ -8,7 +8,15 @@ spec:
   type: LoadBalancer
   loadBalancerIP: <traefikingressip>
   ports:
-  - port: 6443
-    name: websecure-ext
-    targetPort: "websecure-ext"
-    protocol: "TCP"   
+      - port: 80
+        name: web
+        targetPort: "web"
+        protocol: "TCP"
+      - port: 443
+        name: websecure
+        targetPort: "websecure"
+        protocol: "TCP"
+      - port: 6443
+        name: websecure-ext
+        targetPort: "websecure-ext"
+        protocol: "TCP"        

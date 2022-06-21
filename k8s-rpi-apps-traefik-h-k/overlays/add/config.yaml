@@ -49,7 +49,7 @@ data:
     ping:
       entryPoint: ping
     log:
-      level: INFO
+      level: DEBUG
     tracing:
     hostResolver:
     certificatesResolvers:

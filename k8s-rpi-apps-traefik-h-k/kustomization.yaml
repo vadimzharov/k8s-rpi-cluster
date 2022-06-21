@@ -10,6 +10,7 @@ resources:
 - overlays/add/middleware-basicauth-removeh.yaml
 - overlays/add/middleware-basicauth.yaml
 - overlays/add/config.yaml
+- overlays/add/service-dashboard.yaml
 
 patches:
 - overlays/replace/patch-deployment.yaml

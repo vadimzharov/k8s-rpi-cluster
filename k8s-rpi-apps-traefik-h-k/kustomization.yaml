@@ -1,3 +1,4 @@
+namespace: traefik-v2
 
 resources:
 - ./all.yaml

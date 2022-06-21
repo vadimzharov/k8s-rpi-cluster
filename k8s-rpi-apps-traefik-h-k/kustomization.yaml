@@ -13,6 +13,8 @@ resources:
 
 patches:
 - overlays/replace/patch-deployment.yaml
+- overlays/replace/patch-crb.yaml
+- overlays/replace/patch-service.yaml
 
 patchesJSON6902:
 - target:

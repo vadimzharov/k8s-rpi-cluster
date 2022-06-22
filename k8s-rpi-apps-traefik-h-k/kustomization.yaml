@@ -1,0 +1,28 @@
+namespace: traefik-v2
+
+resources:
+- ./all.yaml
+- overlays/add/b-r-configmap.yaml
+- overlays/add/b-r-secret.yaml
+- overlays/add/htpasswd-secret.yaml
+- overlays/add/ingress-dashboard.yaml
+- overlays/add/secret.yaml
+- overlays/add/middleware-basicauth-removeh.yaml
+- overlays/add/middleware-basicauth.yaml
+- overlays/add/config.yaml
+- overlays/add/service-dashboard.yaml
+
+patches:
+- overlays/replace/patch-deployment.yaml
+- overlays/replace/patch-crb.yaml
+- overlays/replace/patch-service.yaml
+
+patchesJSON6902:
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: traefik
+  patch: |-
+    - op: remove
+      path: /spec/template/spec/containers/0/args

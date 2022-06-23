@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: kube-system-np
+  namespace: kube-system
+spec:
+  podSelector: {}
+  ingress:
+    - from:
+        - podSelector: {}
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik-v2
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: argocd
+  policyTypes:
+    - Ingress

@@ -5,4 +5,4 @@ metadata:
     k8s-app: kubernetes-dashboard
   name: kubernetes-dashboard
 spec:
-  replicas: 0
+  replicas: 1

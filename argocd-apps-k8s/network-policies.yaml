@@ -1,22 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: k8s-dashboard
+  name: network-policies
   namespace: argocd
 spec:
   project: k8s-rpi-apps
   source:
     repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-    targetRevision: k8s-test
-    path: k8s-rpi-apps-k8s-dashboard/overlays/k8s-test/
-    plugin:
-      name: argocd-vault-plugin-kustomize
+    targetRevision: k8s-main
+    path: k8s-rpi-networkpolicies
   destination:
     server: https://kubernetes.default.svc
-    namespace: kubernetes-dashboard
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true

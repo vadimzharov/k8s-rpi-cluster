@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: traefik-ingress
+  name: traefik-v2-np
   namespace: traefik-v2
 spec:
   podSelector:

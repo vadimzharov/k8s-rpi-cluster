@@ -1,0 +1,120 @@
+apiVersion: v1
+items:
+  - apiVersion: argoproj.io/v1alpha1
+    kind: Application
+    metadata:
+      name: dexidp
+      namespace: argocd
+      annotations:
+        avp.kubernetes.io/path: "k8secrets/dex"   
+    spec:
+      project: k8s-rpi-apps
+      source:
+        helm:
+          values: |
+            config:
+              issuer: <dexhostname>
+              storage:
+                type: kubernetes
+                config:
+                  inCluster: true          
+              oauth2:
+                responseTypes: ["code", "token", "id_token"]
+                skipApprovalScreen: true
+              connectors:
+                - type: github
+                  id: github
+                  name: GitHub
+                  config:
+                    clientID: "{{ .Env.GITHUB_CLIENT_ID }}"
+                    clientSecret: "{{ .Env.GITHUB_CLIENT_SECRET }}"
+                    redirectURI: <dexhostname>/callback
+                    orgs:
+                      - name: <oauthorg>
+              staticClients:
+              - id: dex-k8s-authenticator
+                name: dex-k8s-authenticator
+                secret: <dexk8sauthsecret>
+                redirectURIs:
+                  - <dexhostname>/callback
+            envFrom:
+              - secretRef: 
+                  name: github-oauth-creds
+          parameters:
+            - name: configSecret.create
+              value: "true"
+            - name: configSecret.name
+              value: dex
+        repoURL: https://charts.dexidp.io
+        chart: dex
+        targetRevision: 0.6.5
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: dexidp
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+
+  - apiVersion: argoproj.io/v1alpha1
+    kind: Application
+    metadata:
+      name: dex-auth
+      namespace: argocd
+      annotations:
+        avp.kubernetes.io/path: "k8secrets/dex"   
+    spec:
+      project: k8s-rpi-apps
+      source:
+        helm:
+          values: |
+            global:
+              deployEnv: test
+            dexK8sAuthenticator:
+              clusters:
+              - name: k8s-test
+                short_description: "k8s test cluster"
+                description: "Kubernetes test cluster"
+                issuer: <dexshorthostname>
+                k8s_master_uri: <k8smasteruri>
+                client_id: dex-k8s-authenticator
+                client_secret: <dexk8sauthsecret>
+                redirect_uri: <dexhostname>/callback
+                k8s_ca_pem: |
+                  <k8scacert>
+        repoURL: https://charts.sagikazarmark.dev/
+        chart: skm/dex-k8s-authenticator
+        targetRevision: 0.0.2
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: dexidp
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+  - apiVersion: argoproj.io/v1alpha1
+    kind: Application
+    metadata:
+      name: dexidp-addons
+      namespace: argocd
+    spec:
+      project: k8s-rpi-apps
+      source:
+        repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: k8s-test
+        path: k8s-rpi-apps-dexidp
+        plugin:
+          name: argocd-vault-plugin
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: dexidp
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true          

@@ -1,5 +1,8 @@
 apiVersion: v1
 kind: List
+  metadata:
+    annotations:
+      avp.kubernetes.io/path: "k8secrets/dex"   
 items:
   - apiVersion: argoproj.io/v1alpha1
     kind: Application

@@ -26,7 +26,7 @@ spec:
             client_secret: <dexk8sauthsecret>
             redirect_uri: <dexhostname>/callback
             k8s_ca_pem: |
-              <k8scacert>
+                  <k8scacert>
     repoURL: https://wiremind.github.io/wiremind-helm-charts
     chart: dex-k8s-authenticator
     targetRevision: 1.5.3

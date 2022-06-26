@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dex-auth
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/dex"   
+spec:
+  project: k8s-rpi-apps
+  source:
+    helm:
+      values: |
+        global:
+          deployEnv: test
+        image:
+          repository: raspbernetes/dex-k8s-authenticator
+          tag: latest
+        dexK8sAuthenticator:
+          clusters:
+          - name: k8s-test
+            short_description: "k8s test cluster"
+            description: "Kubernetes test cluster"
+            issuer: <dexshorthostname>
+            k8s_master_uri: <k8smasteruri>
+            client_id: dex-k8s-authenticator
+            client_secret: <dexk8sauthsecret>
+            redirect_uri: <dexhostname>/callback
+            k8s_ca_pem: |
+              <k8scacert>
+    repoURL: https://wiremind.github.io/wiremind-helm-charts
+    chart: dex-k8s-authenticator
+    targetRevision: 1.5.3
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dexidp
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

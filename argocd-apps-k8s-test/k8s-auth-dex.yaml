@@ -85,9 +85,9 @@ items:
                 redirect_uri: <dexhostname>/callback
                 k8s_ca_pem: |
                   <k8scacert>
-        repoURL: https://charts.sagikazarmark.dev/
-        chart: skm/dex-k8s-authenticator
-        targetRevision: 0.0.2
+        repoURL: https://wiremind.github.io/wiremind-helm-charts
+        chart: wiremind/dex-k8s-authenticator
+        targetRevision: 1.5.3
       destination:
         server: https://kubernetes.default.svc
         namespace: dexidp

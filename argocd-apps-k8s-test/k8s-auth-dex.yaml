@@ -86,7 +86,7 @@ items:
                 k8s_ca_pem: |
                   <k8scacert>
         repoURL: https://wiremind.github.io/wiremind-helm-charts
-        chart: wiremind/dex-k8s-authenticator
+        chart: dex-k8s-authenticator
         targetRevision: 1.5.3
       destination:
         server: https://kubernetes.default.svc

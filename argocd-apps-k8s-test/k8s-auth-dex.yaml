@@ -73,6 +73,9 @@ items:
           values: |
             global:
               deployEnv: test
+            image:
+              repository: raspbernetes/dex-k8s-authenticator
+              tag: latest
             dexK8sAuthenticator:
               clusters:
               - name: k8s-test

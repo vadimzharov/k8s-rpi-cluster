@@ -15,6 +15,7 @@ spec:
         image:
           repository: docker.io/raspbernetes/dex-k8s-authenticator
           tag: latest
+          imagePullPolicy: IfNotPresent
         dexK8sAuthenticator:
           debug: true
           clusters:

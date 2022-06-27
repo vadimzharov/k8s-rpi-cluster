@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dex-auth-dex-k8s-authenticator
+  labels:
+    app: dex-k8s-authenticator
+    env: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dex-k8s-authenticator
+      env: dev
+      release: dex-auth
+  template:
+    metadata:
+      labels:
+        app: dex-k8s-authenticator
+        env: dev
+        release: dex-auth
+    spec:
+      containers:
+      - name: dex-k8s-authenticator
+        image: "docker.io/raspbernetes/dex-k8s-authenticator:latest"
+        imagePullPolicy: IfNotPresent
+        args: [ "--config", "config.yaml" ]
+        ports:
+        - name: http
+          containerPort: 5555
+          protocol: TCP
+        volumeMounts:
+        - name: config
+          subPath: config.yaml
+          mountPath: /app/config.yaml
+        resources:
+          {}
+      volumes:
+      - name: config
+        configMap:
+          name: dex-auth-dex-k8s-authenticator

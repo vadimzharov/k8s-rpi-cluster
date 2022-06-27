@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dex-auth-dex-k8s-authenticator
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/dex"
+  labels:
+    app: dex-auth-dex-k8s-authenticator
+    env: dev
+data:
+  config.yaml: |-
+    listen: http://0.0.0.0:5555
+    web_path_prefix: /
+    debug: true
+    clusters:
+    - client_id: dex-k8s-authenticator
+      client_secret: <dexk8sauthsecret>
+      description: Kubernetes test cluster
+      issuer: <dexshorthostname>
+      k8s_ca_pem: <k8scacertline>
+      k8s_master_uri: <k8smasteruri>
+      name: k8s-test
+      redirect_uri: <dexhostname>/callback
+      short_description: k8s test cluster    

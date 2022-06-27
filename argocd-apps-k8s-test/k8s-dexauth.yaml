@@ -13,7 +13,7 @@ spec:
         global:
           deployEnv: test
         image:
-          repository: raspbernetes/dex-k8s-authenticator
+          repository: docker.io/raspbernetes/dex-k8s-authenticator
           tag: latest
         dexK8sAuthenticator:
           clusters:

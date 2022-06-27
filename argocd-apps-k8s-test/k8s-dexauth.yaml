@@ -16,6 +16,7 @@ spec:
           repository: docker.io/raspbernetes/dex-k8s-authenticator
           tag: latest
         dexK8sAuthenticator:
+          debug: true
           clusters:
           - name: k8s-test
             short_description: "k8s test cluster"

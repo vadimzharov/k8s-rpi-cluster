@@ -34,7 +34,7 @@ spec:
             name: dex-k8s-authenticator
             secret: <dexk8sauthsecret>
             redirectURIs:
-              - <dexhostname>/callback
+              - <dexloginhostname>/callback
         envFrom:
           - secretRef: 
               name: github-oauth-creds

@@ -18,7 +18,7 @@ data:
       description: Kubernetes test cluster
       issuer: <dexshorthostname>
       k8s_ca_pem: |
-        <k8scacert | indent 3>
+       <k8scacert | indent 4>
       k8s_master_uri: <k8smasteruri>
       name: k8s-test
       redirect_uri: <dexloginhostname>/callback

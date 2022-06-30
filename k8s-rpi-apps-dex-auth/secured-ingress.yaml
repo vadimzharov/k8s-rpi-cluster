@@ -9,7 +9,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`<dexloginhostname>`)
+  - match: Host(`<dexinternalloginname>`)
     kind: Rule
     services:
     - name: dex-auth-dex-k8s-authenticator

@@ -22,4 +22,4 @@ data:
       k8s_master_uri: <k8smasteruri>
       name: k8s-test
       redirect_uri: <dexloginhostname>/callback
-      short_description: k8s test cluster    
+      short_description: k8s test cluster

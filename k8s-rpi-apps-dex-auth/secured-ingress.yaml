@@ -1,0 +1,18 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dex-auth-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    avp.kubernetes.io/path: "k8secrets/dex"
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`<dexinternalloginname>`)
+    kind: Rule
+    services:
+    - name: dex-auth-dex-k8s-authenticator
+      port: 5555
+  tls:
+    certResolver: godaddy

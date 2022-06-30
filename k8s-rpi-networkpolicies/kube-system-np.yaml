@@ -21,5 +21,8 @@ spec:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: external-secrets
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: dexidp
   policyTypes:
     - Ingress

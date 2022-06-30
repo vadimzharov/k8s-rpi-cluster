@@ -2,7 +2,19 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: argocd-cm
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/argocd"      
 data:
+  url: https://<argocdhostname>
+  dex.config: |
+    connectors:
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientID: <oauthclientid>
+          clientSecret: <oauthclientsecret>
+          loadAllGroups: true
   configManagementPlugins: |
     - name: argocd-vault-plugin
       generate:

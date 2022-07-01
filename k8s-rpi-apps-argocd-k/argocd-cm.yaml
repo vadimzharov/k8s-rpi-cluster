@@ -7,6 +7,8 @@ metadata:
 data:
   url: https://<argocdhostname>
   policy.default: ''
+  policy.csv: |
+    u, <adminusername>, role:admin
   dex.config: |
     connectors:
       - type: github

@@ -1,13 +1,13 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: dex-ingress-external
+  name: dex-ingress
   annotations:
     kubernetes.io/ingress.class: traefik
-    avp.kubernetes.io/path: "k8secrets/externalroutes"
+    avp.kubernetes.io/path: "k8secrets/dex"
 spec:
   entryPoints:
-    - websecure-external
+    - websecure
   routes:
   - match: Host(`<dexhostname>`)
     kind: Rule

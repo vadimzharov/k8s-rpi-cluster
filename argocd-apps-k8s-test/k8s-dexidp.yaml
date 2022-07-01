@@ -11,7 +11,7 @@ spec:
     helm:
       values: |
         config:
-          issuer: <dexhostname>
+          issuer: https://<dexhostname>
           storage:
             type: kubernetes
             config:
@@ -26,13 +26,13 @@ spec:
               config:
                 clientID: "{{ .Env.GITHUB_CLIENT_ID }}"
                 clientSecret: "{{ .Env.GITHUB_CLIENT_SECRET }}"
-                redirectURI: <dexhostname>/callback
+                redirectURI: https://<dexhostname>/callback
           staticClients:
           - id: dex-k8s-authenticator
             name: dex-k8s-authenticator
             secret: <dexk8sauthsecret>
             redirectURIs:
-              - <dexloginhostname>/callback
+              - https://<dexloginhostname>/callback
         envFrom:
           - secretRef: 
               name: github-oauth-creds

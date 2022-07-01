@@ -16,10 +16,10 @@ data:
     - client_id: dex-k8s-authenticator
       client_secret: <dexk8sauthsecret>
       description: Kubernetes cluster
-      issuer: <dexshorthostname>
+      issuer: https://<dexhostname>
       k8s_ca_pem: |
        <k8scacert | indent 3>
       k8s_master_uri: <k8smasteruri>
       name: <k8sclustername>
-      redirect_uri: <dexloginhostname>/callback
+      redirect_uri: https://<dexloginhostname>/callback
       short_description: k8s cluster

@@ -6,6 +6,7 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/argocd"      
 data:
   url: https://<argocdhostname>
+  policy.default: ''
   dex.config: |
     connectors:
       - type: github

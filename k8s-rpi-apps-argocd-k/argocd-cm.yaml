@@ -9,6 +9,7 @@ data:
   policy.default: ''
   policy.csv: |
     g, <adminusername>, role:admin
+  scopes: '[email, groups]'
   dex.config: |
     connectors:
       - type: github

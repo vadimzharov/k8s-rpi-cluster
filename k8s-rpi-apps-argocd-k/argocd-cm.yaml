@@ -10,7 +10,7 @@ data:
   policy.csv: |
     p, <adminusername>, applications, *, *, allow
     g, <adminusername>, role:admin
-  scopes: '[email, group]'
+  scopes: '[email,groups]'
   dex.config: |
     connectors:
       - type: github

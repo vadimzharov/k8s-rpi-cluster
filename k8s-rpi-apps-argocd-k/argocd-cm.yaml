@@ -8,8 +8,8 @@ data:
   url: https://<argocdhostname>
   policy.default: ''
   policy.csv: |
-    p, <adminusername>, applications, *, *, allow
-    g, <adminusername>, role:admin
+    p, role:org-admin, applications, *, */*, allow
+    g, <adminusername>, role:org-admin
   scopes: '[email,groups]'
   dex.config: |
     connectors:

@@ -8,7 +8,6 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   entryPoints:
-    - web
     - websecure
   routes:
   - match: Host(`<triliumhostname>`)
@@ -16,5 +15,6 @@ spec:
     services:
     - name: trilium
       port: 8080
-
+  tls:
+    certResolver: godaddy
  

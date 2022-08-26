@@ -6,20 +6,6 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/argocd"      
 data:
   url: https://<argocdhostname>
-  policy.default: ''
-  policy.csv: |
-    p, role:org-admin, applications, *, */*, allow
-    g, <adminusername>, role:org-admin
-  scopes: '[email,groups]'
-  dex.config: |
-    connectors:
-      - type: github
-        id: github
-        name: GitHub
-        config:
-          clientID: <oauthclientid>
-          clientSecret: <oauthclientsecret>
-          loadAllGroups: true
   configManagementPlugins: |
     - name: argocd-vault-plugin
       generate:

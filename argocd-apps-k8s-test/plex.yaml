@@ -12,7 +12,6 @@ spec:
           TZ: UTC
     repoURL: https://k8s-at-home.com/charts/
     chart: k8s-at-home/plex
-    targetRevision: 6.4.3
   destination:
     server: https://kubernetes.default.svc
     namespace: plex

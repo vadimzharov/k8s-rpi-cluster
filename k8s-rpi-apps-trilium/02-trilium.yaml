@@ -117,6 +117,18 @@ spec:
               name: backup-restore-settings
           - secretRef:
               name: backup-restore-aws-creds          
-                            
+      initContainers:
+        - name: trilium-restore
+          image: quay.io/vadimzharov/podbackup:latest
+          command: ["podbackup"]
+          args: ["restore"]
+          volumeMounts:
+            - name: trilium-workingdir
+              mountPath: /trilium-workdir
+          envFrom:
+          - configMapRef:
+              name: backup-restore-settings
+          - secretRef:
+              name: backup-restore-aws-creds                                
 
 

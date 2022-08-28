@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: jallyfin
+  name: jellyfin
   namespace: argocd
 spec:
   project: k8s-rpi-apps

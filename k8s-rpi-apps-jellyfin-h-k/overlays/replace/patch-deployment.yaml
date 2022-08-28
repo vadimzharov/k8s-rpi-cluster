@@ -13,6 +13,10 @@ spec:
         - name: confdir
           emptyDir: {}    
       containers:
+        - name: jellyfin
+          volumeMounts:
+            - name: downloads-complete
+              mountPath: /downloads/complete                
         - name: k8s-rpi-transmission
           resources:
             requests:

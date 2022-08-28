@@ -1,0 +1,9 @@
+namespace: jellyfin
+
+resources:
+- ./all.yaml
+- overlays/add/service-transmission.yaml
+
+patches:
+- overlays/replace/patch-deployment.yaml
+

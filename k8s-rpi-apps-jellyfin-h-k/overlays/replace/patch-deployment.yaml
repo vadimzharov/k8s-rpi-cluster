@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+spec:
+  template: 
+    spec:
+      containers:
+        - name: k8s-rpi-transmission
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi        
+          image: "ghcr.io/k8s-at-home/transmission:v3.00"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: downloads-complete
+              mountPath: /downloads/complete
+            - name: downloads-incomplete
+              mountPath: /downloads/incomplete
+            - name: confdir
+              mountPath: /config
+          env:
+            - name: "TRANSMISSION_DOWNLOAD_DIR"
+              value: "/downloads/complete"
+            - name: "TRANSMISSION_INCOMPLETE_DIR"
+              value: "/downloads/incomplete"
+            - name: "TRANSMISSION_INCOMPLETE_DIR_ENABLED"
+              value: "false"
+            - name: "TRANSMISSION_WATCH_DIR"
+              value: "/watch"
+            - name: "TRANSMISSION_WATCH_DIR_ENABLED"
+              value: "false"
+            - name: "TRANSMISSION_WEB_HOME"
+              value: "/web"
+            - name: "TZ"
+              value: "CDT"
+          ports:
+            - name: tr-ui
+              containerPort: 9091
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 9091
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 9091
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 30
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: 9091
+            initialDelaySeconds: 0
+            failureThreshold: 30
+            timeoutSeconds: 1
+            periodSeconds: 5

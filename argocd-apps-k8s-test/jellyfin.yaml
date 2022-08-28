@@ -1,18 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: jellyfin
+  name: jallyfin
   namespace: argocd
 spec:
   project: k8s-rpi-apps
   source:
-    helm:
-      values: |
-        env:
-          TZ: "America/Chicago"
-    repoURL: https://k8s-at-home.com/charts/
-    chart: jellyfin
-    targetRevision: 9.5.3
+    repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+    targetRevision: k8s-test
+    path: k8s-rpi-apps-jellyfin-h-k
+    plugin:
+      name: argocd-vault-plugin-kustomized-helm
+      env:
+        - name: helm_args
+          value: --include-crds
   destination:
     server: https://kubernetes.default.svc
     namespace: jellyfin
@@ -21,4 +22,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true      
+      - CreateNamespace=true

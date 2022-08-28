@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: k8s-rpi-transmission
   labels:
-    app.kubernetes.io/name: transmission
+    app.kubernetes.io/name: jellyfin
 spec:
   type: ClusterIP
   ports:
@@ -12,4 +12,4 @@ spec:
     protocol: TCP
     name: tr-ui
   selector:
-    app.kubernetes.io/name: transmission
+    app.kubernetes.io/name: jellyfin

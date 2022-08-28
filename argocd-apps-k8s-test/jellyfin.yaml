@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jellyfin
+  namespace: argocd
+spec:
+  project: k8s-rpi-apps
+  source:
+    helm:
+      values: |
+        env:
+          TZ: "America/Chicago"
+    repoURL: https://k8s-at-home.com/charts/
+    chart: jellyfin
+    targetRevision: 9.5.3
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jellyfin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true      

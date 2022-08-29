@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backup-restore-settings
+data:
+  S3_BUCKET_FOLDER: "jellyfin-data"
+  S3_FILE_PREFIX: "jellyfin-data"
+  DIR_TO_BACKUP: "/jellyfin-data"
+  DIR_TO_RESTORE: "/jellyfin-data"  
+  BACKUP_INTERVAL: "24h"
+  PRUNE_INTERVAL: "48h"
+  COPIES_TO_KEEP: "35"
+  FORCE_RESTORE: "False"  
+  ARCHIVE_TYPE: "tarzip"
+

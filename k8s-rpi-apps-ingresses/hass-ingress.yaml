@@ -5,16 +5,18 @@ metadata:
   namespace: home-assistant
   annotations:
     kubernetes.io/ingress.class: traefik  
-    avp.kubernetes.io/path: "k8secrets/hass"    
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   entryPoints:
     - web
     - websecure
   routes:
-  - match: Host(`<hasshostname>`)
+  - match: Host(`<hasshostname>.<domainname>`)
     kind: Rule
     services:
     - name: home-assistant
       port: 8123
+  tls:
+    certResolver: godaddy  
 
  

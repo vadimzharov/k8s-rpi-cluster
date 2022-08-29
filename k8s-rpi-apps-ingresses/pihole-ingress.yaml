@@ -5,12 +5,12 @@ metadata:
   namespace: pihole
   annotations:
     kubernetes.io/ingress.class: traefik  
-    avp.kubernetes.io/path: "k8secrets/pihole"    
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   entryPoints:
     - web
   routes:
-  - match: Host(`<piholehostname>`)
+  - match: Host(`<piholehostname>.<domainname>`)
     kind: Rule
     services:
     - name: pihole-web

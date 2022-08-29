@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: plex
+  namespace: argocd
+spec:
+  project: k8s-rpi-apps
+  source:
+    helm:
+      values: |
+        env:
+          TZ: UTC
+    repoURL: https://k8s-at-home.com/charts/
+    chart: plex
+    targetRevision: 6.4.3
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: plex
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true      

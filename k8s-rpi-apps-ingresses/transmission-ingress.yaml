@@ -1,20 +1,17 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: trilium-ingress
-  namespace: trilium
+  name: transmission-ui
+  namespace: jellyfin  
   annotations:
     kubernetes.io/ingress.class: traefik  
     avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   entryPoints:
-    - websecure
+    - web
   routes:
-  - match: Host(`<triliumhostname>.<domainname>`)
+  - match: Host(`<truihostname>.<domainname>`)
     kind: Rule
     services:
-    - name: trilium
-      port: 8080
-  tls:
-    certResolver: godaddy
- 
+    - name: k8s-rpi-transmission
+      port: 9091

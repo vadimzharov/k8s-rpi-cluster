@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/jellyfin"  
+spec:
+  template: 
+    spec:
+      volumes:
+        - name: downloads-complete
+          hostPath:
+            path: /cont/torr
+            type: DirectoryOrCreate
+        - name: downloads-incomplete
+          emptyDir: {}
+        - name: confdir
+          hostPath:
+            path: /cont/torr-conf
+            type: DirectoryOrCreate
+        - name: jellyfin-datadir
+          emptyDir: {}
+      nodeSelector:
+          kubernetes.io/hostname: <jellyfink8snodename>
+      containers:
+        - name: jellyfin
+          volumeMounts:
+            - name: downloads-complete
+              mountPath: /downloads/complete            
+            - name: jellyfin-datadir
+              mountPath: /jellyfin-data
+          env:
+            - name: "JELLYFIN_DATA_DIR"
+              value: "/jellyfin-data"
+            - name: "JELLYFIN_CONFIG_DIR"
+              value: "/jellyfin-data/config"
+        - name: k8s-rpi-transmission
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi        
+          image: "ghcr.io/k8s-at-home/transmission:v3.00"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: downloads-complete
+              mountPath: /downloads/complete
+            - name: downloads-incomplete
+              mountPath: /downloads/incomplete
+            - name: confdir
+              mountPath: /config
+          env:
+            - name: "TRANSMISSION_DOWNLOAD_DIR"
+              value: "/downloads/complete"
+            - name: "TRANSMISSION_INCOMPLETE_DIR"
+              value: "/downloads/incomplete"
+            - name: "TRANSMISSION_INCOMPLETE_DIR_ENABLED"
+              value: "false"
+            - name: "TRANSMISSION_WATCH_DIR"
+              value: "/watch"
+            - name: "TRANSMISSION_WATCH_DIR_ENABLED"
+              value: "false"
+            - name: "TRANSMISSION_WEB_HOME"
+              value: "/web"
+            - name: "TZ"
+              value: "CDT"
+          ports:
+            - name: tr-ui
+              containerPort: 9091
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 9091
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 9091
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 30
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: 9091
+            initialDelaySeconds: 0
+            failureThreshold: 30
+            timeoutSeconds: 1
+            periodSeconds: 5
+        - name: jellyfin-backup-daemon
+          image: quay.io/vadimzharov/podbackup:latest
+          command: ["podbackup"]
+          args: ["backup-daemon"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+          volumeMounts:
+            - name: jellyfin-datadir
+              mountPath: /jellyfin-data
+          envFrom:
+          - configMapRef:
+              name: backup-restore-settings
+          - secretRef:
+              name: backup-restore-aws-creds
+      initContainers:
+        - name: jellyfin-restore
+          image: quay.io/vadimzharov/podbackup:latest
+          command: ["podbackup"]
+          args: ["restore"]
+          volumeMounts:
+            - name: jellyfin-datadir
+              mountPath: /jellyfin-data
+          envFrom:
+          - configMapRef:
+              name: backup-restore-settings
+          - secretRef:
+              name: backup-restore-aws-creds

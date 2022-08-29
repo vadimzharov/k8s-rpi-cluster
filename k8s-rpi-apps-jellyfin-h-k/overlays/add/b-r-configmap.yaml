@@ -10,6 +10,6 @@ data:
   BACKUP_INTERVAL: "24h"
   PRUNE_INTERVAL: "48h"
   COPIES_TO_KEEP: "35"
-  FORCE_RESTORE: "True"  
+  FORCE_RESTORE: "False"  
   ARCHIVE_TYPE: "tarzip"
 

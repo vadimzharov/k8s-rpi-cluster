@@ -110,16 +110,3 @@ spec:
               name: backup-restore-settings
           - secretRef:
               name: backup-restore-aws-creds
-      initContainers:
-        - name: jellyfin-restore
-          image: quay.io/vadimzharov/podbackup:latest
-          command: ["podbackup"]
-          args: ["restore"]
-          volumeMounts:
-            - name: jellyfin-datadir
-              mountPath: /jellyfin-data
-          envFrom:
-          - configMapRef:
-              name: backup-restore-settings
-          - secretRef:
-              name: backup-restore-aws-creds

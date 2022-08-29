@@ -21,7 +21,7 @@ spec:
         - name: jellyfin-datadir
           emptyDir: {}
       nodeSelector:
-          kubernetes.io/hostname: <jellyfink8snodename>
+          kubernetes.io/hostname: <jellyfink8snode>
       containers:
         - name: jellyfin
           volumeMounts:

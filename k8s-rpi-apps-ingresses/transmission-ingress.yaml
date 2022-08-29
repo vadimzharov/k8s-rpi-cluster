@@ -10,7 +10,7 @@ spec:
   entryPoints:
     - web
   routes:
-  - match: Host(`<truihostname>`)
+  - match: Host(`<truihostname>.<domainname>`)
     kind: Rule
     services:
     - name: k8s-rpi-transmission

@@ -10,7 +10,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`<triliumhostname>`)
+  - match: Host(`<triliumhostname>.<domainname>`)
     kind: Rule
     services:
     - name: trilium

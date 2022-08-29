@@ -10,7 +10,7 @@ spec:
   entryPoints:
     - web
   routes:
-  - match: Host(`<jellyfinhostname>`)
+  - match: Host(`<jellyfinhostname>.<domainname>`)
     kind: Rule
     services:
     - name: jellyfin

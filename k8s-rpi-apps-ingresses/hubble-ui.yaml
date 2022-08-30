@@ -8,13 +8,11 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   entryPoints:
-    - websecure
+    - web
   routes:
   - match: Host(`<hubblehostname>.<domainname>`)
     kind: Rule
     services:
     - name: hubble-ui
       port: 80
-  tls:
-    certResolver: godaddy
     

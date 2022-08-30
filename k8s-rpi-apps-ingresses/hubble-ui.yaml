@@ -8,7 +8,7 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
   - match: Host(`<hubblehostname>.<domainname>`)
     kind: Rule
@@ -18,3 +18,5 @@ spec:
     middlewares:
       - name: basic-auth
         namespace: traefik-v2
+  tls:
+    certResolver: godaddy        

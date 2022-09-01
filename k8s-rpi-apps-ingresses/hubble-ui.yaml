@@ -19,4 +19,4 @@ spec:
       - name: basic-auth-remove-header
         namespace: traefik-v2      
   tls:
-    certResolver: godaddy      
+    certResolver: godaddy

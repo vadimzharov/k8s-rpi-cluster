@@ -8,10 +8,12 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
   - match: Host(`<piholehostname>.<domainname>`)
     kind: Rule
     services:
     - name: pihole-web
       port: 80
+  tls:
+    certResolver: godaddy      

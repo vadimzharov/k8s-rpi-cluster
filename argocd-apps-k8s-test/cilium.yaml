@@ -29,7 +29,7 @@ spec:
           tls:
             auto:
               enabled: true 
-              method: helm  
+              method: cronJob  
               certValidityDuration: 1095
     repoURL: https://helm.cilium.io/
     chart: cilium

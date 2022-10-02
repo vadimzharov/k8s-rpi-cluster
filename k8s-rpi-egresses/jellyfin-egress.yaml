@@ -15,4 +15,4 @@ spec:
     nodeSelector:
       matchLabels:
         node-role.kubernetes.io/egress-gw: 
-      egressIP: <egressipvpn>
+    egressIP: <egressipvpn>

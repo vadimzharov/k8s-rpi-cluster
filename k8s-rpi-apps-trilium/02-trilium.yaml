@@ -1,0 +1,134 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: trilium
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  name: trilium
+  namespace: trilium
+  labels:
+    app.kubernetes.io/name: trilium
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app.kubernetes.io/name: trilium
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trilium
+  namespace: trilium
+  labels:
+    app.kubernetes.io/name: trilium
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: trilium
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: trilium
+    spec:
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 90
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      volumes:
+        - name: trilium-workingdir
+          emptyDir: {}
+      containers:
+        - name: trilium
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 150m
+              memory: 256Mi        
+          image: "docker.io/zadam/trilium:latest"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: false
+          env:
+            - name: "USER_UID"
+              value: "1001"
+            - name: "USER_GID"
+              value: "1001"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: trilium-workingdir
+              mountPath: /home/node/trilium-data    
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 30
+            failureThreshold: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 30
+            failureThreshold: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 30
+            failureThreshold: 30
+            timeoutSeconds: 2
+            periodSeconds: 5
+        - name: trilium-daemon
+          image: quay.io/vadimzharov/podbackup:latest
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/usr/local/bin/podbackup", "backup"]
+          command: ["podbackup"]
+          args: ["backup-daemon"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 150m
+              memory: 128Mi
+          volumeMounts:
+            - name: trilium-workingdir
+              mountPath: /trilium-workdir
+          envFrom:
+          - configMapRef:
+              name: backup-restore-settings
+          - secretRef:
+              name: backup-restore-aws-creds          
+      initContainers:
+        - name: trilium-restore
+          image: quay.io/vadimzharov/podbackup:latest
+          command: ["podbackup"]
+          args: ["restore"]
+          volumeMounts:
+            - name: trilium-workingdir
+              mountPath: /trilium-workdir
+          envFrom:
+          - configMapRef:
+              name: backup-restore-settings
+          - secretRef:
+              name: backup-restore-aws-creds                                
+
+

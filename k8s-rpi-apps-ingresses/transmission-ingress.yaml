@@ -1,19 +1,17 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: k8s-rpi-pihole-ui
-  namespace: pihole
+  name: transmission-ui
+  namespace: jellyfin  
   annotations:
     kubernetes.io/ingress.class: traefik  
     avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   entryPoints:
-    - websecure
+    - web
   routes:
-  - match: Host(`<piholehostname>.<domainname>`)
+  - match: Host(`<truihostname>.<domainname>`)
     kind: Rule
     services:
-    - name: pihole-web
-      port: 80
-  tls:
-    certResolver: godaddy      
+    - name: k8s-rpi-transmission
+      port: 9091

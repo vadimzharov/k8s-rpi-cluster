@@ -1,8 +1,8 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: k8s-rpi-pihole-ui
-  namespace: pihole
+  name: hass-ingress
+  namespace: home-assistant
   annotations:
     kubernetes.io/ingress.class: traefik  
     avp.kubernetes.io/path: "k8secrets/ingresses"    
@@ -10,10 +10,12 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`<piholehostname>.<domainname>`)
+  - match: Host(`<hasshostname>.<domainname>`)
     kind: Rule
     services:
-    - name: pihole-web
-      port: 80
+    - name: home-assistant
+      port: 8123
   tls:
-    certResolver: godaddy      
+    certResolver: godaddy  
+
+ 

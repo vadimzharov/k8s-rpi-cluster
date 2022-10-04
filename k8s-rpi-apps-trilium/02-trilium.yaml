@@ -45,18 +45,19 @@ spec:
       terminationGracePeriodSeconds: 90
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
-      securityContext:
-        capabilities:
-          drop:
-            - ALL
-        runAsNonRoot: true
-        runAsUser: 1001
-        allowPrivilegeEscalation: false        
       volumes:
         - name: trilium-workingdir
           emptyDir: {}
       containers:
         - name: trilium
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 1001
+            allowPrivilegeEscalation: false                
+            privileged: false            
           resources:
             requests:
               cpu: 50m
@@ -66,8 +67,7 @@ spec:
               memory: 256Mi        
           image: "docker.io/zadam/trilium:latest"
           imagePullPolicy: IfNotPresent
-          securityContext:
-            privileged: false
+
           env:
             - name: "USER_UID"
               value: "1001"

@@ -51,11 +51,11 @@ spec:
       containers:
         - name: trilium
           securityContext:
-#            capabilities:
-#              drop:
-#                - ALL
-#            runAsNonRoot: true
-#            runAsUser: 1001
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 1000
 #            allowPrivilegeEscalation: false                
             privileged: true
           resources:

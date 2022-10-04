@@ -45,6 +45,13 @@ spec:
       terminationGracePeriodSeconds: 90
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
+        runAsNonRoot: true
+        runAsUser: 1001
+        allowPrivilegeEscalation: false        
       volumes:
         - name: trilium-workingdir
           emptyDir: {}

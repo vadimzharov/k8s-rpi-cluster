@@ -14,11 +14,6 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: tekton-pipelines
-  namespaceResourceBlacklist:
-  - group: tekton.dev
-    kind: TaskRun
-  - group: tekton.dev
-    kind: PipelineRun    
   syncPolicy:
     automated:
       prune: true

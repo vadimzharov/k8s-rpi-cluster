@@ -12,7 +12,7 @@ data:
         - tekton.dev
       kinds:
         - CiliumIdentity
-        - taskruns
+        - TaskRun
       clusters:
         - "*"
   configManagementPlugins: |

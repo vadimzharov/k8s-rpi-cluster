@@ -130,7 +130,7 @@ spec:
             - name: downloads-complete
               mountPath: /data
             - name: minio-s3-config
-              mountPath: "/root/.mc/config.json"
+              mountPath: "/root/.mc/"
             - name: minio-s3-config-dir
               mountPath: "/root/.mc/"
       initContainers:

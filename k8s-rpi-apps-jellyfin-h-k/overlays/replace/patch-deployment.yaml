@@ -127,7 +127,7 @@ spec:
           volumeMounts:
             - name: downloads-complete
               mountPath: /data
-            - name: mirror-s3-secret
+            - name: minio-s3-config
               mountPath: "/root/.mc/"
       initContainers:
         - name: jellyfin-restore

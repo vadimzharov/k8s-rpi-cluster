@@ -116,7 +116,7 @@ spec:
         - name: transmission-sync-daemon
           image: docker.io/minio/mc:latest
           command: ["mc"]
-          args: ["--watch", "/data", "minio-s3/torrents"]
+          args: ["mirror","--watch", "/data", "minio-s3/torrents"]
           resources:
             requests:
               cpu: 50m

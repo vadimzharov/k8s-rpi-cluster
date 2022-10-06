@@ -23,6 +23,8 @@ spec:
         - name: minio-s3-config
           secret:
             secretName: mirror-s3-secret
+        - name: minio-s3-config-dir
+          emptyDir: {}
       nodeSelector:
           kubernetes.io/hostname: <jellyfink8snode>
       containers:
@@ -128,6 +130,8 @@ spec:
             - name: downloads-complete
               mountPath: /data
             - name: minio-s3-config
+              mountPath: "/root/.mc/config.json"
+            - name: minio-s3-config-dir
               mountPath: "/root/.mc/"
       initContainers:
         - name: jellyfin-restore

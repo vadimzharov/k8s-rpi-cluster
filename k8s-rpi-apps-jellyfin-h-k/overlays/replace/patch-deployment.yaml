@@ -23,7 +23,11 @@ spec:
         - name: minio-s3-config
           secret:
             secretName: mirror-s3-secret
-        - name: minio-s3-config-dir
+        - name: minio-s3-config-certs-dir
+          emptyDir: {}
+        - name: minio-s3-config-session-dir
+          emptyDir: {}
+        - name: minio-s3-config-share-dir
           emptyDir: {}
       nodeSelector:
           kubernetes.io/hostname: <jellyfink8snode>
@@ -131,8 +135,12 @@ spec:
               mountPath: /data
             - name: minio-s3-config
               mountPath: "/root/.mc/"
-            - name: minio-s3-config-dir
-              mountPath: "/root/.mc/"
+            - name: minio-s3-config-certs-dir
+              mountPath: "/root/.mc/certs"
+            - name: minio-s3-config-session-dir
+              mountPath: "/root/.mc/session"
+            - name: minio-s3-config-share-dir
+              mountPath: "/root/.mc/share"
       initContainers:
         - name: jellyfin-restore
           image: quay.io/vadimzharov/podbackup:latest

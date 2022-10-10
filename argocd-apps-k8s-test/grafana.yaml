@@ -19,7 +19,7 @@ spec:
               datasources:
               - name: VM
                 type: victoriametrics
-                url: http://victoriametrics-victoria-metrics-single-server.victoriametrics.svc.cluster.local:8428/select/0/prometheus/
+                url: http://victoriametrics-victoria-metrics-single-server.victoriametrics.svc.cluster.local:8428
                 access: proxy
                 isDefault: true
                 updateIntervalSeconds: 10

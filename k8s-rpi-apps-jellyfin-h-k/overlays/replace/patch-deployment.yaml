@@ -111,7 +111,7 @@ spec:
           - secretRef:
               name: backup-restore-aws-creds
         - name: transmission-sync-daemon
-          image: quay.io/vadimzharov/podbackup:test
+          image: quay.io/vadimzharov/podbackup:latest
           imagePullPolicy: Always
           command: ["podbackup"]
           args: ["sync-to-s3"]

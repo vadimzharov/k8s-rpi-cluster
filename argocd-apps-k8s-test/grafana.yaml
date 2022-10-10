@@ -17,9 +17,9 @@ spec:
             datasources.yaml:
               apiVersion: 1
               datasources:
-              - name: VM
-                type: victoriametrics
-                url: http://victoriametrics-victoria-metrics-single-server.victoriametrics.svc.cluster.local:8428
+              - name: victoriametrics
+                type: prometheus
+                url: http://victoriametrics-victoria-metrics-single-server.victoriametrics.svc.cluster.local:8428/select/0/prometheus/
                 access: proxy
                 isDefault: true
                 updateIntervalSeconds: 10

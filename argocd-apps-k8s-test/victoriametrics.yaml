@@ -10,11 +10,14 @@ spec:
   source:
     helm:
       values: |
-          scrape:
-            enabled: true
-            config:
-              global:
-                scrape_interval: 30s            
+          server:
+            persistentVolume:
+              enabled: true
+            scrape:
+              enabled: true
+              config:
+                global:
+                  scrape_interval: 30s            
     repoURL: https://victoriametrics.github.io/helm-charts/
     chart: victoria-metrics-single 
     targetRevision: 0.8.38

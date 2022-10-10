@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: all-ingresses
+  name: all-egresses
   namespace: argocd
 spec:
   project: k8s-rpi-apps
   source:
     repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-    targetRevision: k8s-test
-    path: k8s-rpi-apps-ingresses
+    targetRevision: k8s-main
+    path: k8s-rpi-egresses
     plugin:
       name: argocd-vault-plugin    
   destination:
@@ -17,5 +17,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true

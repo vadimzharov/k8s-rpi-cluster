@@ -9,8 +9,10 @@ data:
   resource.exclusions: |
     - apiGroups:
         - cilium.io
+        - tekton.dev
       kinds:
         - CiliumIdentity
+        - TaskRun
       clusters:
         - "*"
   configManagementPlugins: |

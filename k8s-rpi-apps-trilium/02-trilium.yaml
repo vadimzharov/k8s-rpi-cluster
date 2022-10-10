@@ -50,6 +50,14 @@ spec:
           emptyDir: {}
       containers:
         - name: trilium
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 1000
+#            allowPrivilegeEscalation: false                
+            privileged: true
           resources:
             requests:
               cpu: 50m
@@ -59,13 +67,13 @@ spec:
               memory: 256Mi        
           image: "docker.io/zadam/trilium:latest"
           imagePullPolicy: IfNotPresent
-          securityContext:
-            privileged: false
           env:
-            - name: "USER_UID"
-              value: "1001"
-            - name: "USER_GID"
-              value: "1001"
+             - name: TRILIUM_PORT
+               value: "8080"
+#            - name: "USER_UID"
+#              value: "1001"
+#            - name: "USER_GID"
+#              value: "1001"
           ports:
             - name: http
               containerPort: 8080

@@ -5,6 +5,8 @@ resources:
 - overlays/add/service-transmission.yaml
 - overlays/add/b-r-configmap.yaml
 - overlays/add/b-r-secret.yaml
+- overlays/add/sync-s3-configmap.yaml
+- overlays/add/sync-s3-secret.yaml
 
 patches:
 - overlays/replace/patch-deployment.yaml

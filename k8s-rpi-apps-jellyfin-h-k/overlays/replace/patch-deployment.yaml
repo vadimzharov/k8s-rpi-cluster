@@ -110,6 +110,26 @@ spec:
               name: backup-restore-settings
           - secretRef:
               name: backup-restore-aws-creds
+        - name: transmission-sync-daemon
+          image: quay.io/vadimzharov/podbackup:latest
+          imagePullPolicy: Always
+          command: ["podbackup"]
+          args: ["sync-to-s3"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          envFrom:
+          - configMapRef:
+              name: sync-s3-settings
+          - secretRef:
+              name: sync-s3-secret
+          volumeMounts:
+            - name: downloads-complete
+              mountPath: /data
       initContainers:
         - name: jellyfin-restore
           image: quay.io/vadimzharov/podbackup:latest

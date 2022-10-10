@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sync-s3-settings
+data:
+  S3_BUCKET_FOLDER: "transmission"
+  DIR_TO_BACKUP: "/data"
+  BACKUP_INTERVAL: "3h"
+  S3_SYNC_PARALLELISM: "4"
+

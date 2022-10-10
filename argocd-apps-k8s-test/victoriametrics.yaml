@@ -12,7 +12,7 @@ spec:
       values: |
           server:
             persistentVolume:
-              enabled: true
+              enabled: false
             scrape:
               enabled: true
               config:

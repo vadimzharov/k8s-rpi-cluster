@@ -20,15 +20,15 @@ spec:
             type: DirectoryOrCreate
         - name: jellyfin-datadir
           emptyDir: {}
-        - name: minio-s3-config
-          secret:
-            secretName: mirror-s3-secret
-        - name: minio-s3-config-certs-dir
-          emptyDir: {}
-        - name: minio-s3-config-session-dir
-          emptyDir: {}
-        - name: minio-s3-config-share-dir
-          emptyDir: {}
+#        - name: minio-s3-config
+#          secret:
+#            secretName: mirror-s3-secret
+#        - name: minio-s3-config-certs-dir
+#          emptyDir: {}
+#        - name: minio-s3-config-session-dir
+#          emptyDir: {}
+#        - name: minio-s3-config-share-dir
+#          emptyDir: {}
       nodeSelector:
           kubernetes.io/hostname: <jellyfink8snode>
       containers:
@@ -120,9 +120,9 @@ spec:
           - secretRef:
               name: backup-restore-aws-creds
         - name: transmission-sync-daemon
-          image: docker.io/minio/mc:latest
-          command: ["mc"]
-          args: ["mirror","--watch", "/data", "minio-s3/torrents"]
+          image: quay.io/vadimzharov/podbackup:test
+          command: ["podbackup"]
+          args: ["sync-to-s3"]
           resources:
             requests:
               cpu: 50m
@@ -130,17 +130,22 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
+          envFrom:
+          - configMapRef:
+              name: sync-s3-settings
+          - secretRef:
+              name: sync-s3-secret
           volumeMounts:
             - name: downloads-complete
               mountPath: /data
-            - name: minio-s3-config
-              mountPath: "/root/.mc/"
-            - name: minio-s3-config-certs-dir
-              mountPath: "/root/.mc/certs"
-            - name: minio-s3-config-session-dir
-              mountPath: "/root/.mc/session"
-            - name: minio-s3-config-share-dir
-              mountPath: "/root/.mc/share"
+#            - name: minio-s3-config
+#              mountPath: "/root/.mc/"
+#            - name: minio-s3-config-certs-dir
+#              mountPath: "/root/.mc/certs"
+#            - name: minio-s3-config-session-dir
+#              mountPath: "/root/.mc/session"
+#            - name: minio-s3-config-share-dir
+#              mountPath: "/root/.mc/share"
       initContainers:
         - name: jellyfin-restore
           image: quay.io/vadimzharov/podbackup:latest

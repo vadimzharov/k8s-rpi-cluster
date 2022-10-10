@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: victoriametrics
   namespace: argocd
-#  annotations:
-#    avp.kubernetes.io/path: "k8secrets/pihole" 
 spec:
   project: k8s-rpi-apps
   source:

@@ -17,7 +17,7 @@ spec:
                 scrape_interval: 30s            
     repoURL: https://victoriametrics.github.io/helm-charts/
     chart: victoria-metrics-single 
-    targetRevision: 1.82.0
+    targetRevision: 0.8.38
   destination:
     server: https://kubernetes.default.svc
     namespace: victoriametrics

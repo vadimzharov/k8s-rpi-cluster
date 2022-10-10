@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: victoriametrics
+  namespace: argocd
+#  annotations:
+#    avp.kubernetes.io/path: "k8secrets/pihole" 
+spec:
+  project: k8s-rpi-apps
+  source:
+    helm:
+      values: |
+          scrape:
+            enabled: true
+            config:
+              global:
+                scrape_interval: 30s            
+    repoURL: https://victoriametrics.github.io/helm-charts/
+    chart: victoria-metrics-single 
+    targetRevision: 1.82.0
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: victoriametrics
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: victoriametrics-victoria-metrics-single-server
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/victoriametrics"  
+spec:
+  template: 
+    spec:
+      volumes:
+        - name: vmbackup-config-secret
+          secret:
+            secretName: vmbackup-config-secret
+        - name: backup-script
+          configMap:
+            name: vmbackup-script
+            defaultMode: 0777
+      containers:
+        - name: victoriametrics-backup
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi        
+          image: "docker.io/victoriametrics/vmbackup:latest"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: vmbackup-config-secret
+              mountPath: /etc/vmbackup-config
+            - name: server-volume
+              mountPath: /storage
+            - name: backup-script
+              mountPath: /script/backup.sh
+              subPath: backup.sh

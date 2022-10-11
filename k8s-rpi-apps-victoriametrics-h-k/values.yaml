@@ -1,0 +1,8 @@
+server:
+  persistentVolume:
+    enabled: false
+  scrape:
+    enabled: true
+    config:
+      global:
+        scrape_interval: 30s         

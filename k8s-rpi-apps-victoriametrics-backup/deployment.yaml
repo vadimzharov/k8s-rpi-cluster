@@ -1,11 +1,19 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: victoriametrics-victoria-metrics-single-server
-  annotations:
-    avp.kubernetes.io/path: "k8secrets/victoriametrics"  
+  name: vmbackup
+  namespace: victoriametrics
+  labels:
+    app: vmbackup
 spec:
-  template: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vmbackup
+  template:
+    metadata:
+      labels:
+        app: vmbackup
     spec:
       volumes:
         - name: vmbackup-config-secret
@@ -14,7 +22,7 @@ spec:
         - name: backup-script
           configMap:
             name: vmbackup-script
-            defaultMode: 0777
+            defaultMode: 0777    
       containers:
         - name: victoriametrics-backup
           resources:
@@ -34,3 +42,4 @@ spec:
             - name: backup-script
               mountPath: /script/backup.sh
               subPath: backup.sh
+

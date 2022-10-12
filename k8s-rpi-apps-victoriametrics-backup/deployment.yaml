@@ -25,6 +25,7 @@ spec:
             defaultMode: 0777    
       containers:
         - name: victoriametrics-backup
+          command: ["/script/backup.sh"]
           resources:
             requests:
               cpu: 100m

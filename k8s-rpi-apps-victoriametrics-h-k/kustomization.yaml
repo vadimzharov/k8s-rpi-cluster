@@ -5,5 +5,5 @@ resources:
 - overlays/add/vmbackup-config-secret.yaml
 - overlays/add/vmbackup-script-configmap.yaml
 
-patches:
+patchesStrategicMerge:
 - overlays/replace/patch-statefulset.yaml

@@ -1,0 +1,9 @@
+namespace: victoriametrics
+
+resources:
+- ./all.yaml
+- overlays/add/vmbackup-config-secret.yaml
+- overlays/add/vmbackup-script-configmap.yaml
+
+patches:
+- overlays/replace/patch-statefulset.yaml

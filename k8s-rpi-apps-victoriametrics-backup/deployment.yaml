@@ -37,8 +37,6 @@ spec:
           volumeMounts:
             - name: vmbackup-config-secret
               mountPath: /etc/vmbackup-config
-            - name: server-volume
-              mountPath: /storage
             - name: backup-script
               mountPath: /script/backup.sh
               subPath: backup.sh

@@ -14,6 +14,10 @@ spec:
           configMap:
             name: vmbackup-script
             defaultMode: 0777
+        - name: restore-script
+          configMap:
+            name: vmrestore-script
+            defaultMode: 0777            
       containers:
         - name: victoriametrics-backup
           command: ["/script/backup.sh"]
@@ -34,3 +38,16 @@ spec:
             - name: backup-script
               mountPath: /script/backup.sh
               subPath: backup.sh
+      initContainers:
+        - name: vm-restore
+          image: "docker.io/victoriametrics/vmrestore:latest"
+          command: ["/script/restore.sh"]
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: vmbackup-config-secret
+              mountPath: /etc/vmbackup-config
+            - name: server-volume
+              mountPath: /storage
+            - name: restore-script
+              mountPath: /script/restore.sh
+              subPath: restore.sh      

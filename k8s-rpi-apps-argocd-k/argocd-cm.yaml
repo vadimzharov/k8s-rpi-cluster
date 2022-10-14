@@ -58,4 +58,4 @@ data:
         args: ["helm dependency build"]
       generate:
         command: ["bash", "-c"]
-        args: ['helm template "$ARGOCD_APP_NAME" --include-crds -f values.yaml --namespace="$HELM_NAMESPACE" . > all.yaml && kustomize build | argocd-vault-plugin generate -']
+        args: ['helm template "$ARGOCD_APP_NAME" --include-crds -f values.yaml --namespace=victoriametrics . > all.yaml && kustomize build | argocd-vault-plugin generate -']

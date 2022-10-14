@@ -21,6 +21,6 @@ spec:
         targetPort: "websecure-ext"
         protocol: "TCP"        
       - port: 8080
-        name: metrics
-        targetPort: "metrics"
+        name: vm-metrics
+        targetPort: "vm-metrics"
         protocol: "TCP"     

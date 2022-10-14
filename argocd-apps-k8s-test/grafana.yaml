@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: grafana
   namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/grafana"     
 spec:
   project: k8s-rpi-apps
   source:
@@ -12,7 +14,7 @@ spec:
             type: pvc
             enabled: false
           adminUser: admin
-          adminPassword: admin
+          adminPassword: <adminpassword>
           datasources: 
             datasources.yaml:
               apiVersion: 1

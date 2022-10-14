@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vmbackup-script
+  namespace: victoriametrics
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/victoriametrics"  
+data:
+  backup.sh: |
+    #!/bin/sh
+    while :
+    do
+      sleep 10m
+      /vmbackup-prod -storageDataPath=/storage -snapshot.createURL=http://localhost:8428/snapshot/create -dst=s3://<bucket>/backups/vm -credsFilePath=/etc/vmbackup-config/config.ini -customS3Endpoint=<s3endpoint>
+      sleep 10m
+    done
+

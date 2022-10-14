@@ -13,7 +13,9 @@ spec:
       name: argocd-vault-plugin-kustomized-helm-values
       env:
         - name: helm_args
-          value: --namespace=victoriametrics -f values.yaml 
+          value: -f values.yaml 
+        - name: HELM_NAMESPACE
+          value: victoriametrics
   destination:
     server: https://kubernetes.default.svc
     namespace: victoriametrics

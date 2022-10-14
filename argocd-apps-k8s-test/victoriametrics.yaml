@@ -16,6 +16,8 @@ spec:
           value: -f values.yaml 
         - name: HELM_NAMESPACE
           value: victoriametrics
+        - name: APP_NAMESPACE
+          value: victoriametrics
   destination:
     server: https://kubernetes.default.svc
     namespace: victoriametrics

@@ -1,10 +1,8 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: victoriametrics-victoria-metrics-single-server
+  name: victoriam-victoria-metrics-single-server
   namespace: victoriametrics
-  annotations:
-    avp.kubernetes.io/path: "k8secrets/victoriametrics"  
 spec:
   template: 
     spec:

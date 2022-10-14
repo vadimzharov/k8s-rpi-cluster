@@ -35,9 +35,6 @@ spec:
         - name: "websecure-ext"
           containerPort: 6443
           protocol: "TCP"
-        - name: "metrics"
-          containerPort: 8080
-          protocol: "TCP"                     
       - name: tr-backup-daemon
         image: quay.io/vadimzharov/podbackup:latest
         command: ["podbackup"]

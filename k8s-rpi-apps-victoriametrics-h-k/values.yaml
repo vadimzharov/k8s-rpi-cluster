@@ -6,4 +6,9 @@ victoria-metrics-single:
       enabled: true
       config:
         global:
-          scrape_interval: 30s        
+          scrape_interval: 30s
+      extraScrapeConfigs:
+      - job_name: 'traefik'
+        static_configs:
+        - targets: ['traefik.traefik-v2.svc.cluster.local:8080']
+        scheme: http

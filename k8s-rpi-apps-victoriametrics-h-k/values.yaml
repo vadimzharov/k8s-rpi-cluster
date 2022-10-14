@@ -11,4 +11,4 @@ victoria-metrics-single:
       - job_name: 'traefik'
         static_configs:
         - targets: ['traefik.traefik-v2.svc.cluster.local:8080']
-        scheme: https
+        scheme: http

@@ -8,4 +8,6 @@ metadata:
 data:
   restore.sh: |
     #!/bin/sh
+    set -e
     /vmrestore-prod -storageDataPath=/storage -src=s3://<bucket>/backups/vm -credsFilePath=/etc/vmbackup-config/config.ini -customS3Endpoint=<s3endpoint>
+    echo "Restore successful"

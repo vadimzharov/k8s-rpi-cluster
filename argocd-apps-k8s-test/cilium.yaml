@@ -43,7 +43,13 @@ spec:
           ui:
             enabled: true
           metrics:
-            enabled: "{dns,drop,tcp,flow,icmp,http}"
+            enabled: 
+             - dns:query;ignoreAAAA
+             - drop
+             - tcp
+             - flow
+             - icmp
+             - http            
           tls:
             auto:
               enabled: true 

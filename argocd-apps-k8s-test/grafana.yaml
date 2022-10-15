@@ -15,6 +15,8 @@ spec:
             enabled: false
           adminUser: admin
           adminPassword: <adminpassword>
+          plugins: 
+            - grafana-piechart-panel
           datasources: 
             datasources.yaml:
               apiVersion: 1
@@ -50,8 +52,12 @@ spec:
                 datasource: victoriametrics
               traefik:
                 gnetId: 4475
+                revision: 5
+                datasource: victoriametrics
+              traefik-v2:
+                gnetId: 12250
                 revision: 1
-                datasource: victoriametrics                
+                datasource: victoriametrics                  
     repoURL: https://grafana.github.io/helm-charts
     chart: grafana
     targetRevision: 6.40.3

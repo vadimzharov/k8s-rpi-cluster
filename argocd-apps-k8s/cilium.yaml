@@ -9,19 +9,29 @@ spec:
     helm:
       values: |
         debug:
-          enabled: true
+          enabled: false
         bgp:
           enabled: false
           announce:
             loadbalancerIP: false
         operator:
           replicas: 1
+        prometheus:
+          enabled: true          
         ipam:
           mode: "cluster-pool"
           operator:
             clusterPoolIPv4PodCIDR: "10.244.0.0/16"
             clusterPoolIPv4MaskSize: 24
         hubble:
+          metrics:
+            enabled: 
+             - dns:query;ignoreAAAA
+             - drop
+             - tcp
+             - flow
+             - icmp
+             - http            
           relay: 
             enabled: true
           ui:

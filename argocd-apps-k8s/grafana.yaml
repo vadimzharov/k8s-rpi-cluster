@@ -57,7 +57,15 @@ spec:
               traefik-v2:
                 gnetId: 12250
                 revision: 1
-                datasource: victoriametrics                                  
+                datasource: victoriametrics
+              cilium-agent:
+                gnetId: 15513
+                revision: 1
+                datasource: victoriametrics
+              cilium-hubble:
+                gnetId: 15515
+                revision: 1
+                datasource: victoriametrics                                                
     repoURL: https://grafana.github.io/helm-charts
     chart: grafana
     targetRevision: 6.40.3

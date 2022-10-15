@@ -18,6 +18,8 @@ spec:
             loadbalancerIP: false
         operator:
           replicas: 1
+        prometheus:
+          enabled: true          
         bpf:
           masquerade: true          
         ipv4:

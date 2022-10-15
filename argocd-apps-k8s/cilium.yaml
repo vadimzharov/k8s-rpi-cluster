@@ -16,8 +16,6 @@ spec:
             loadbalancerIP: false
         operator:
           replicas: 1
-        prometheus:
-          enabled: true
         ipam:
           mode: "cluster-pool"
           operator:

@@ -49,9 +49,13 @@ spec:
                 revision: 18
                 datasource: victoriametrics          
               traefik:
+                gnetId: 4475
+                revision: 5
+                datasource: victoriametrics
+              traefik-v2:
                 gnetId: 12250
                 revision: 1
-                datasource: victoriametrics                         
+                datasource: victoriametrics                                  
     repoURL: https://grafana.github.io/helm-charts
     chart: grafana
     targetRevision: 6.40.3

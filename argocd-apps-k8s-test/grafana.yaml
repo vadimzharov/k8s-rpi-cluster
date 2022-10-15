@@ -61,7 +61,11 @@ spec:
               cilium-agent:
                 gnetId: 15513
                 revision: 1
-                datasource: victoriametrics      
+                datasource: victoriametrics
+              cilium-hubble:
+                gnetId: 15515
+                revision: 1
+                datasource: victoriametrics                                
     repoURL: https://grafana.github.io/helm-charts
     chart: grafana
     targetRevision: 6.40.3

@@ -15,14 +15,14 @@ spec:
         app: mikrotik-exporter
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "9090"
+        prometheus.io/port: "9436"
     spec:
       containers:
         - name: mikrotik-exporter
           image: 'quay.io/vadimzharov/mikrotik-exporter:latest'
           ports:
             - name: exporter
-              containerPort: 9090
+              containerPort: 9436
               protocol: TCP
           resources:
             limits:

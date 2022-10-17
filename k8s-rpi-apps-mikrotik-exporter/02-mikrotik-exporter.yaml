@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mikrotik-exporter
+  namespace: mikrotik-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mikrotik-exporter
+  template:
+    metadata:
+      labels:
+        app: mikrotik-exporter
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      containers:
+        - name: mikrotik-exporter
+          image: 'nshttpd/mikrotik-exporter:1.0.11'
+          ports:
+            - name: exporter
+              containerPort: 9090
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 150m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          envFrom:
+          - secretRef:
+              name: mikrotik-creds
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 600

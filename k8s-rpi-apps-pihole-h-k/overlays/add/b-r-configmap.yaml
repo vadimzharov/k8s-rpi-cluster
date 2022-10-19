@@ -7,7 +7,7 @@ data:
   S3_FILE_PREFIX: "pihole"
   DIR_TO_BACKUP: "/pihole"
   DIR_TO_RESTORE: "/pihole"
-  BACKUP_INTERVAL: "24h"
+  BACKUP_INTERVAL: "8h"
   PRUNE_INTERVAL: "48h"
   COPIES_TO_KEEP: "35"
   FORCE_RESTORE: "False"  

@@ -62,7 +62,7 @@ data:
 
     - name: argocd-vault-plugin-helm-deps-with-values
       init:
-        command: ["sh", "-c"]
+        command: ["bash", "-c"]
         args: ['helm repo add "$HELM_REPO_NAME" "$HELM_REPO_URL"']
       generate:
         command: ["bash", "-c"]

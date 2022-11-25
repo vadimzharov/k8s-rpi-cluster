@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: invidious
+  namespace: argocd
+spec:
+  project: k8s-rpi-apps
+  source:
+    repoURL: https://github.com/iv-org/invidious.git
+    targetRevision: main
+    path: kubernetes
+    plugin:
+      name: argocd-vault-plugin-helm-deps-with-values
+      env:
+        - name: HELM_VALUES
+          value: |
+            image:
+              repository: quay.io/invidious/invidious
+              tag: latest-arm64
+              pullPolicy: Always
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: invidious
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      

@@ -52,10 +52,10 @@ data:
         command: ["sh", "-c"]
         args: ['helm template "$ARGOCD_APP_NAME" --include-crds . > all.yaml && kustomize build | argocd-vault-plugin generate -']
 
-    - name: argocd-vault-plugin-kustomized-helm-values
+    - name: argocd-vault-plugin-helm-deps-with-values
       init:
         command: ["sh", "-c"]
         args: ["helm dependency build"]
       generate:
         command: ["bash", "-c"]
-        args: ['helm template "$ARGOCD_APP_NAME" --include-crds -f values.yaml --namespace="$ARGOCD_APP_NAMESPACE" . > all.yaml && kustomize build | argocd-vault-plugin generate -']
+        args: ['helm template "$ARGOCD_APP_NAME" -f <(echo "$HELM_VALUES") . | argocd-vault-plugin generate -']

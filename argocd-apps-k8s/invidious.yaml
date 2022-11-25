@@ -7,7 +7,7 @@ spec:
   project: k8s-rpi-apps
   source:
     repoURL: https://github.com/iv-org/invidious.git
-    targetRevision: main
+    targetRevision: master
     path: kubernetes
     plugin:
       name: argocd-vault-plugin-helm-deps-with-values

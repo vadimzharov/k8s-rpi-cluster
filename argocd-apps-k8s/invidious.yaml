@@ -12,6 +12,10 @@ spec:
     plugin:
       name: argocd-vault-plugin-helm-deps-with-values
       env:
+        - name: HELM_REPO_NAME
+          value: "bitnami"
+        - name: HELM_REPO_URL
+          value: "https://charts.bitnami.com/bitnami/"
         - name: HELM_VALUES
           value: |
             image:

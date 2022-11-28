@@ -7,7 +7,7 @@ spec:
   project: k8s-rpi-apps
   source:
     repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-    targetRevision: k8s-main
+    targetRevision: k8s-main-argocd-plugin-sidecar
     path: k8s-rpi-apps-argocd-k
     plugin:
       name: argocd-vault-plugin-kustomize

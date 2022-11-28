@@ -66,4 +66,4 @@ data:
         args: ["$HELM_REPO_NAME", "$HELM_REPO_URL", '&& helm dependency build']
       generate:
         command: ["bash", "-c"]
-        args: ['helm dep list && helm template "$ARGOCD_APP_NAME" -f <(echo "$HELM_VALUES") . | argocd-vault-plugin generate -']
+        args: ['helm dependency build && helm template "$ARGOCD_APP_NAME" -f <(echo "$HELM_VALUES") . | argocd-vault-plugin generate -']

@@ -16,12 +16,12 @@ spec:
           value: "bitnami"
         - name: HELM_REPO_URL
           value: "https://charts.bitnami.com/bitnami/"
-#        - name: HELM_VALUES
-#          value: |
-#            image:
-#              repository: quay.io/invidious/invidious
-#              tag: latest-arm64
-#              pullPolicy: Always
+        - name: HELM_VALUES
+          value: |
+            image:
+              repository: quay.io/invidious/invidious
+              tag: latest-arm64
+              pullPolicy: Always
   destination:
     server: https://kubernetes.default.svc
     namespace: invidious

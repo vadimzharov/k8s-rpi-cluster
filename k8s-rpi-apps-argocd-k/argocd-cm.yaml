@@ -61,9 +61,6 @@ data:
         args: ['helm template "$ARGOCD_APP_NAME" --include-crds -f values.yaml --namespace="$ARGOCD_APP_NAMESPACE" . > all.yaml && kustomize build | argocd-vault-plugin generate -']
 
     - name: argocd-vault-plugin-helm-deps-with-values
-      init:
-        command: ['bash', '-c', 'helm', 'repo', 'add']
-        args: ["bitnami", "https://charts.bitnami.com/bitnami/", '&& helm dependency build']
       generate:
-        command: ["bash", "-c"]
-        args: ['helm template "$ARGOCD_APP_NAME" -f <(echo "$HELM_VALUES") . | argocd-vault-plugin generate -']
+        command: ["bash", "-c", 'helm', 'repo', 'add']
+        args: ['"bitnami", "https://charts.bitnami.com/bitnami/", '&& helm dependency build && helm template "$ARGOCD_APP_NAME" -f <(echo "$HELM_VALUES") . | argocd-vault-plugin generate -']

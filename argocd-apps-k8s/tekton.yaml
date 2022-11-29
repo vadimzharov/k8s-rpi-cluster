@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
     targetRevision: k8s-main
-    path: k8s-rpi-apps-tekton-pipelines
+    path: k8s-rpi-apps-tekton-pipelines-k
     plugin:
   destination:
     server: https://kubernetes.default.svc

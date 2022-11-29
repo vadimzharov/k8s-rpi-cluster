@@ -27,12 +27,18 @@ spec:
             - name: custom-tools
               subPath: argocd-vault-plugin
               mountPath: /usr/local/bin/argocd-vault-plugin
+          envFrom:
+            - secretRef:
+                name: argocd-vault-plugin-credentials              
         - name: avp-kustomize-helm
           command: [/var/run/argocd/argocd-cmp-server]
           image: quay.io/argoproj/argocd:v2.5.3
           securityContext:
             runAsNonRoot: true
             runAsUser: 999
+          envFrom:
+            - secretRef:
+                name: argocd-vault-plugin-credentials              
           volumeMounts:
             - mountPath: /var/run/argocd
               name: var-files
@@ -51,6 +57,9 @@ spec:
         - name: avp-kustomize
           command: [/var/run/argocd/argocd-cmp-server]
           image: quay.io/argoproj/argocd:v2.5.3
+          envFrom:
+            - secretRef:
+                name: argocd-vault-plugin-credentials              
           securityContext:
             runAsNonRoot: true
             runAsUser: 999
@@ -72,6 +81,9 @@ spec:
         - name: avp
           command: [/var/run/argocd/argocd-cmp-server]
           image: quay.io/argoproj/argocd:v2.5.3
+          envFrom:
+            - secretRef:
+                name: argocd-vault-plugin-credentials              
           securityContext:
             runAsNonRoot: true
             runAsUser: 999

@@ -18,6 +18,9 @@ data:
             - sh
             - "-c"
             - "test -f values.yaml && find . -name 'kustomization.yaml' && find . -name 'Chart.yaml'"
+      init:
+        command: ["sh", "-c"]
+        args: ["helm dependency build"]
       generate:
         command:
           - sh
@@ -40,6 +43,9 @@ data:
             - sh
             - "-c"
             - "test ! -f values.yaml && find . -name 'kustomization.yaml' && find . -name 'Chart.yaml'"
+      init:
+        command: ["sh", "-c"]
+        args: ["helm dependency build"]
       generate:
         command:
           - sh

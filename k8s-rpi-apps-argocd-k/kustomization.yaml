@@ -6,6 +6,7 @@ resources:
 - argocd-ns.yaml
 - argocd-plugin-secret.yaml
 - argocd-project.yaml
+- argocd-cmp-cm.yaml
 
 patchesStrategicMerge:
 - argocd-repo-server-deploy.yaml

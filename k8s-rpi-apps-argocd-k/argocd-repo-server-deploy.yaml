@@ -8,7 +8,7 @@ spec:
       containers:
         - name: avp-kustomize-helm-values
           command: [/var/run/argocd/argocd-cmp-server]
-          image: registry.access.redhat.com/ubi8
+          image: quay.io/argoproj/argocd:v2.5.3
           securityContext:
             runAsNonRoot: true
             runAsUser: 999
@@ -29,7 +29,7 @@ spec:
               mountPath: /usr/local/bin/argocd-vault-plugin
         - name: avp-kustomize-helm
           command: [/var/run/argocd/argocd-cmp-server]
-          image: registry.access.redhat.com/ubi8
+          image: quay.io/argoproj/argocd:v2.5.3
           securityContext:
             runAsNonRoot: true
             runAsUser: 999
@@ -50,7 +50,7 @@ spec:
               mountPath: /usr/local/bin/argocd-vault-plugin
         - name: avp-kustomize
           command: [/var/run/argocd/argocd-cmp-server]
-          image: registry.access.redhat.com/ubi8
+          image: quay.io/argoproj/argocd:v2.5.3
           securityContext:
             runAsNonRoot: true
             runAsUser: 999
@@ -71,7 +71,7 @@ spec:
               mountPath: /usr/local/bin/argocd-vault-plugin
         - name: avp
           command: [/var/run/argocd/argocd-cmp-server]
-          image: registry.access.redhat.com/ubi8
+          image: quay.io/argoproj/argocd:v2.5.3
           securityContext:
             runAsNonRoot: true
             runAsUser: 999

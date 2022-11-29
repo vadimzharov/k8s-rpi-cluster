@@ -10,7 +10,6 @@ spec:
     targetRevision: HEAD
     path: k8s-rpi-apps-nextcloud
     plugin:
-      name: argocd-vault-plugin    
   destination:
     server: https://kubernetes.default.svc
     namespace: nextcloud

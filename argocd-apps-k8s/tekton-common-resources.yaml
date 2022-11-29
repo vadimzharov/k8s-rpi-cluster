@@ -10,7 +10,6 @@ spec:
     targetRevision: k8s-main
     path: k8s-rpi-apps-tekton-common-resources
     plugin:
-      name: argocd-vault-plugin       
   destination:
     server: https://kubernetes.default.svc
     namespace: tekton-pipelines

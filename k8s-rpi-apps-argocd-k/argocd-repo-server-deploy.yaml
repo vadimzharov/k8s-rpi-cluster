@@ -108,7 +108,8 @@ spec:
             value: "1.11.0"
         args:
           - >-
-            curl -L https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$(AVP_VERSION)/argocd-vault-plugin_$(AVP_VERSION)_linux_arm64 -o argocd-vault-plugin &&
+            wget -O argocd-vault-plugin
+            https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$(AVP_VERSION)/argocd-vault-plugin_$(AVP_VERSION)_linux_arm64 &&
             chmod +x argocd-vault-plugin &&
             mv argocd-vault-plugin /custom-tools/
         volumeMounts:

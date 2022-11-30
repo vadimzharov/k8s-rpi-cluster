@@ -51,15 +51,15 @@ spec:
           limits:
             cpu: 1
             memory: 2Gi
-        readinessProbe:
-          httpGet:
-            port: 3000
-            path: /
-        livenessProbe:
-          httpGet:
-            port: 3000
-            path: /
-          initialDelaySeconds: 15
+        # readinessProbe:
+        #   httpGet:
+        #     port: 3000
+        #     path: /
+        # livenessProbe:
+        #   httpGet:
+        #     port: 3000
+        #     path: /
+        #   initialDelaySeconds: 15
       restartPolicy: Always
       volumes:
         - name: invidious-config

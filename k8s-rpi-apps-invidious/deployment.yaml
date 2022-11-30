@@ -60,3 +60,15 @@ spec:
             path: /
           initialDelaySeconds: 15
       restartPolicy: Always
+      volumeMounts:
+            - name: invidious-config
+              mountPath: /invidious/config/config.yml
+              subPath: config.yml
+            - name: dshm
+              mountPath: /dev/shm
+            - name: data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: invidious-config
+          configMap:
+            name: invidious-config

@@ -5,7 +5,7 @@ metadata:
   annotations:
     avp.kubernetes.io/path: "k8secrets/invidious"
 stringData:
-  INVIDIOUS_CONFIG: |  
+  config.yml: |  
     db:
       dbname: invidious
       user: kemal

@@ -33,6 +33,14 @@ spec:
       - name: invidious
         image: "quay.io/invidious/invidious:latest-arm64"
         imagePullPolicy: Always
+        volumeMounts:
+          - name: invidious-config
+            mountPath: /invidious/config/config.yml
+            subPath: config.yml
+          - name: dshm
+            mountPath: /dev/shm
+          - name: data
+            mountPath: /var/lib/postgresql/data        
         ports:
         - containerPort: 3000
         securityContext:
@@ -57,14 +65,6 @@ spec:
             path: /
           initialDelaySeconds: 15
       restartPolicy: Always
-      volumeMounts:
-            - name: invidious-config
-              mountPath: /invidious/config/config.yml
-              subPath: config.yml
-            - name: dshm
-              mountPath: /dev/shm
-            - name: data
-              mountPath: /var/lib/postgresql/data
       volumes:
         - name: invidious-config
           configMap:

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: invidious-invidious
+  name: invidious
   labels:
     app: invidious
     chart: invidious

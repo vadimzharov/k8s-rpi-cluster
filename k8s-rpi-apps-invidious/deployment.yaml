@@ -63,5 +63,5 @@ spec:
       restartPolicy: Always
       volumes:
         - name: invidious-config
-          configMap:
-            name: invidious-config
+          secret:
+            secretName: invidious-config

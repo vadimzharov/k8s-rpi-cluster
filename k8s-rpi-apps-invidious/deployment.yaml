@@ -35,11 +35,8 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
-        env:
-        - name: INVIDIOUS_CONFIG
-          valueFrom:
-            secretRef:
-              key: INVIDIOUS_CONFIG
+        envFrom:
+          - secretRef:
               name: invidious-config
         securityContext:
           allowPrivilegeEscalation: false

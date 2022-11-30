@@ -4,7 +4,7 @@ metadata:
   name: invidious-psql-config
   annotations:
     avp.kubernetes.io/path: "k8secrets/invidious"
-data:
+stringData:
   POSTGRES_DB: "invidious"
   POSTGRES_USER: "kemal"
   POSTGRES_PASSWORD: <psql-pw>

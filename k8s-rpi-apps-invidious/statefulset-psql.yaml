@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: invidious-postgresql
-  namespace: default
   labels:
     app.kubernetes.io/name: postgresql
     app.kubernetes.io/instance: invidious

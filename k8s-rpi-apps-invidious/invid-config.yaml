@@ -10,7 +10,7 @@ stringData:
       dbname: invidious
       user: kemal
       password: <psql-pw>
-      host: invidious-db
+      host: invidious-postgresql
       port: 5432
     check_tables: true
     channel_threads: 1

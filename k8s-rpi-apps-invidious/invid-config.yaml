@@ -5,7 +5,7 @@ metadata:
   annotations:
     avp.kubernetes.io/path: "k8secrets/invidious"
 data:
-  config.yml: |  
+  INVIDIOUS_CONFIG: |  
     db:
       dbname: invidious
       user: kemal
@@ -13,4 +13,7 @@ data:
       host: invidious-db
       port: 5432
     check_tables: true
-
+    channel_threads: 1
+    feed_threads: 1
+    full_refresh: false
+    https_only: false

@@ -1,0 +1,18 @@
+# Source: invidious/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: invidious-invidious
+  labels:
+    app: invidious
+    chart: invidious
+    release: invidious
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+  selector:
+    app: invidious
+    release: invidious

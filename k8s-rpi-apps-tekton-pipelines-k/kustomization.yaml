@@ -10,3 +10,6 @@ resources:
 - tekton-git-secret.yaml
 - tekton-pipeline-sa.yaml
 - docker-build-task.yaml
+
+patchesStrategicMerge:
+- tekton-ns.yaml

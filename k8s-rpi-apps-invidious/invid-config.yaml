@@ -17,3 +17,4 @@ stringData:
     feed_threads: 1
     full_refresh: false
     https_only: false
+    external_port: 443

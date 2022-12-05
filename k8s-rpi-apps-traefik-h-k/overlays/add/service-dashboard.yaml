@@ -4,8 +4,6 @@ metadata:
   name: traefik-dashboard
   labels:
     app.kubernetes.io/name: traefik
-    helm.sh/chart: traefik-10.1.1
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: traefik
 spec:
   type: ClusterIP

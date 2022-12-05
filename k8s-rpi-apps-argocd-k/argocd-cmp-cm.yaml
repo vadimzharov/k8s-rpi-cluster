@@ -50,7 +50,7 @@ data:
         command:
           - sh
           - "-c"
-          - 'helm template "$ARGOCD_APP_NAME" --include-crds . > all.yaml && kustomize build | argocd-vault-plugin generate -'
+          - 'helm template "$ARGOCD_APP_NAME" --include-crds --namespace="$ARGOCD_APP_NAMESPACE" . > all.yaml && kustomize build | argocd-vault-plugin generate -'
       lockRepo: false
 
   avp-kustomize.yaml: |

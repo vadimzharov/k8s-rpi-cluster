@@ -10,10 +10,8 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app.kubernetes.io/instance: traefik
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: traefik-traefik-v2
     app.kubernetes.io/name: traefik
-    helm.sh/chart: traefik-20.6.0
   ports:
   - port: 8080
     name: dashboard

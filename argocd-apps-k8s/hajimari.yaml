@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: hajimari
   namespace: argocd
-#  annotations:
-#    avp.kubernetes.io/path: "k8secrets/hajimari"     
 spec:
   project: k8s-rpi-apps
   source:

@@ -16,3 +16,4 @@ ports:
 endpoints:
   - addresses:
       - <mikrotik-ip>
+    conditions: {} 

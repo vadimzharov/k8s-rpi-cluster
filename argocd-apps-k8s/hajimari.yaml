@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: hajimari
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io  
 spec:
   project: k8s-rpi-apps
   source:

@@ -17,4 +17,19 @@ spec:
       port: 80
   tls:
     certResolver: godaddy
+---
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: forecastle
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  name: K8S cluster dashboards
+  group: dev
+  icon: https://en.wikipedia.org/wiki/Grafana#/media/File:Grafana_logo.svg
+  url: https://<grafanahostname>.<domainname>
+  networkRestricted: false
+ 
  

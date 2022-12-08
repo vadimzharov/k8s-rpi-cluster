@@ -21,7 +21,7 @@ spec:
 apiVersion: forecastle.stakater.com/v1alpha1
 kind: ForecastleApp
 metadata:
-  name: forecastle
+  name: argocd
   namespace: forecastle
   annotations:
     avp.kubernetes.io/path: "k8secrets/ingresses"    

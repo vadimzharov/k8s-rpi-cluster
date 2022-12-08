@@ -28,7 +28,7 @@ metadata:
 spec:
   name: K8S cluster dashboards
   group: dev
-  icon: https://en.wikipedia.org/wiki/Grafana#/media/File:Grafana_logo.svg
+  icon: https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/grafana-icon.png
   url: https://<grafanahostname>.<domainname>
   networkRestricted: false
  

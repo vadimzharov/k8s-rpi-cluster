@@ -19,5 +19,5 @@ stringData:
     https_only: false
     external_port: 443
     https_only: true
-    domain: <invidioushostname>
+    domain: <invidiousvpnhostname>
 

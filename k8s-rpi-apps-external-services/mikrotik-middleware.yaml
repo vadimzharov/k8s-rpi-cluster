@@ -1,0 +1,22 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: mikrot-cors-header
+  namespace: external-services
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  headers:
+    accessControlAllowMethods:
+      - "GET"
+      - "OPTIONS"
+      - "PUT"
+      - "PATCH"
+    accessControlAllowOriginList:
+      - "https://<mikrotikhostname>.<domainname>"
+      - "http://localhost:3000"
+    accessControlAllowHeaders:
+      - "Authorization"
+    accessControlAllowCredentials: true
+    accessControlMaxAge: 100
+    addVaryHeader: true

@@ -1,0 +1,18 @@
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: mikrotik-1 
+  namespace: external-services
+  labels:
+    kubernetes.io/service-name: mikrotik
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/external-services"    
+addressType: IPv4
+ports:
+  - name: 'mikrotik-api'
+    appProtocol: https
+    protocol: TCP
+    port: 7443
+endpoints:
+  - addresses:
+      - mikrotik-ip

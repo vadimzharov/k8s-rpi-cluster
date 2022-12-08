@@ -27,7 +27,7 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   name: K8S cluster dashboards
-  group: dev
+  group: K8S cluster
   icon: https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/grafana-icon.png
   url: https://<grafanahostname>.<domainname>
   networkRestricted: false

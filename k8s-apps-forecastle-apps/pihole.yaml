@@ -9,5 +9,5 @@ spec:
   name: PiHole
   group: Infrastructure
   icon: https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png
-  url: https://<piholehostname>.<domainname>
+  url: https://<piholehostname>.<domainname>/admin/
   networkRestricted: false

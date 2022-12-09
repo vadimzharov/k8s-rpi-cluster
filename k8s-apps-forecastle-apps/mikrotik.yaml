@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: mikrotik
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  name: Mikrotik
+  group: Infrastructure
+  icon: https://1000logos.net/wp-content/uploads/2020/09/MikroTik-logo.jpg
+  url: https://<mikrotikhostname>.<domainname>
+  networkRestricted: false

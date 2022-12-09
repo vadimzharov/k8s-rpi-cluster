@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: vaultwarden
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/vaultwarden"    
+spec:
+  name: Vaultwarden
+  group: Home
+  icon: https://assets.website-files.com/627ba6588811eca90ffd6f2a/6282a6c78eb870e948fcc709_vaultwarden.png
+  url: https://<vwhostname>
+  networkRestricted: false

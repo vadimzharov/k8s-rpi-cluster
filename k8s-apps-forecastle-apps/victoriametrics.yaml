@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: victoriam
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  name: Victoria Metrics
+  group: Infrastructure
+  icon: https://docs.victoriametrics.com/logo.png
+  url: http://<victoriamhostname>.<domainname>
+  networkRestricted: false

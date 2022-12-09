@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: jellyfin
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  name: Jellyfin
+  group: Home
+  icon: https://static-00.iconduck.com/assets.00/jellyfin-icon-512x512-jcuy5qbi.png
+  url: http://<jellyfinhostname>.<domainname>
+  networkRestricted: false

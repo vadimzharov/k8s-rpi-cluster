@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: pihole
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  name: PiHole
+  group: Infrastructure
+  icon: https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png
+  url: https://<piholehostname>.<domainname>
+  networkRestricted: false

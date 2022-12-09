@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: pihole
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  name: Transmission UI
+  group: Home
+  icon: https://upload.wikimedia.org/wikipedia/commons/b/b9/Transmission_torrent.png
+  url: http://<truihostname>.<domainname>
+  networkRestricted: false

@@ -9,5 +9,5 @@ spec:
   name: Invidious (VPN)
   group: Home
   icon: https://i0.wp.com/www.thehoornet.com/wp-content/uploads/2021/12/indiivdus.png
-  url: https://<invidioushostname>.<domainname>
+  url: https://<invidiousvpnhostname>.<domainname>
   networkRestricted: false

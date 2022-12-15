@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: syncthing
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"   
+spec:
+  name: Syncthing console
+  group: Home
+  icon: https://w7.pngwing.com/pngs/563/857/png-transparent-syncthing-computer-icons-android-file-synchronization-linux-android-linux-android-syncthing-thumbnail.png
+  url: https://<syncthinghostname>.<domainname>
+  networkRestricted: false

@@ -1,0 +1,137 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: syncthing
+  namespace: syncthing
+  labels:
+    app: syncthing
+    release: syncthing
+spec:
+  serviceName: syncthing-http
+  replicas: 1
+  selector:
+    matchLabels:
+      app: syncthing
+      release: syncthing
+  template:
+    metadata:
+      labels:
+        app: syncthing
+        release: syncthing
+    spec:
+      hostname: "syncthing"
+      initContainers:
+      - name: syncthing-restore-config
+        image: quay.io/vadimzharov/podbackup:test
+        command: ["podbackup"]
+        args: ["restore"]
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000          
+        volumeMounts:
+        - name: config
+          mountPath: /syncthing
+        envFrom:
+        - configMapRef:
+            name: backup-restore-settings
+        - secretRef:
+            name: backup-restore-aws-creds    
+      - name: syncthing-restore-data
+        image: quay.io/vadimzharov/podbackup:test
+        command: ["podbackup"]
+        args: ["copy-from-s3"]
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000          
+        volumeMounts:
+        - name: syncthing-data
+          mountPath: /syncthing-data
+        envFrom:
+          - configMapRef:
+              name: sync-s3-settings
+          - secretRef:
+              name: sync-s3-secret           
+      containers:
+      - name: syncthing
+        image: "docker.io/syncthing/syncthing:latest"
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+        ports:
+            - name: http
+              containerPort: 8384
+              protocol: TCP
+            - name: tcp-transfer
+              containerPort: 22000
+              protocol: TCP
+            - name: quic-transfer
+              containerPort: 22000
+              protocol: UDP
+            - name: local-discovery
+              containerPort: 21027
+              protocol: UDP
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        volumeMounts:
+          - mountPath: /var/syncthing
+            name: syncthing-data
+          - name: config
+            mountPath: /var/syncthing/config
+      - name: syncthing-backup-config-daemon
+        image: quay.io/vadimzharov/podbackup:test
+        command: ["podbackup"]
+        args: ["backup-daemon"]
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 50m
+            memory: 64Mi
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000            
+        envFrom:
+        - configMapRef:
+            name: backup-restore-settings
+        - secretRef:
+            name: backup-restore-aws-creds            
+        volumeMounts:
+          - name: config
+            mountPath: /syncthing
+      - name: syncthing-backup-data-daemon
+        image: quay.io/vadimzharov/podbackup:test
+        imagePullPolicy: Always
+        command: ["podbackup"]
+        args: ["sync-to-s3"]
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000            
+        envFrom:
+          - configMapRef:
+              name: sync-s3-settings
+          - secretRef:
+              name: sync-s3-secret
+        volumeMounts:
+          - name: syncthing-data
+            mountPath: /syncthing-data
+      restartPolicy: Always
+      volumes:
+        - name: syncthing-data
+          emptyDir: {}
+        - name: config
+          emptyDir: {}
+            

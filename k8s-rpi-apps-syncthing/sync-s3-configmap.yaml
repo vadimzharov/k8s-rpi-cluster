@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sync-s3-settings
+  namespace: syncthing    
+data:
+  S3_BUCKET_FOLDER: "syncthing"
+  DIR_TO_BACKUP: "/syncthing-data/folders"
+  DIR_TO_RESTORE: "/syncthing-data/folders"
+  BACKUP_INTERVAL: "3h"
+  S3_SYNC_PARALLELISM: "4"
+  AWS_BUCKET: syncthing
+

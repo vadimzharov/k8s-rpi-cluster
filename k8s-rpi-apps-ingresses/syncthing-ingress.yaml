@@ -1,0 +1,20 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: syncthing-ingress
+  namespace: syncthing
+  annotations:
+    kubernetes.io/ingress.class: traefik  
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`<syncthinghostname>.<domainname>`)
+    kind: Rule
+    services:
+    - name: syncthing-http
+      port: 80
+  tls:
+    certResolver: godaddy
+ 

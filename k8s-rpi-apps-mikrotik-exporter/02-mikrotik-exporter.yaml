@@ -37,7 +37,7 @@ spec:
           volumeMounts:
             - name: config
               subPath: config.yml
-              mountPath: /app/config/config.yml        
+              mountPath: /app/config.yml        
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: Always

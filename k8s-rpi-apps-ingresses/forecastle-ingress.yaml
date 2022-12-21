@@ -9,7 +9,6 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/ingresses"        
 spec:
   entryPoints:
-    - websecure
     - web
   routes:
   - match: Host(`<forecastlehostname>.<domainname>`)
@@ -17,6 +16,6 @@ spec:
     services:
     - name: forecastle
       port: 80
-  tls:
-    certResolver: godaddy
+#  tls:
+#    certResolver: godaddy
  

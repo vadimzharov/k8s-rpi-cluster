@@ -10,6 +10,7 @@ metadata:
 spec:
   entryPoints:
     - websecure
+    - web
   routes:
   - match: Host(`<forecastlehostname>.<domainname>`)
     kind: Rule

@@ -37,7 +37,7 @@ spec:
           volumeMounts:
             - name: config
               subPath: config.yml
-              mountPath: /app/config.yml        
+              mountPath: /app/config      
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: Always
@@ -49,7 +49,7 @@ spec:
       volumes:
         - name: config
           secret:
-            secretName: mikrotik-creds
+            secretName: exporter-config
   strategy:
     type: Recreate
   revisionHistoryLimit: 5

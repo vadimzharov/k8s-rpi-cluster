@@ -63,13 +63,20 @@ spec:
               mountPath: /downloads/complete
             - name: jellyfin-datadir
               mountPath: /jellyfin-data
+# Liveness probe to check S3 mount is alive (i.e. if rclone pod was restarted - jellyfin loose access to the folder).
           livenessProbe:
-            tcpSocket:
-              port: 8096
-            timeoutSeconds: 1
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 3
+            exec: 
+              command:
+                - ls
+                - /downloads/complete
+            initialDelaySeconds: 45
+            periodSeconds: 120
+#            tcpSocket:
+#              port: 8096
+#            timeoutSeconds: 1
+#            periodSeconds: 10
+#            successThreshold: 1
+#            failureThreshold: 3
           readinessProbe:
             tcpSocket:
               port: 8096

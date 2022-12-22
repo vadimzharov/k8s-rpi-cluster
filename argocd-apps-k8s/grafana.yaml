@@ -50,6 +50,10 @@ spec:
                 gnetId: 15757
                 revision: 20
                 datasource: victoriametrics
+              kubernetes-v-pods:
+                gnetId: 15760
+                revision: 15
+                datasource: victoriametrics
               victoriametrics:
                 gnetId: 10229
                 revision: 18

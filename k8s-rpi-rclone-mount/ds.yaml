@@ -26,6 +26,12 @@ spec:
           - --allow-non-empty
           - --allow-other
           - --read-only
+          - --cache-info-age=4h
+          - --cache-chunk-clean-interval=15m
+          - --dir-cache-time=5s
+          - --vfs-cache-mode=writes
+          - --allow-non-empty=true
+          - --allow-other=true
         lifecycle:
           preStop:
             exec:

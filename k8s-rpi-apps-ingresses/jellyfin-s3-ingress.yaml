@@ -5,6 +5,7 @@ metadata:
   namespace: jellyfin-s3
   annotations:
     kubernetes.io/ingress.class: traefik  
+    forecastle.stakater.com/expose: "true"
     avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   entryPoints:

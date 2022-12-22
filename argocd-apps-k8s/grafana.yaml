@@ -46,6 +46,10 @@ spec:
                 gnetId: 14205
                 revision: 1
                 datasource: victoriametrics             
+              kubernetes-v-global:
+                gnetId: 15757
+                revision: 20
+                datasource: victoriametrics
               victoriametrics:
                 gnetId: 10229
                 revision: 18

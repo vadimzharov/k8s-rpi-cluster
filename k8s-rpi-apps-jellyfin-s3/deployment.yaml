@@ -69,7 +69,7 @@ spec:
               command:
                 - ls
                 - /downloads/complete
-            initialDelaySeconds: 45
+            initialDelaySeconds: 120
             periodSeconds: 120
 #            tcpSocket:
 #              port: 8096
@@ -90,7 +90,7 @@ spec:
             timeoutSeconds: 1
             periodSeconds: 5
             successThreshold: 1
-            failureThreshold: 30
+            failureThreshold: 60
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: IfNotPresent

@@ -46,7 +46,7 @@ spec:
             - name: "TRANSMISSION_INCOMPLETE_DIR"
               value: "/downloads/incomplete"
             - name: "TRANSMISSION_INCOMPLETE_DIR_ENABLED"
-              value: "false"
+              value: "true"
             - name: "TRANSMISSION_WATCH_DIR"
               value: "/watch"
             - name: "TRANSMISSION_WATCH_DIR_ENABLED"

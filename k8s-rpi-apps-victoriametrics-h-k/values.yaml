@@ -13,7 +13,7 @@ victoria-metrics-single:
         - targets: ['traefik.traefik-v2.svc.cluster.local:8080']
         scheme: http
       - job_name: "hass"
-        scrape_interval: 60s
+        scrape_interval: 30s
         metrics_path: /api/prometheus
         bearer_token: <hasstoken>
         scheme: http

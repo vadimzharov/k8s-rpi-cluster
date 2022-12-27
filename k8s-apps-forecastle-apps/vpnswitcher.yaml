@@ -8,5 +8,6 @@ metadata:
 spec:
   name: VPNSwitcher
   group: Home
+  icon: https://cdn-icons-png.flaticon.com/512/5322/5322131.png
   url: http://<vpnswitcherhostname>.<domainname>
   networkRestricted: false

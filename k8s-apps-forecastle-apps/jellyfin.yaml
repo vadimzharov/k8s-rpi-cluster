@@ -9,5 +9,5 @@ spec:
   name: Jellyfin
   group: Home
   icon: https://static-00.iconduck.com/assets.00/jellyfin-icon-512x512-jcuy5qbi.png
-  url: http://<jellyfinhostname>.<domainname>
+  url: http://<jellyfins3hostname>.<domainname>
   networkRestricted: false

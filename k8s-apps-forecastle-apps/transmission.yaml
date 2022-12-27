@@ -9,5 +9,5 @@ spec:
   name: Transmission UI
   group: Home
   icon: https://upload.wikimedia.org/wikipedia/commons/b/b9/Transmission_torrent.png
-  url: http://<truihostname>.<domainname>
+  url: http://<transmissionhostname>.<domainname>
   networkRestricted: false

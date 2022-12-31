@@ -58,6 +58,8 @@ spec:
             path: /
           initialDelaySeconds: 15
       restartPolicy: Always
+      nodeSelector:
+        beta.kubernetes.io/arch: arm64      
       volumes:
         - name: invidious-config
           secret:

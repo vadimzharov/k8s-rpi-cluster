@@ -108,6 +108,8 @@ spec:
       - configMap:
           name: cmp-plugin
         name: cmp-plugin
+      nodeSelector:
+        beta.kubernetes.io/arch: arm64        
       initContainers:
       - name: download-tools
         image: alpine:3.8

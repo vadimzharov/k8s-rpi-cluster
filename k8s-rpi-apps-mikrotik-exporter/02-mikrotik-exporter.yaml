@@ -46,6 +46,8 @@ spec:
       dnsPolicy: ClusterFirst
       securityContext: {}
       schedulerName: default-scheduler
+      nodeSelector:
+        beta.kubernetes.io/arch: arm64      
       volumes:
         - name: config
           secret:

@@ -3,15 +3,15 @@ kind: Service
 metadata:
   name: traefik-dashboard
   labels:
-    app.kubernetes.io/name: traefik
-    helm.sh/chart: traefik-10.1.1
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: traefik
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: traefik
+    helm.sh/chart: traefik-20.6.0
 spec:
   type: ClusterIP
   selector:
+    app.kubernetes.io/instance: traefik-traefik-v2
     app.kubernetes.io/name: traefik
-    app.kubernetes.io/instance: traefik
   ports:
   - port: 8080
     name: dashboard

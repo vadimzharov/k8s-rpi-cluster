@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: traefik
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/traefik"   
+spec:
+  name: Traefik dashboards
+  group: Infrastructure
+  icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Traefik.logo.png/434px-Traefik.logo.png
+  url: https://<traefikdashhostname>
+  networkRestricted: false

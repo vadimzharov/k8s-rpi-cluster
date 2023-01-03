@@ -1,0 +1,18 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: jellyfin-s3
+  namespace: jellyfin-s3
+  annotations:
+    kubernetes.io/ingress.class: traefik  
+    forecastle.stakater.com/expose: "true"
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`<jellyfins3hostname>.<domainname>`)
+    kind: Rule
+    services:
+    - name: jellyfin-s3
+      port: 8096

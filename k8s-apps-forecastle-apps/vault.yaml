@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: vault
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/vault"   
+spec:
+  name: Hashi Vault
+  group: Infrastructure
+  icon: https://www.pngitem.com/pimgs/m/329-3299659_hashicorp-vault-logo-hd-png-download.png
+  url: https://<vaulthostname>
+  networkRestricted: false

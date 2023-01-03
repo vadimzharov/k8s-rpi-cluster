@@ -1,0 +1,21 @@
+victoria-metrics-single:
+  server:
+    persistentVolume:
+      enabled: false
+    scrape:
+      enabled: true
+      config:
+        global:
+          scrape_interval: 30s
+      extraScrapeConfigs:
+      - job_name: 'traefik'
+        static_configs:
+        - targets: ['traefik.traefik-v2.svc.cluster.local:8080']
+        scheme: http
+      - job_name: "hass"
+        scrape_interval: 30s
+        metrics_path: /api/prometheus
+        bearer_token: <hasstoken>
+        scheme: http
+        static_configs:
+          - targets: ['home-assistant.home-assistant.svc.cluster.local:8123']        

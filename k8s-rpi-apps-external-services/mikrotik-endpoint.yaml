@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: mikrotik
+  namespace: external-services
+  labels:
+    kubernetes.io/service-name: mikrotik  
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/external-services"
+subsets:
+  - addresses:
+      - ip: <mikrotik-ip>
+    ports:
+      - name: mikrotik-api
+        port: 7443
+        protocol: TCP

@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hajimari
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io  
+spec:
+  project: k8s-rpi-apps
+  source:
+    helm:
+      values: |
+        env:
+          # -- Set the container timezone
+          TZ: America/Chicago
+        hajimari:
+          # -- Set to true to show all discovered applications by default.
+          defaultEnable: true
+          title: "Welcome to k8s"
+          name: "You"
+        persistence:
+          data:
+            enabled: false
+    repoURL: https://hajimari.io
+    chart: hajimari
+    targetRevision: 2.0.2
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hajimari
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: traefik
+  namespace: traefik-v2
 spec:
   template: 
     spec:
@@ -23,7 +24,7 @@ spec:
             cpu: 150m
             memory: 128Mi
           limits:
-            cpu: 500m
+            cpu: 800m
             memory: 128Mi     
         volumeMounts:
           - name: certs-store
@@ -34,7 +35,10 @@ spec:
         ports:
         - name: "websecure-ext"
           containerPort: 6443
-          protocol: "TCP"                  
+          protocol: "TCP"
+        - name: "vm-metrics"
+          containerPort: 8080
+          protocol: "TCP"          
       - name: tr-backup-daemon
         image: quay.io/vadimzharov/podbackup:latest
         command: ["podbackup"]

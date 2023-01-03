@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: notea
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io  
+spec:
+  project: k8s-rpi-apps
+  source:
+    repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+    targetRevision: k8s-main
+    path: k8s-rpi-apps-notea
+    plugin:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: notea
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

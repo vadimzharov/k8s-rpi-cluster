@@ -18,6 +18,8 @@ spec:
             loadbalancerIP: false
         operator:
           replicas: 1
+        prometheus:
+          enabled: true    
         bpf:
           masquerade: true          
         ipv4:
@@ -40,6 +42,14 @@ spec:
             enabled: true
           ui:
             enabled: true
+          metrics:
+            enabled: 
+             - dns:query;ignoreAAAA
+             - drop
+             - tcp
+             - flow
+             - icmp
+             - http            
           tls:
             auto:
               enabled: true 

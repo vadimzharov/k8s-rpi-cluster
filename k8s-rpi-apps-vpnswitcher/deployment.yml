@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vpnswitcher
+  namespace: vpnswitcher
+  labels:
+    app: vpnswitcher
+    release: vpnswitcher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vpnswitcher
+      release: vpnswitcher
+  template:
+    metadata:
+      labels:
+        app: vpnswitcher
+        release: vpnswitcher
+    spec:
+      containers:
+      - name: vpnswitcher
+        image: "quay.io/vadimzharov/vpnswitcher:latest"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        volumeMounts:
+          - mountPath: /etc/vpnswitcher/config.yaml
+            name: vpnswitcher-config
+            subPath: config.yaml
+      restartPolicy: Always
+      volumes:
+        - name: vpnswitcher-config
+          secret:
+            secretName: vpnswitcher-config

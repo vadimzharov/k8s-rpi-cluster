@@ -1,0 +1,14 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: argocd
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  name: ArgoCD
+  group: Infrastructure
+  icon: https://cncf-branding.netlify.app/img/projects/argo/horizontal/color/argo-horizontal-color.png
+  url: https://<argocdhostname>.<domainname>
+  networkRestricted: false
+

@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jellyfin
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io    
+spec:
+  project: k8s-rpi-apps
+  source:
+    repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+    targetRevision: k8s-main
+    path: k8s-rpi-apps-jellyfin-h-k
+    plugin:
+      env:
+        - name: helm_args
+          value: --include-crds
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jellyfin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

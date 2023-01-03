@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: k8s-login
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/dex"
+spec:
+  name: K8S Cluster
+  group: Infrastructure
+  icon: https://1000logos.net/wp-content/uploads/2022/07/Kubernetes-Logo.png
+  url: https://<dexloginhostname>
+  networkRestricted: false

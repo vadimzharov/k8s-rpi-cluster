@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backup-restore-settings
+  namespace: syncthing  
+data:
+  S3_BUCKET_FOLDER: "syncthing-config"
+  S3_FILE_PREFIX: "syncthing"
+  DIR_TO_BACKUP: "/syncthing"
+  DIR_TO_RESTORE: "/syncthing"
+  BACKUP_INTERVAL: "3h"
+  PRUNE_INTERVAL: "48h"
+  COPIES_TO_KEEP: "35"
+  FORCE_RESTORE: "True"
+  ARCHIVE_TYPE: "tarzip"
+

@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mikrotik-exporter
+  namespace: mikrotik-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mikrotik-exporter
+  template:
+    metadata:
+      labels:
+        app: mikrotik-exporter
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9436"
+    spec:
+      containers:
+        - name: mikrotik-exporter
+          image: 'quay.io/vadimzharov/mikrotik-exporter:latest'
+          ports:
+            - name: exporter
+              containerPort: 9436
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 150m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          env:
+            - name: CONFIG_FILE
+              value: "/app/config.yml"
+          volumeMounts:
+            - name: config
+              subPath: config.yml
+              mountPath: /app/config.yml      
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+      nodeSelector:
+        beta.kubernetes.io/arch: arm64      
+      volumes:
+        - name: config
+          secret:
+            secretName: exporter-config
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 600

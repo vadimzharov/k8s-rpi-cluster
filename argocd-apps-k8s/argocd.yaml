@@ -10,7 +10,6 @@ spec:
     targetRevision: k8s-main
     path: k8s-rpi-apps-argocd-k
     plugin:
-      name: argocd-vault-plugin-kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

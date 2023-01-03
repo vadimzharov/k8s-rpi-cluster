@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: forecastle
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: ..
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io      
+spec:
+  project: k8s-rpi-apps
+  source:
+      repoURL: https://github.com/stakater/Forecastle.git
+      path: deployments/kubernetes/chart/forecastle
+      targetRevision: master
+      helm:
+        version: v3      
+        values: |
+          forecastle:
+            config:
+              namespaceSelector:
+                any: true
+              crdEnabled: true
+  destination:
+      server: https://kubernetes.default.svc
+      namespace: forecastle
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true      

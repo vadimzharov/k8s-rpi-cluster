@@ -1,0 +1,20 @@
+namespace: victoriametrics
+
+resources:
+- ./all.yaml
+- overlays/add/vmbackup-config-secret.yaml
+- overlays/add/vmbackup-script-configmap.yaml
+- overlays/add/vmrestore-script-configmap.yaml
+
+patches:
+- overlays/replace/patch-statefulset.yaml
+
+patchesJSON6902:
+- target:
+    version: v1
+    kind: ConfigMap
+    name: victoriam-victoria-metrics-single-server-scrapeconfig
+  patch: |-
+    - op: add
+      path: /metadata/annotations/avp.kubernetes.io~1path
+      value: "k8secrets/victoriametrics"

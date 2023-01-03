@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: traefik
+  namespace: traefik-v2
   annotations:
     avp.kubernetes.io/path: "k8secrets/traefik"    
 spec:
@@ -20,3 +21,7 @@ spec:
         name: websecure-ext
         targetPort: "websecure-ext"
         protocol: "TCP"        
+      - port: 8080
+        name: vm-metrics
+        targetPort: "vm-metrics"
+        protocol: "TCP"     

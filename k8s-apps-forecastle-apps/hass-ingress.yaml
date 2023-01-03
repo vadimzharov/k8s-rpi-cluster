@@ -1,0 +1,15 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: home-assistant
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  name: Home Assistant
+  group: Home
+  icon: https://cdn.icon-icons.com/icons2/2107/PNG/512/file_type_homeassistant_icon_130543.png
+  url: https://<hasshostname>.<domainname>
+  networkRestricted: false    
+
+ 

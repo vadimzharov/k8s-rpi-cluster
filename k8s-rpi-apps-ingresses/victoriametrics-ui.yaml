@@ -1,0 +1,22 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: victoriam-ui-ingress
+  namespace: victoriametrics
+  annotations:
+    kubernetes.io/ingress.class: traefik  
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`<victoriamhostname>.<domainname>`)
+    kind: Rule
+    services:
+    - name: victoriam-victoria-metrics-single-server
+      port: 8428
+    middlewares:
+      - name: basic-auth
+        namespace: traefik-v2      
+
+ 

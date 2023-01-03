@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: tekton-ui
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/tekton"   
+spec:
+  name: Tekton Pipelines
+  group: Infrastructure
+  icon: https://cd.foundation/wp-content/uploads/sites/78/2020/04/tekton-icon-color-1-1.png
+  url: https://<tektonhostname>
+  networkRestricted: false

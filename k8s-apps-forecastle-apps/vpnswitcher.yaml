@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: vpnswitcher
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  name: VPNSwitcher
+  group: Home
+  icon: https://cdn-icons-png.flaticon.com/512/5322/5322131.png
+  url: http://<vpnswitcherhostname>.<domainname>
+  networkRestricted: false

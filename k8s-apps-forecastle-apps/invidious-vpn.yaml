@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: invidious-vpn
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  name: Invidious (VPN)
+  group: Home
+  icon: https://i0.wp.com/www.thehoornet.com/wp-content/uploads/2021/12/indiivdus.png
+  url: https://<invidiousvpnhostname>.<domainname>
+  networkRestricted: false

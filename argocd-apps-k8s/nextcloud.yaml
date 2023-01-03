@@ -3,14 +3,15 @@ kind: Application
 metadata:
   name: nextcloud
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io  
 spec:
   project: k8s-rpi-apps
   source:
     repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-    targetRevision: HEAD
+    targetRevision: k8s-main
     path: k8s-rpi-apps-nextcloud
     plugin:
-      name: argocd-vault-plugin    
   destination:
     server: https://kubernetes.default.svc
     namespace: nextcloud

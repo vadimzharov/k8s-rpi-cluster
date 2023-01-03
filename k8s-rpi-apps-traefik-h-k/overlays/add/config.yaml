@@ -48,6 +48,9 @@ data:
       debug: true
     ping:
       entryPoint: ping
+    metrics:
+      prometheus:
+        addRoutersLabels: true      
     log:
       level: INFO
     tracing:

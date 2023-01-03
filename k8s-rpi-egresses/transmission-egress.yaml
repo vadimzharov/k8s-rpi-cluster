@@ -1,0 +1,18 @@
+apiVersion: cilium.io/v2
+kind: CiliumEgressGatewayPolicy
+metadata:
+  name: transmission-egress
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/egresses"
+spec:
+  selectors:
+  - podSelector:
+      matchLabels:
+        io.kubernetes.pod.namespace: transmission
+  destinationCIDRs:
+  - "0.0.0.0/0"
+  egressGateway:
+    nodeSelector:
+      matchLabels:
+        node-role.kubernetes.io/egress-gw: vpn
+    egressIP: <egressipvpn>

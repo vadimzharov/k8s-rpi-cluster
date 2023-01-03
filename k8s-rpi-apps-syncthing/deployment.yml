@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: syncthing
   namespace: syncthing
@@ -7,8 +7,10 @@ metadata:
     app: syncthing
     release: syncthing
 spec:
-  serviceName: syncthing-http
+#  serviceName: syncthing-http
   replicas: 1
+  strategy:
+    type: Recreate  
   selector:
     matchLabels:
       app: syncthing
@@ -19,7 +21,7 @@ spec:
         app: syncthing
         release: syncthing
     spec:
-      hostname: "syncthing"
+#      hostname: "syncthing"
       initContainers:
       - name: syncthing-restore-config
         image: quay.io/vadimzharov/podbackup:test
@@ -84,7 +86,7 @@ spec:
           - name: config
             mountPath: /var/syncthing/config
       - name: syncthing-backup-config-daemon
-        image: quay.io/vadimzharov/podbackup:test
+        image: quay.io/vadimzharov/podbackup:latest
         command: ["podbackup"]
         args: ["backup-daemon"]
         resources:
@@ -106,7 +108,7 @@ spec:
           - name: config
             mountPath: /syncthing
       - name: syncthing-backup-data-daemon
-        image: quay.io/vadimzharov/podbackup:test
+        image: quay.io/vadimzharov/podbackup:latest
         imagePullPolicy: Always
         command: ["podbackup"]
         args: ["sync-to-s3"]

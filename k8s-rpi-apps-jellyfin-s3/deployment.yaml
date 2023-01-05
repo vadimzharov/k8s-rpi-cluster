@@ -101,7 +101,7 @@ spec:
                 name: backup-restore-aws-creds
           resources:
             limits:
-              cpu: 50m
+              cpu: 150m
               memory: 64Mi
             requests:
               cpu: 50m

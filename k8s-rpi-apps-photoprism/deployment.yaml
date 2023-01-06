@@ -73,7 +73,7 @@ spec:
               command:
                 - ls
                 - /photoprism/originals
-            initialDelaySeconds: 120
+            initialDelaySeconds: 60
             periodSeconds: 120
         - name: photoprism-backup-daemon
           image: quay.io/vadimzharov/podbackup:latest

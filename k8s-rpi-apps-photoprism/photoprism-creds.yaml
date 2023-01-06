@@ -1,0 +1,21 @@
+apiVersion: "kubernetes-client.io/v1"
+kind: ExternalSecret
+metadata:
+  name: photoprism-creds
+  namespace: photoprism-s3
+spec:
+  backendType: vault
+  vaultMountPoint: k8s-rpi
+  vaultRole: k8s-rpi-auth-role
+  kvVersion: 1
+  data:
+    - name: PHOTOPRISM_ADMIN_PASSWORD
+      key: k8secrets/photoprism
+      property: PHOTOPRISM_ADMIN_PASSWORD
+    - name: PHOTOPRISM_ADMIN_USER
+      key: k8secrets/photoprism
+      property: PHOTOPRISM_ADMIN_USER
+    - name: PHOTOPRISM_SITE_URL
+      key: k8secrets/photoprism
+      property: PHOTOPRISM_SITE_URL
+

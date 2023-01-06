@@ -1,0 +1,61 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: photoprism-ingress
+  namespace: photoprism-s3 
+  annotations:
+    kubernetes.io/ingress.class: traefik  
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`<photoprismhostname>.<domainname>`)
+    middlewares:
+      - name: svc-https-headers
+    kind: Rule
+    services:
+    - name: photoprism-s3
+      port: 80
+  tls:
+    certResolver: godaddy
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: photoprism-ingress-http
+  namespace: photoprism-s3 
+  annotations:
+    kubernetes.io/ingress.class: traefik  
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`<photoprismhostname>.<domainname>`) 
+    middlewares:
+      - name: redirect-to-https
+    kind: Rule
+    services:
+    - name: photoprism-s3
+      port: 80
+--- 
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-to-https
+  namespace: photoprism-s3 
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: svc-https-headers
+  namespace: photoprism-s3 
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: "https"

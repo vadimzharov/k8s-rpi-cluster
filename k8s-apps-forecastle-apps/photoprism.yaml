@@ -1,0 +1,13 @@
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: photoprism
+  namespace: forecastle
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  name: Photoprism
+  group: Home
+  icon: https://miro.medium.com/max/900/0*Jx-G5WxKYCEr7V11
+  url: https://<photoprismhostname>.<domainname>/
+  networkRestricted: false

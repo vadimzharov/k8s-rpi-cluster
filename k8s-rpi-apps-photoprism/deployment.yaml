@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: photoprism-s3
+  namespace: photoprism-s3
+  labels:
+    app.kubernetes.io/name: photoprism-s3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: photoprism-s3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: photoprism-s3
+    spec:
+      volumes:
+        - name: originals
+          hostPath:
+            path: /mnt/s3-photos
+            type: Directory
+        - name: storage
+          emptyDir: {}
+      initContainers:
+        - name: photoprism-restore
+          image: 'quay.io/vadimzharov/podbackup:latest'
+          command:
+            - podbackup
+          args:
+            - copy-from-s3
+          envFrom:
+            - configMapRef:
+                name: sync-s3-settings
+            - secretRef:
+                name: sync-s3-secret
+          resources: {}    
+          volumeMounts:
+            - name: storage
+              mountPath: /data
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      containers:
+        - name: photoprism
+          image: 'photoprism/photoprism:latest'
+          ports:
+            - name: http
+              containerPort: 2342
+              protocol: TCP
+          envFrom:
+          - secretRef:
+              name: photoprism-config
+          - secretRef:
+              name: photoprism-creds
+          resources: 
+            requests:
+              cpu: 1
+              memory: 1Gi
+            limits:
+              cpu: 3
+              memory: 6Gi
+          volumeMounts:
+            - name: originals
+              mountPath: /photoprism/originals
+            - name: storage
+              mountPath: /photoprism/storage
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec: 
+              command:
+                - ls
+                - /photoprism/originals
+            initialDelaySeconds: 120
+            periodSeconds: 120
+        - name: photoprism-backup-daemon
+          image: quay.io/vadimzharov/podbackup:latest
+          imagePullPolicy: Always
+          command: ["podbackup"]
+          args: ["sync-to-s3"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          envFrom:
+          - configMapRef:
+              name: sync-s3-settings
+          - secretRef:
+              name: sync-s3-secret
+          volumeMounts:
+            - name: storage
+              mountPath: /data
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      serviceAccountName: default
+      serviceAccount: default
+      automountServiceAccountToken: true
+      securityContext: {}
+      schedulerName: default-scheduler
+      enableServiceLinks: true
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 3
+  progressDeadlineSeconds: 600

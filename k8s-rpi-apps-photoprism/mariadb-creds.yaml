@@ -21,3 +21,7 @@ spec:
     - name: MARIADB_PASSWORD
       key: k8secrets/photoprism
       property: MARIADB_PASSWORD
+    - name: MYSQL_PASSWORD
+      key: k8secrets/photoprism
+      property: MARIADB_ROOT_PASSWORD
+

@@ -34,8 +34,6 @@ spec:
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
-#          command:
-#            - mysqld
           args:
             - --innodb-buffer-pool-size=512M 
             - --transaction-isolation=READ-COMMITTED 
@@ -48,6 +46,19 @@ spec:
             - name: mysql
               containerPort: 3306
               protocol: TCP
+          startupProbe:
+            exec:
+              command:
+                - cat
+                - /tmp/mysqlrestore/restored
+            failureThreshold: 30
+            periodSeconds: 20
+            initialDelaySeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 5
+            periodSeconds: 20
           envFrom:
           - secretRef:
               name: mariadb-creds

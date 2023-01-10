@@ -10,3 +10,5 @@ data:
   PRUNE_INTERVAL: "48h"
   COPIES_TO_KEEP: "35"
   FORCE_RESTORE: "False"
+  DIR_TO_BACKUP: "/data"
+  DIR_TO_RESTORE: "/data"

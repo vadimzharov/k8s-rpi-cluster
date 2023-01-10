@@ -18,4 +18,14 @@ spec:
     - name: PHOTOPRISM_SITE_URL
       key: k8secrets/photoprism
       property: PHOTOPRISM_SITE_URL
+    - name: PHOTOPRISM_DATABASE_NAME
+      key: k8secrets/photoprism
+      property: MARIADB_DATABASE
+    - name: PHOTOPRISM_DATABASE_USER
+      key: k8secrets/photoprism
+      property: MARIADB_USER
+    - name: PHOTOPRISM_DATABASE_PASSWORD
+      key: k8secrets/photoprism
+      property: MARIADB_PASSWORD      
+
 

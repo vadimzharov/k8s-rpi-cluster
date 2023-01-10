@@ -80,6 +80,8 @@ spec:
               name: sync-s3-secret
           - configMapRef:
               name: mariadb-b-r-settings
+          - secretRef:
+              name: mariadb-creds              
           resources:
             limits:
               cpu: 150m

@@ -22,25 +22,25 @@ spec:
             type: Directory
         - name: storage
           emptyDir: {}
-      initContainers:
-        - name: photoprism-restore
-          image: 'quay.io/vadimzharov/podbackup:latest'
-          command:
-            - podbackup
-          args:
-            - copy-from-s3
-          envFrom:
-            - configMapRef:
-                name: sync-s3-settings
-            - secretRef:
-                name: sync-s3-secret
-          resources: {}    
-          volumeMounts:
-            - name: storage
-              mountPath: /data
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          imagePullPolicy: Always
+      # initContainers:
+      #   - name: photoprism-restore
+      #     image: 'quay.io/vadimzharov/podbackup:latest'
+      #     command:
+      #       - podbackup
+      #     args:
+      #       - copy-from-s3
+      #     envFrom:
+      #       - configMapRef:
+      #           name: sync-s3-settings
+      #       - secretRef:
+      #           name: sync-s3-secret
+      #     resources: {}    
+      #     volumeMounts:
+      #       - name: storage
+      #         mountPath: /data
+      #     terminationMessagePath: /dev/termination-log
+      #     terminationMessagePolicy: File
+      #     imagePullPolicy: Always
       containers:
         - name: photoprism
           image: 'photoprism/photoprism:latest'

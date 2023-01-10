@@ -32,7 +32,7 @@ spec:
         - name: mysql
           image: 'docker.io/library/mariadb:10.10'
           command:
-            - mysqld
+            - mariadbd
           args:
             - --innodb-buffer-pool-size=512M 
             - --transaction-isolation=READ-COMMITTED 

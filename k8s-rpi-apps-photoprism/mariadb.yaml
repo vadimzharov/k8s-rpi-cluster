@@ -89,12 +89,12 @@ spec:
             requests:
               cpu: 50m
               memory: 64Mi
-#          lifecycle:
-#            postStart:
-#              exec:
-#                command:
-#                  - podbackup
-#                  - restore-sql
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - podbackup
+                  - restore-sql
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: Always

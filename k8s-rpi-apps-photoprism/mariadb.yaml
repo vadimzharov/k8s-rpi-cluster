@@ -28,6 +28,8 @@ spec:
           emptyDir: {}
         - name: mysql-dump
           emptyDir: {}
+        - name: mysql-restored-mark
+          emptyDir: {}          
       containers:
         - name: mysql
           image: 'docker.io/library/mariadb:10.10'
@@ -74,6 +76,8 @@ spec:
           volumeMounts:
             - name: mysql-storage
               mountPath: /var/lib/mysql
+            - name:  mysql-restored-mark
+              mountPath: /tmp/mysqlrestore/
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: Always
@@ -111,6 +115,9 @@ spec:
                 command:
                   - podbackup
                   - restore-sql
+          volumeMounts:
+            - name:  mysql-restored-mark
+              mountPath: /tmp/mysqlrestore/                  
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: Always

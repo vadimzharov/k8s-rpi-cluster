@@ -6,8 +6,8 @@ metadata:
 data:
   AWS_BUCKET: photoprism-storage
   S3_BUCKET_FOLDER: "storage"
-  DIR_TO_BACKUP: "/data/index.db"
+  DIR_TO_BACKUP: "/data/"
   DIR_TO_RESTORE: "/data"
-  BACKUP_INTERVAL: "3h"
-  S3_SYNC_PARALLELISM: "4"
+  BACKUP_INTERVAL: "48h"
+  S3_SYNC_PARALLELISM: "5"
 

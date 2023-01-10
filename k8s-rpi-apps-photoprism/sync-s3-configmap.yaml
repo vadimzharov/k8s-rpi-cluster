@@ -10,4 +10,5 @@ data:
   DIR_TO_RESTORE: "/data"
   BACKUP_INTERVAL: "48h"
   S3_SYNC_PARALLELISM: "5"
+  S3_COPY_BEFORE_SYNC: "true"
 

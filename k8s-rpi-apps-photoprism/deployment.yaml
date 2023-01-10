@@ -22,25 +22,6 @@ spec:
             type: Directory
         - name: storage
           emptyDir: {}
-      # initContainers:
-      #   - name: photoprism-restore
-      #     image: 'quay.io/vadimzharov/podbackup:latest'
-      #     command:
-      #       - podbackup
-      #     args:
-      #       - copy-from-s3
-      #     envFrom:
-      #       - configMapRef:
-      #           name: sync-s3-settings
-      #       - secretRef:
-      #           name: sync-s3-secret
-      #     resources: {}    
-      #     volumeMounts:
-      #       - name: storage
-      #         mountPath: /data
-      #     terminationMessagePath: /dev/termination-log
-      #     terminationMessagePolicy: File
-      #     imagePullPolicy: Always
       containers:
         - name: photoprism
           image: 'photoprism/photoprism:latest'
@@ -76,7 +57,7 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 120
         - name: photoprism-backup-daemon
-          image: quay.io/vadimzharov/podbackup:latest
+          image: quay.io/vadimzharov/podbackup:test
           imagePullPolicy: Always
           command: ["podbackup"]
           args: ["sync-to-s3"]
@@ -95,12 +76,6 @@ spec:
           volumeMounts:
             - name: storage
               mountPath: /data
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - podbackup
-                  - copy-from-s3
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

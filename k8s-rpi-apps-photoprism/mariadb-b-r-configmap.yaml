@@ -4,11 +4,10 @@ metadata:
   name: mariadb-b-r-settings
   namespace: photoprism-s3
 data:
+  AWS_BUCKET: "photoprism-db"
   S3_BUCKET_FOLDER: "photoprism-db"
   S3_FILE_PREFIX: "photoprism-db"
   BACKUP_INTERVAL: "3h"
   PRUNE_INTERVAL: "48h"
   COPIES_TO_KEEP: "35"
   FORCE_RESTORE: "False"
-  DIR_TO_BACKUP: "/data"
-  DIR_TO_RESTORE: "/data"

@@ -95,6 +95,12 @@ spec:
           volumeMounts:
             - name: storage
               mountPath: /data
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - podbackup
+                  - copy-from-s3
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

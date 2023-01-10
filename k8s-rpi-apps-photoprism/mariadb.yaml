@@ -31,6 +31,9 @@ spec:
       containers:
         - name: mysql
           image: 'docker.io/library/mariadb:10.10'
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
           command:
             - mariadbd
           args:
@@ -41,7 +44,6 @@ spec:
             - --max-connections=512 
             - --innodb-rollback-on-timeout=OFF 
             - --innodb-lock-wait-timeout=120
-            - --user=root
           ports:
             - name: mysql
               containerPort: 3306

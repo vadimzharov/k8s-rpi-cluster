@@ -34,16 +34,16 @@ spec:
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
-          command:
-            - mysqld
-          args:
-            - --innodb-buffer-pool-size=512M 
-            - --transaction-isolation=READ-COMMITTED 
-            - --character-set-server=utf8mb4 
-            - --collation-server=utf8mb4_unicode_ci 
-            - --max-connections=512 
-            - --innodb-rollback-on-timeout=OFF 
-            - --innodb-lock-wait-timeout=120
+#          command:
+#            - mysqld
+#          args:
+#            - --innodb-buffer-pool-size=512M 
+#            - --transaction-isolation=READ-COMMITTED 
+#            - --character-set-server=utf8mb4 
+#            - --collation-server=utf8mb4_unicode_ci 
+#            - --max-connections=512 
+#            - --innodb-rollback-on-timeout=OFF 
+#            - --innodb-lock-wait-timeout=120
           ports:
             - name: mysql
               containerPort: 3306
@@ -68,6 +68,9 @@ spec:
           imagePullPolicy: Always
         - name: mysql-backup-daemon
           image: 'quay.io/vadimzharov/podbackup:latest'
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
           command:
             - podbackup
           args:

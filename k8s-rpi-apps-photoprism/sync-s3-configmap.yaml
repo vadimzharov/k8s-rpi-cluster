@@ -8,7 +8,7 @@ data:
   S3_BUCKET_FOLDER: "storage"
   DIR_TO_BACKUP: "/data/"
   DIR_TO_RESTORE: "/data"
-  BACKUP_INTERVAL: "48h"
+  BACKUP_INTERVAL: "4h"
   S3_SYNC_PARALLELISM: "5"
   S3_COPY_BEFORE_SYNC: "true"
   S3_COPY_WITH_DELETE: "true"

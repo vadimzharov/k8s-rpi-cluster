@@ -99,7 +99,7 @@ spec:
               name: mariadb-creds              
           resources:
             limits:
-              cpu: 150m
+              cpu: 700m
               memory: 128Mi
             requests:
               cpu: 50m

@@ -19,7 +19,6 @@ spec:
           forecastle:
             config:
               namespaceSelector:
-#                any: true
                 matchNames:
                  - forecastle
               crdEnabled: true

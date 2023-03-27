@@ -123,6 +123,16 @@ spec:
       securityContext: {}
       schedulerName: default-scheduler
       enableServiceLinks: true
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
   strategy:
     type: Recreate
   revisionHistoryLimit: 3

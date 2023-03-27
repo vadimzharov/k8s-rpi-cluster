@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sync-s3-settings
+  namespace: photoprism-s3
+data:
+  AWS_BUCKET: photoprism-storage
+  S3_BUCKET_FOLDER: "storage"
+  DIR_TO_BACKUP: "/data/"
+  DIR_TO_RESTORE: "/data"
+  BACKUP_INTERVAL: "4h"
+  S3_SYNC_PARALLELISM: "5"
+  S3_COPY_BEFORE_SYNC: "true"
+  S3_COPY_WITH_DELETE: "true"
+

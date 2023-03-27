@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: rclone-s3-photos-import-mount
+  namespace: rclone-mount
+  labels:
+    app: rclone-photos-import
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rclone-photos-import
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rclone-photos-import
+    spec:
+      terminationGracePeriodSeconds: 120
+      containers:
+      - name: rclone-s3-mount
+        image: "docker.io/rclone/rclone:latest"
+        args:
+          - mount
+          - "minio:photos-import"
+          - "/mnt/s3-photos-import"
+          - --config=/etc/rclone/rclone.conf
+          - --cache-info-age=4h
+          - --cache-chunk-clean-interval=15m
+          - --dir-cache-time=5s
+          - --vfs-cache-mode=writes
+          - --allow-non-empty=true
+          - --allow-other=true
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","fusermount -uz /mnt/s3-photos-import"]
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+              - SYS_ADMIN
+        resources:
+        volumeMounts:
+          - name: config-data
+            subPath: config.conf
+            mountPath: /etc/rclone/rclone.conf
+          - name: data
+            mountPath: /var/lib/rclone
+          - name: media
+            mountPath: /mnt/s3-photos-import
+            mountPropagation: Bidirectional
+      volumes:
+      - name: config-data
+        secret:
+          secretName: rclone-s3-config
+      - name: media
+        hostPath:
+          path: /mnt/s3-photos-import
+      - name: data
+        hostPath:
+          path: /var/lib/rclone-photos-import/
+      nodeSelector:
+        shared-s3: "true"

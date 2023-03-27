@@ -19,7 +19,8 @@ spec:
           forecastle:
             config:
               namespaceSelector:
-                any: true
+                matchNames:
+                 - forecastle
               crdEnabled: true
   destination:
       server: https://kubernetes.default.svc

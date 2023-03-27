@@ -8,7 +8,7 @@ data:
   S3_FILE_PREFIX: "trilium-backup"
   DIR_TO_BACKUP: "/trilium-workdir"
   DIR_TO_RESTORE: "/trilium-workdir"  
-  BACKUP_INTERVAL: "24h"
+  BACKUP_INTERVAL: "1h"
   PRUNE_INTERVAL: "48h"
   COPIES_TO_KEEP: "35"
   FORCE_RESTORE: "True"  

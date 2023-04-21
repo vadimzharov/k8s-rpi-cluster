@@ -1,6 +1,6 @@
 victoria-metrics-single:
   server:
-    retentionPeriod: 24
+    retentionPeriod: 3
     persistentVolume:
       enabled: false
     scrape:

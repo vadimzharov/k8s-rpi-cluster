@@ -7,10 +7,10 @@ spec:
     spec:
       containers:
       - name: argocd-server
-        command:
-        - argocd-server
-        - --insecure
-        - --staticassets
-        - /shared/app
-        - '--redis'
-        - argocd-redis:6379        
+        command: ["argocd-server"]
+        args: 
+          - --insecure
+          - --staticassets
+          - /shared/app
+          - '--redis'
+          - argocd-redis:6379        

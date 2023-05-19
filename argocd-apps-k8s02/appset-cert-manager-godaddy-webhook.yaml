@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cert-manager-godaddy
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          cluster-apps: "true"
+  template:
+    metadata:
+      name: '{{name}}-cert-manager-godaddy'
+    annotations:
+      avp.kubernetes.io/path: "k8secrets/godaddy"
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          values: |
+            groupName: <webhook-groupname>
+        repoURL: https://fred78290.github.io/cert-manager-webhook-godaddy/
+        chart: godaddy-webhook
+        targetRevision: v1.27.1
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: cert-manager
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

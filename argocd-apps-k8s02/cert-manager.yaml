@@ -8,7 +8,7 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          active: true
+          cluster-role: active
   template:
     metadata:
       name: '{{name}}-guestbook' 

@@ -8,7 +8,7 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          cluster-role: active
+          cluster-apps: "true"
   template:
     metadata:
       name: '{{name}}-cert-manager' 

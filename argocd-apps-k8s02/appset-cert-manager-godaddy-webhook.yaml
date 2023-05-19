@@ -17,6 +17,8 @@ spec:
     spec:
       project: k8s-rpi-apps
       sources:
+      - plugin:
+          name: avp
       - helm:
           values: |
             groupName: <webhook-groupname>

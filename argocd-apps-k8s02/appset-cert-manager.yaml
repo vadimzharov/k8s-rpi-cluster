@@ -11,7 +11,7 @@ spec:
           cluster-role: active
   template:
     metadata:
-      name: '{{name}}-guestbook' 
+      name: '{{name}}-cert-manager' 
     spec:
       project: k8s-rpi-apps
       source:

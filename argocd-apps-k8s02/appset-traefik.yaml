@@ -39,6 +39,8 @@ spec:
               enabled: true
               single: true
               type: LoadBalancer
+              labels:
+                exposed-service: bgp
               spec:
                 loadBalancerIP: <traefikingressip>
             tlsStore:

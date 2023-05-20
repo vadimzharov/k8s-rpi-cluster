@@ -18,6 +18,7 @@ spec:
       project: k8s-rpi-apps
       sources:
       - helm:
+          releaseName: traefik      
           values: |
             providers:
               kubernetesCRD:
@@ -49,7 +50,6 @@ spec:
                   secretName: wildcard-apps-certificate
         repoURL: https://traefik.github.io/charts
         chart: traefik
-        releaseName: traefik
         targetRevision: 23.0.1
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         path: k8s-rpi-apps-traefik

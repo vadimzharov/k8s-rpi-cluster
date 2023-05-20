@@ -9,11 +9,11 @@ spec:
     matchLabels:
       node-role.kubernetes.io/bgp-router: enabled
   virtualRouters: 
-  - localASN: <cilium-bgp-local-asn>
+  - localASN: <cilium-bgp-local-asn | int>
     exportPodCIDR: false
     neighbors: 
     - peerAddress: <router-bgp-peer-ip> 
-      peerASN: <router-bgp-peer-asn>
+      peerASN: <router-bgp-peer-asn | int>
     serviceSelector:
       matchExpressions:
         - key: exposed-service

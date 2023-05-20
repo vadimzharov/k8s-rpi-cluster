@@ -1,0 +1,64 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: traefik
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/traefik"  
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          cluster-apps: "true"
+  template:
+    metadata:
+      name: '{{name}}-traefik'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          values: |
+            providers:
+              kubernetesCRD:
+                enabled: true
+                allowCrossNamespace: false
+                namespaces: []
+            globalArguments: []
+            ports:
+              web:
+                port: 8000
+                expose: true
+                exposedPort: 80
+                protocol: TCP
+              websecure:
+                port: 8443
+                expose: true
+                exposedPort: 443
+            service:
+              enabled: true
+              single: true
+              type: LoadBalancer
+              spec:
+                loadBalancerIP: <traefikingressip>
+            tlsStore:
+              default:
+                defaultCertificate:
+                  secretName: wildcard-apps-certificate
+        repoURL: https://traefik.github.io/charts
+        chart: traefik
+        releaseName: traefik
+        targetRevision: 0.8.1
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        path: k8s-rpi-apps-traefik
+        targetRevision: k8s-second        
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: traefik-v2
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

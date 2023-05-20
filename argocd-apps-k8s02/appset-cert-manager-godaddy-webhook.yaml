@@ -20,6 +20,9 @@ spec:
       - helm:
           values: |
             groupName: <webhook-groupname>
+            certManager:
+              namespace: cert-manager
+              serviceAccountName: {{name}}-cert-manager
         repoURL: https://fred78290.github.io/cert-manager-webhook-godaddy/
         chart: godaddy-webhook
         targetRevision: v1.27.1

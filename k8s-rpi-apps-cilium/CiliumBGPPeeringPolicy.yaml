@@ -1,0 +1,22 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeeringPolicy
+metadata:
+ name: bgp-peering-policy
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/cilium"  
+spec: 
+  nodeSelector:
+    matchLabels:
+      node-role.kubernetes.io/bgp-router: enabled
+  virtualRouters: 
+  - localASN: <cilium-bgp-local-asn>
+    exportPodCIDR: false
+    neighbors: 
+    - peerAddress: <router-bgp-peer-ip> 
+      peerASN: <router-bgp-peer-asn>
+    serviceSelector:
+      matchExpressions:
+        - key: exposed-service
+          operator: In
+          values:
+            - bgp      

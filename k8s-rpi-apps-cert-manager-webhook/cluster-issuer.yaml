@@ -12,8 +12,8 @@ spec:
       name: letsencrypt-prod
     solvers:
     - selector:
-        dnsNames:
-        - '<godaddy-cert-dns-names>'
+        dnsZones:
+        - '<godaddy-cert-dns-zone>'
       dns01:
         webhook:
           config:

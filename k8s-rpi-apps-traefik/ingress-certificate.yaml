@@ -7,7 +7,7 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/godaddy"  
 spec:
   secretName: wildcard-certificate
-  renewBefore: 240h
+  renewBefore: 240h0m0s
   dnsNames:
   - '<godaddy-cert-dns-names>'
   issuerRef:

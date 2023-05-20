@@ -1,0 +1,10 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: bpg-ippool
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/cilium"  
+spec:
+  cidrs:
+    - cidr: 192.168.90.64/29
+  disabled: false

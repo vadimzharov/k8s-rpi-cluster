@@ -4,12 +4,12 @@ metadata:
   name: wildcard-certificate
   namespace: traefik-v2
   annotations:
-    avp.kubernetes.io/path: "k8secrets/godaddy"  
+    avp.kubernetes.io/path: "k8secrets/traefik"  
 spec:
   secretName: wildcard-certificate
   renewBefore: 240h0m0s
   dnsNames:
-  - '<godaddy-cert-dns-names>'
+  - '<traefik-wildcard-dns-name>'
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer

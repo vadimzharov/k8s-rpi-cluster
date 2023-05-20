@@ -23,6 +23,9 @@ spec:
         repoURL: https://fred78290.github.io/cert-manager-webhook-godaddy/
         chart: godaddy-webhook
         targetRevision: v1.27.1
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        path: k8s-rpi-apps-cert-manager-webhook
+        targetRevision: k8s-second  
       destination:
         server: https://kubernetes.default.svc
         namespace: cert-manager

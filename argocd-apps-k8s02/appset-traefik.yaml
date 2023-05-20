@@ -48,7 +48,7 @@ spec:
         repoURL: https://traefik.github.io/charts
         chart: traefik
         releaseName: traefik
-        targetRevision: 0.8.1
+        targetRevision: 23.0.1
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         path: k8s-rpi-apps-traefik
         targetRevision: k8s-second        

@@ -23,6 +23,7 @@ spec:
             serviceDhcp:
               enabled: true
             serviceDns:
+              mixedService: true
               type: LoadBalancer
               loadBalancerIP: <piholeip>
             serviceDhcp:

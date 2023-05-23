@@ -18,6 +18,7 @@ spec:
       project: k8s-rpi-apps
       sources:
       - helm:
+          releaseName: pihole      
           values: |
             pihole:
               serviceDhcp:

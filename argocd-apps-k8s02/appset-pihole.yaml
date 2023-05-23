@@ -3,6 +3,8 @@ kind: ApplicationSet
 metadata:
   name: pihole
   namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/pihole"    
 spec:
   generators:
   - clusters:
@@ -14,13 +16,33 @@ spec:
       name: '{{name}}-pihole'   
     spec:
       project: k8s-rpi-apps
-      source:
-        repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        targetRevision: k8s-second
-        path: k8s-rpi-apps-pihole-h-k
-        plugin:
+      sources:
+      - helm:
+          values: |
+            pihole:
+              serviceDhcp:
+                enabled: true
+              serviceDns:
+                type: LoadBalancer
+                loadBalancerIP: <piholeip>
+              serviceDhcp:
+                enabled: false
+              extraEnvVars:
+                DNSMASQ_USER: "root"               
+              DNS1: <piholeupstreamdns>
+              DNS2: <piholeupstreamdns>
+              adminPassword: <password>
+              podDnsConfig:
+                enabled: true
+                policy: "None"
+                nameservers:
+                - 127.0.0.1
+                - <piholeupstreamdns>      
+        repoURL: https://mojo2600.github.io/pihole-kubernetes/
+        chart: pihole
+        targetRevision: 2.14.0
       destination:
-        server: https://kubernetes.default.svc
+        server: '{{url}}'
         namespace: pihole
       syncPolicy:
         automated:

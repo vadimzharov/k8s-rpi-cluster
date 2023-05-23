@@ -6,5 +6,5 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/cilium"  
 spec:
   cidrs:
-    - cidr: 192.168.90.64/29
+    - cidr: <load-balancer-cidr>
   disabled: false

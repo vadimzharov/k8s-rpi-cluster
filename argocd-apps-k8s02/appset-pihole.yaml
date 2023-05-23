@@ -43,7 +43,7 @@ spec:
         chart: pihole
         targetRevision: 2.14.0
       destination:
-        server: '{{url}}'
+        server: '{{server}}' 
         namespace: pihole
       syncPolicy:
         automated:

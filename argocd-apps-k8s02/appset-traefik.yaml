@@ -31,6 +31,8 @@ spec:
                 enabled: true
                 allowCrossNamespace: false
                 namespaces: []
+              kubernetesIngress:
+                enabled: true
                 publishedService:
                   enabled: true
                 publishedServicePath: "namespace/foo-service"

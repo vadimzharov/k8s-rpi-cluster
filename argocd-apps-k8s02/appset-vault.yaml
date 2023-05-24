@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: vault
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          cluster-apps: "true"
+  template:
+    metadata:
+      name: '{{name}}-vault'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: vault
+          values: |
+            global:
+              enabled: false
+            server:
+              enabled: true
+              volumes:
+                - name: config
+                  secret:
+                    secretName: vault-config
+              volumeMounts:
+                - name: config
+                  mountPath: /vault/config
+              dataStorage:
+                enabled: false
+              standalone:
+                config: ""
+              ha:
+                config: ""
+        repoURL: https://helm.releases.hashicorp.com
+        chart: vault
+        targetRevision: v0.24.1
+      destination:
+        server: '{{server}}'
+        namespace: vault
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

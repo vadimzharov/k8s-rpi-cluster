@@ -22,6 +22,11 @@ spec:
           values: |
             serviceDhcp:
               enabled: true
+            ingress:
+              enabled: true
+              ingressClassName: traefik-internal
+              hosts:
+                - <piholehostname>
             serviceDns:
               mixedService: true
               type: LoadBalancer

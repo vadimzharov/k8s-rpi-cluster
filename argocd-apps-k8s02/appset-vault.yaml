@@ -33,9 +33,11 @@ spec:
               dataStorage:
                 enabled: false
               standalone:                
-                config: ""
+                config: |
+                  # dummy
               ha:
-                config: ""
+                config: |
+                  # dummy
         repoURL: https://helm.releases.hashicorp.com
         chart: vault
         targetRevision: v0.24.1

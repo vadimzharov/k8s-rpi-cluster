@@ -24,7 +24,7 @@ spec:
               enabled: true
             ingress:
               enabled: true
-              ingressClassName: traefik-internal
+              ingressClassName: traefik
               hosts:
                 - <piholehostname>
             serviceDns:

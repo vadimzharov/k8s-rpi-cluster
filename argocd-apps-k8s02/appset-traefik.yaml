@@ -30,6 +30,7 @@ spec:
                 namespaces: []
                 publishedService:
                   enabled: true
+                  publishedServicePath: "namespace/foo-service"
             globalArguments: []
             ports:
               web:

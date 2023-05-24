@@ -15,32 +15,10 @@ spec:
     spec:
       project: k8s-rpi-apps
       sources:
-      - helm:
-          releaseName: vault
-          values: |
-            global:
-              enabled: false
-            server:
-              enabled: true
-              extraArgs: "-config=/vault/config/vault.conf"
-              volumes:
-                - name: aws-config
-                  secret:
-                    secretName: vault-config
-              volumeMounts:
-                - name: aws-config
-                  mountPath: /vault/config
-              dataStorage:
-                enabled: false
-              standalone:                
-                config: |
-                  # dummy
-              ha:
-                config: |
-                  # dummy
-        repoURL: https://helm.releases.hashicorp.com
-        chart: vault
-        targetRevision: v0.24.1
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: k8s-second
+        path: k8s-rpi-apps-vault
+        plugin:
       destination:
         server: '{{server}}'
         namespace: vault

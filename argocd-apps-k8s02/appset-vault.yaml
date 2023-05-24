@@ -34,10 +34,10 @@ spec:
                 enabled: false
               standalone:                
                 config: |
-                  {}
+                  # dummy
               ha:
                 config: |
-                  {}
+                  # dummy
         repoURL: https://helm.releases.hashicorp.com
         chart: vault
         targetRevision: v0.24.1

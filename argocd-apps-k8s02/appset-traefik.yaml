@@ -20,6 +20,9 @@ spec:
       - helm:
           releaseName: traefik      
           values: |
+            logs:
+              general:
+                level: DEBUG
             providers:
               kubernetesCRD:
                 enabled: true

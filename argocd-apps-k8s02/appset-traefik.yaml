@@ -28,6 +28,8 @@ spec:
                 enabled: true
                 allowCrossNamespace: false
                 namespaces: []
+                publishedService:
+                  enabled: true
             globalArguments: []
             ports:
               web:

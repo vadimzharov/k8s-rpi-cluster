@@ -22,16 +22,17 @@ spec:
               enabled: false
             server:
               enabled: true
+              extraArgs: "-config=/vault/config/vault.conf"
               volumes:
-                - name: config
+                - name: aws-config
                   secret:
                     secretName: vault-config
               volumeMounts:
-                - name: config
+                - name: aws-config
                   mountPath: /vault/config
               dataStorage:
                 enabled: false
-              standalone:
+              standalone:                
                 config: ""
               ha:
                 config: ""

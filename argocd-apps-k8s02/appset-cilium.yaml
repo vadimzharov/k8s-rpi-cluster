@@ -73,7 +73,7 @@ spec:
         chart: cilium
         targetRevision: 1.13.2
       destination:
-        server: server: '{{server}}'
+        server: '{{server}}'
       syncPolicy:
         automated:
           prune: true

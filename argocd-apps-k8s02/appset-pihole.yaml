@@ -27,6 +27,8 @@ spec:
               ingressClassName: traefik
               hosts:
                 - <piholehostname>
+            dualStack:
+              enabled: true
             serviceDns:
               mixedService: true
               type: LoadBalancer

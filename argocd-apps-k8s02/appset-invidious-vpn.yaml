@@ -17,8 +17,12 @@ spec:
       sources:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         targetRevision: k8s-second
-        path: k8s-rpi-apps-invidious
+        path: k8s-rpi-apps-invidious/main
         plugin:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: k8s-second
+        path: k8s-rpi-apps-invidious/vpn
+        plugin:        
       destination:
         server: '{{server}}'
         namespace: invidious-vpn

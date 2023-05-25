@@ -40,6 +40,7 @@ spec:
             adminPassword: <password>
             nodeSelector:
               node-role.kubernetes.io/control-plane: 
+            blacklist: <blacklist>
             podDnsConfig:
               enabled: true
               policy: "None"

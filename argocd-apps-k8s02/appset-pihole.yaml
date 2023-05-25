@@ -28,7 +28,7 @@ spec:
               hosts:
                 - <piholehostname>
             serviceDns:
-              mixedService: false
+              mixedService: true
               type: LoadBalancer
               loadBalancerIP: <piholeip>
             serviceDhcp:
@@ -38,6 +38,8 @@ spec:
             DNS1: <piholeupstreamdns>
             DNS2: <piholeupstreamdns>
             adminPassword: <password>
+            nodeSelector:
+              node-role.kubernetes.io/control-plane: 
             podDnsConfig:
               enabled: true
               policy: "None"

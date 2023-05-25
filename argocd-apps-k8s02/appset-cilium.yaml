@@ -74,6 +74,7 @@ spec:
         targetRevision: 1.13.2
       destination:
         server: '{{server}}'
+        namespace: kube-system
       syncPolicy:
         automated:
           prune: true

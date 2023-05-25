@@ -32,7 +32,7 @@ spec:
           - until pg_isready -h invidious-postgresql -p 5432 -U kemal; do echo waiting for database; sleep 2; done;
       containers:
       - name: invidious
-        image: "quay.io/invidious/invidious:latest-arm64"
+        image: "quay.io/invidious/invidious:latest"
         imagePullPolicy: Always
         volumeMounts:
           - name: invidious-config
@@ -63,7 +63,7 @@ spec:
         #   initialDelaySeconds: 15
       restartPolicy: Always
       nodeSelector:
-        beta.kubernetes.io/arch: arm64
+        beta.kubernetes.io/arch: amd64
       volumes:
         - name: invidious-config
           secret:

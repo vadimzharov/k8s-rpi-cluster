@@ -25,7 +25,7 @@ data:
         command:
           - sh
           - "-c"
-          - 'helm template "$ARGOCD_APP_NAME" --include-crds -f values.yaml --namespace="$ARGOCD_APP_NAMESPACE" . > all.yaml && kustomize build | argocd-vault-plugin generate -'
+          - 'kustomize build --enable-helm | argocd-vault-plugin generate -'
       lockRepo: false
 
   avp-kustomize-helm.yaml: |

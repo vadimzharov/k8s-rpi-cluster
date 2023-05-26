@@ -19,4 +19,4 @@ victoria-metrics-single:
         bearer_token: <hasstoken>
         scheme: http
         static_configs:
-          - targets: ['home-assistant.home-assistant.svc.cluster.local:8123']        
+          - targets: ['home-assistant.home-assistant.svc.cluster.local:8123']

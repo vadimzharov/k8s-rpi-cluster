@@ -8,7 +8,7 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          cluster-apps: "true"
+          victoriametrics: "installed"
   template:
     metadata:
       name: '{{name}}-victoriametrics'

@@ -18,7 +18,6 @@ spec:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         targetRevision: k8s-second
         path: k8s-rpi-apps-victoriametrics-h-k
-        plugin:
       destination:
         server: '{{server}}'
         namespace: victoriametrics

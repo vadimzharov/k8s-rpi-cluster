@@ -6,28 +6,30 @@ helmCharts:
   repo: https://victoriametrics.github.io/helm-charts/
   releaseName: victoriam
   valuesInline:
-    victoria-metrics-single:
-      server:
-        retentionPeriod: 2
-        persistentVolume:
-          enabled: false
-        scrape:
-          enabled: true
-          config:
-            global:
-              scrape_interval: 30s
-          extraScrapeConfigs:
-          - job_name: 'traefik'
-            static_configs:
-            - targets: ['traefik.traefik-v2.svc.cluster.local:8080']
-            scheme: http
-          - job_name: "hass"
+    rbac:
+      create: true
+      pspEnabled: false
+    server:
+      retentionPeriod: 2
+      persistentVolume:
+        enabled: false
+      scrape:
+        enabled: true
+        config:
+          global:
             scrape_interval: 30s
-            metrics_path: /api/prometheus
-            bearer_token: <hasstoken>
-            scheme: http
-            static_configs:
-              - targets: ['home-assistant.home-assistant.svc.cluster.local:8123']  
+        extraScrapeConfigs:
+        - job_name: 'traefik'
+          static_configs:
+          - targets: ['traefik.traefik-v2.svc.cluster.local:8080']
+          scheme: http
+        - job_name: "hass"
+          scrape_interval: 30s
+          metrics_path: /api/prometheus
+          bearer_token: <hasstoken>
+          scheme: http
+          static_configs:
+            - targets: ['home-assistant.home-assistant.svc.cluster.local:8123']  
 
 resources:
 #- ./all.yaml

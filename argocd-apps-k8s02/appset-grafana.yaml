@@ -83,6 +83,9 @@ spec:
         repoURL: https://grafana.github.io/helm-charts
         chart: grafana
         targetRevision: 6.40.3
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: k8s-second
+        path: k8s-rpi-apps-ingresses/grafana-ingress
       destination:
         server: '{{server}}'
         namespace: grafana

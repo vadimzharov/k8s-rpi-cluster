@@ -18,11 +18,9 @@ spec:
         - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
           targetRevision: k8s-second
           path: k8s-rpi-apps-argocd-k
-          plugin:
         - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
           targetRevision: k8s-second
           path: k8s-rpi-apps-ingresses/argocd-ingress
-          plugin:          
       destination:
         server: '{{server}}' 
         namespace: argocd

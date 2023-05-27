@@ -8,7 +8,7 @@ helmCharts:
   valuesInline:
     rbac:
       create: true
-      pspEnabled: false
+      pspEnabled: true
     server:
       retentionPeriod: 2
       persistentVolume:
@@ -44,7 +44,8 @@ patches:
     version: v1
     kind: StatefulSet
     name: victoriam-victoria-metrics-single-server
-  
+- path: overlays/delete/podsecuritypolicy.yaml
+
 patchesJSON6902:
 - target:
     version: v1

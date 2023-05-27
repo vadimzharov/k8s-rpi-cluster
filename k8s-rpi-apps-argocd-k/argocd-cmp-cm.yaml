@@ -22,7 +22,7 @@ data:
         command:
           - sh
           - "-c"
-          - 'kustomize build --enable-helm | argocd-vault-plugin generate -'
+          - 'rm -rf charts/* && kustomize build --enable-helm | argocd-vault-plugin generate -'
       lockRepo: false
 
   avp-kustomize-helm.yaml: |

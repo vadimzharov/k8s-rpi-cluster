@@ -37,6 +37,12 @@ spec:
                   enabled: true
                 publishedServicePath: "namespace/foo-service"
             globalArguments: []
+            ingressRoute:
+              dashboard:
+                enabled: true
+                matchRule: Host(`<traefikhostname>`)
+                entryPoints: ["websecure"]
+                middlewares: ["basic-auth"]
             ports:
               web:
                 port: 8000

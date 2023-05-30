@@ -42,7 +42,8 @@ spec:
                 enabled: true
                 matchRule: Host(`<traefikhostname>`)
                 entryPoints: ["websecure"]
-                middlewares: ["name: basic-auth"]
+                middlewares: 
+                  - name: basic-auth
             ports:
               web:
                 port: 8000

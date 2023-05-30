@@ -64,7 +64,10 @@ spec:
         targetRevision: 23.0.1
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         path: k8s-rpi-apps-traefik
-        targetRevision: k8s-second        
+        targetRevision: k8s-second
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        path: k8s-rpi-apps-ingresses/traefik-ingress
+        targetRevision: k8s-second
       destination:
         server: https://kubernetes.default.svc
         namespace: traefik-v2

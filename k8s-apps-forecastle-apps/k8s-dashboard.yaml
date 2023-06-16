@@ -4,10 +4,10 @@ metadata:
   name: k8s-dashboard
   namespace: forecastle
   annotations:
-    avp.kubernetes.io/path: "k8secrets/k8s-dashboard"
+    avp.kubernetes.io/path: "k8secrets/ingresses"
 spec:
   name: K8S Cluster Dashboard
   group: Infrastructure
   icon: https://1000logos.net/wp-content/uploads/2022/07/Kubernetes-Logo.png
-  url: https://<k8sdashboardhostname>
+  url: https://<k8sdashboardhostname>.<domainname>
   networkRestricted: false

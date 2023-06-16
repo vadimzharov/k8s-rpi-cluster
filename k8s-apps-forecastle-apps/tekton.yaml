@@ -4,7 +4,7 @@ metadata:
   name: tekton-ui
   namespace: forecastle
   annotations:
-    avp.kubernetes.io/path: "k8secrets/ingress"   
+    avp.kubernetes.io/path: "k8secrets/ingresses"   
 spec:
   name: Tekton Pipelines
   group: Infrastructure

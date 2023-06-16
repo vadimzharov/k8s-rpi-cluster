@@ -19,6 +19,5 @@ spec:
     middlewares:
       - name: mikrot-cors-header
         namespace: external-services
-  tls:
-    certResolver: godaddy
+
  

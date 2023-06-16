@@ -1,0 +1,18 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: forecastle-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    forecastle.stakater.com/expose: "true"
+    avp.kubernetes.io/path: "k8secrets/ingresses"        
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`<forecastlehostname>.<domainname>`)
+    kind: Rule
+    services:
+    - name: forecastle
+      port: 80
+ 

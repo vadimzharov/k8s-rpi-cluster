@@ -69,11 +69,11 @@ spec:
                   revision: 1
                   datasource: victoriametrics         
                 cilium-agent:
-                  gnetId: 15513
+                  gnetId: 16611
                   revision: 1
                   datasource: victoriametrics
                 cilium-hubble:
-                  gnetId: 15515
+                  gnetId: 16613
                   revision: 1
                   datasource: victoriametrics
                 mikrotik-exporter:

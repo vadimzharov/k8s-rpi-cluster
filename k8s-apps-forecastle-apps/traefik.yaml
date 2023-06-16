@@ -9,5 +9,5 @@ spec:
   name: Traefik dashboards
   group: Infrastructure
   icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Traefik.logo.png/434px-Traefik.logo.png
-  url: https://<traefikdashhostname>
+  url: https://<traefikhostname>
   networkRestricted: false

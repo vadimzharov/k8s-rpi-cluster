@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: rclone-s3-torr-mount
-  namespace: jellyfin-s3
   labels:
     app: rclone
 spec:

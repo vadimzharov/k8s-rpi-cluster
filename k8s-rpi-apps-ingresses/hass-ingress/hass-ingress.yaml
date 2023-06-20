@@ -15,8 +15,7 @@ spec:
     services:
     - name: home-assistant
       port: 8123
-  tls:
-    certResolver: godaddy  
+
 
 
  

@@ -54,7 +54,7 @@ spec:
                 port: 8443
                 expose: true
                 exposedPort: 443
-              websecure-external:
+              websecure-ext:
                 port: 6443
                 expose: true
                 exposedPort: 6443

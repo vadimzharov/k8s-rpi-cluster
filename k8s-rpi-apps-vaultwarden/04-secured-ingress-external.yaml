@@ -16,5 +16,4 @@ spec:
       port: 80
     middlewares:
       - name: vw-replaceprefix
-  tls:
-    certResolver: godaddy
+

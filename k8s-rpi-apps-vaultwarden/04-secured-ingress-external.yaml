@@ -7,7 +7,7 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/externalroutes"
 spec:
   entryPoints:
-    - websecure-external
+    - websecure-ext
   routes:
   - match: Host(`<externalhostname>`) && PathPrefix(`<vwpathprefix>`)
     kind: Rule

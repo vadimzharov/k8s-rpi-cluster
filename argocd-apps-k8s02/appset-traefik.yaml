@@ -17,9 +17,6 @@ spec:
     spec:
       project: k8s-rpi-apps
       sources:
-      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        path: k8s-rpi-apps-traefik
-        targetRevision: k8s-second      
       - helm:
           releaseName: traefik      
           values: |
@@ -76,6 +73,9 @@ spec:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         path: k8s-rpi-apps-traefik
         targetRevision: k8s-second
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        path: k8s-rpi-apps-traefik-certs
+        targetRevision: k8s-second        
       destination:
         server: https://kubernetes.default.svc
         namespace: traefik-v2

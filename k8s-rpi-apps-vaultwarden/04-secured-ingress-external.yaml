@@ -9,7 +9,7 @@ spec:
   entryPoints:
     - websecure-ext
   routes:
-  - match: Host(`<externalhostname>`) && PathPrefix(`<vwpathprefix>`)
+  - match: Host(`<vwexternalhostname>`) && PathPrefix(`<vwpathprefix>`)
     kind: Rule
     services:
     - name: vaultwarden

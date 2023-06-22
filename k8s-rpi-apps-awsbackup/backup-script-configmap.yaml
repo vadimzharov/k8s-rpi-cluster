@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backup-script
+data:
+  backup.sh: |
+    #!/bin/sh
+    while :
+    do
+      rclone --config=/etc/rclone/rclone.conf --update --use-server-modtime sync --progress minio:photos encrypted-bkp:photoprism
+      sleep 24h
+    done
+

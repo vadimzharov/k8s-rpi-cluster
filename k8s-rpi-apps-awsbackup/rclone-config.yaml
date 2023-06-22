@@ -11,7 +11,7 @@ spec:
     name: rclone-s3-config
     creationPolicy: Owner
   data:
-  - secretKey: key
+  - secretKey: config.conf
     remoteRef:
       key: backups3creds
       property: config.conf

@@ -1,0 +1,21 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hass-ingress
+  namespace: home-assistant
+  annotations:
+    kubernetes.io/ingress.class: traefik  
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`<hasshostname>.<domainname>`)
+    kind: Rule
+    services:
+    - name: home-assistant
+      port: 8123
+
+
+
+ 

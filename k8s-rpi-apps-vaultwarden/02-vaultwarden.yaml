@@ -125,8 +125,8 @@ spec:
               cpu: 50m
               memory: 64Mi
             limits:
-              cpu: 50m
-              memory: 64Mi
+              cpu: 200m
+              memory: 128Mi
           volumeMounts:
             - name: vw-workingdir
               mountPath: /data

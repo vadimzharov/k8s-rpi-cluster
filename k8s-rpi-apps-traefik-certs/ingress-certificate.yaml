@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-apps-certificate
+  namespace: traefik-v2
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/traefik"  
+spec:
+  secretName: wildcard-apps-certificate
+  renewBefore: 240h0m0s
+  dnsNames:
+  - '<traefik-wildcard-dns-name>'
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer

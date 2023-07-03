@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: invidious-vpn
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          shared-apps: "true"
+  template:
+    metadata:
+      name: '{{name}}-invidious-vpn' 
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: k8s-second
+        path: k8s-rpi-apps-invidious/main
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: k8s-second
+        path: k8s-rpi-apps-invidious/vpn
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: k8s-second
+        path: k8s-rpi-apps-ingresses/invidious-vpn-ingress
+      destination:
+        server: '{{server}}'
+        namespace: invidious-vpn
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

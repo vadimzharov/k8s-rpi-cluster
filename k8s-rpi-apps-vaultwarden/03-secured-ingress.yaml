@@ -4,20 +4,18 @@ metadata:
   name: vaultwarden-ingress
   annotations:
     kubernetes.io/ingress.class: traefik
-    avp.kubernetes.io/path: "k8secrets/vaultwarden"    
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`<vwhostname>`)
+  - match: Host(`<vwhostname>.<domainname>`)
     kind: Rule
     services:
     - name: vaultwarden
       port: 80
-  - match: Host(`<vwhostname>`) && Path(`/notifications/hub`)
+  - match: Host(`<vwhostname>.<domainname>`) && Path(`/notifications/hub`)
     kind: Rule
     services:
     - name: vaultwarden-ws
       port: 3012
-  tls:
-    certResolver: godaddy

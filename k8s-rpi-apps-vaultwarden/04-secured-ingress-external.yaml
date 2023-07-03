@@ -7,14 +7,13 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/externalroutes"
 spec:
   entryPoints:
-    - websecure-external
+    - websecure-ext
   routes:
-  - match: Host(`<externalhostname>`) && PathPrefix(`<vwpathprefix>`)
+  - match: Host(`<vwexternalhostname>`) && PathPrefix(`<vwpathprefix>`)
     kind: Rule
     services:
     - name: vaultwarden
       port: 80
     middlewares:
       - name: vw-replaceprefix
-  tls:
-    certResolver: godaddy
+  tls: {}

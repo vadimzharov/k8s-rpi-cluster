@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backup-to-aws
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backup-to-s3
+  template:
+    metadata:
+      labels:
+        app: backup-to-s3
+    spec:
+      containers:
+        - name: backup-to-s3
+          image: "docker.io/rclone/rclone:latest"
+          command: ["/script/backup.sh"]
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: config-data
+              subPath: config.conf
+              mountPath: /etc/rclone/rclone.conf
+            - name: backup-script
+              mountPath: /script/backup.sh
+              subPath: backup.sh              
+      volumes:
+      - name: config-data
+        secret:
+          secretName: rclone-s3-config
+      - name: backup-script
+        configMap:
+          name: backup-script
+          defaultMode: 0777          
+

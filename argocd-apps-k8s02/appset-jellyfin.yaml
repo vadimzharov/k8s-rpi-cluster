@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: jellyfin
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          jellyfin: "installed"
+  template:
+    metadata:
+      name: '{{name}}-jellyfin' 
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: k8s-second
+        path: k8s-rpi-apps-jellyfin-s3
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: k8s-second
+        path: k8s-rpi-apps-ingresses/jellyfin-ingress
+      destination:
+        server: '{{server}}'
+        namespace: jellyfin
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

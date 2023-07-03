@@ -1,0 +1,70 @@
+# Source: invidious/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invidious
+  labels:
+    app: invidious
+    release: invidious
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invidious
+      release: invidious
+  template:
+    metadata:
+      labels:
+        app: invidious
+        release: invidious
+    spec:
+#      securityContext:
+#        runAsUser: 1000
+#        runAsGroup: 1000
+#        fsGroup: 1000
+      enableServiceLinks: false
+      initContainers:
+        - name: wait-for-postgresql
+          image: postgres
+          args:
+          - /bin/sh
+          - -c
+          - until pg_isready -h invidious-postgresql -p 5432 -U kemal; do echo waiting for database; sleep 2; done;
+      containers:
+      - name: invidious
+        image: "quay.io/invidious/invidious:latest"
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: invidious-config
+            mountPath: /invidious/config/config.yml
+            subPath: config.yml
+        ports:
+        - containerPort: 3000
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 1
+            memory: 2Gi
+        # readinessProbe:
+        #   httpGet:
+        #     port: 3000
+        #     path: /
+        # livenessProbe:
+        #   httpGet:
+        #     port: 3000
+        #     path: /
+        #   initialDelaySeconds: 15
+      restartPolicy: Always
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
+      volumes:
+        - name: invidious-config
+          secret:
+            secretName: invidious-config

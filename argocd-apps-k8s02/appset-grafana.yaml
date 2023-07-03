@@ -1,0 +1,98 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: grafana
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/grafana"  
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          victoriametrics: "installed"
+  template:
+    metadata:
+      name: '{{name}}-grafana'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: grafana      
+          values: |
+            persistence:
+              type: pvc
+              enabled: false
+            adminUser: admin
+            adminPassword: <adminpassword>
+            plugins: 
+              - grafana-piechart-panel
+            datasources: 
+              datasources.yaml:
+                apiVersion: 1
+                datasources:
+                - name: victoriametrics
+                  type: prometheus
+                  url: http://victoriam-victoria-metrics-single-server.victoriametrics.svc.cluster.local:8428
+                  access: proxy
+                  isDefault: true
+                  updateIntervalSeconds: 10
+                  editable: true
+            dashboardProviders: 
+              dashboardproviders.yaml:
+                apiVersion: 1
+                providers:
+                - name: 'default'
+                  orgId: 1
+                  folder: ''
+                  type: file
+                  disableDeletion: true
+                  editable: true
+                  options:
+                    path: /var/lib/grafana/dashboards/default
+            dashboards:
+              default:
+                kubernetes:
+                  gnetId: 14205
+                  revision: 1
+                  datasource: victoriametrics             
+                victoriametrics:
+                  gnetId: 10229
+                  revision: 18
+                  datasource: victoriametrics
+                traefik:
+                  gnetId: 4475
+                  revision: 5
+                  datasource: victoriametrics
+                traefik-v2:
+                  gnetId: 12250
+                  revision: 1
+                  datasource: victoriametrics         
+                cilium-agent:
+                  gnetId: 16611
+                  revision: 1
+                  datasource: victoriametrics
+                cilium-hubble:
+                  gnetId: 16613
+                  revision: 1
+                  datasource: victoriametrics
+                mikrotik-exporter:
+                  gnetId: 10950
+                  revision: 1
+                  datasource: victoriametrics   
+        repoURL: https://grafana.github.io/helm-charts
+        chart: grafana
+        targetRevision: 6.40.3
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: k8s-second
+        path: k8s-rpi-apps-ingresses/grafana-ingress
+      destination:
+        server: '{{server}}'
+        namespace: grafana
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

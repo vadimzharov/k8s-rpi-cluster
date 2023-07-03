@@ -1,13 +1,50 @@
 namespace: victoriametrics
 
+helmCharts:
+- name: victoria-metrics-single 
+  version: 0.8.38
+  repo: https://victoriametrics.github.io/helm-charts/
+  releaseName: victoriam
+  valuesInline:
+    rbac:
+      create: true
+      pspEnabled: true
+    server:
+      retentionPeriod: 2
+      persistentVolume:
+        enabled: false
+      scrape:
+        enabled: true
+        config:
+          global:
+            scrape_interval: 30s
+        extraScrapeConfigs:
+        - job_name: 'traefik'
+          static_configs:
+          - targets: ['traefik.traefik-v2.svc.cluster.local:8080']
+          scheme: http
+        - job_name: "hass"
+          scrape_interval: 30s
+          metrics_path: /api/prometheus
+          bearer_token: <hasstoken>
+          scheme: http
+          static_configs:
+            - targets: ['home-assistant.home-assistant.svc.cluster.local:8123']  
+
 resources:
-- ./all.yaml
+#- ./all.yaml
 - overlays/add/vmbackup-config-secret.yaml
 - overlays/add/vmbackup-script-configmap.yaml
 - overlays/add/vmrestore-script-configmap.yaml
 
 patches:
-- overlays/replace/patch-statefulset.yaml
+- path: overlays/replace/patch-statefulset.yaml
+  target:
+    group: apps
+    version: v1
+    kind: StatefulSet
+    name: victoriam-victoria-metrics-single-server
+- path: overlays/delete/podsecuritypolicy.yaml
 
 patchesJSON6902:
 - target:

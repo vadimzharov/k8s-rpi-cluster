@@ -10,8 +10,8 @@ data:
     #!/bin/sh
     while :
     do
-      sleep 10m
+      sleep <vmbackupinterval>
       /vmbackup-prod -storageDataPath=/storage -snapshot.createURL=http://localhost:8428/snapshot/create -dst=s3://<bucket>/backups/vm -credsFilePath=/etc/vmbackup-config/config.ini -customS3Endpoint=<s3endpoint>
-      sleep 10m
+      sleep <vmbackupinterval>
     done
 

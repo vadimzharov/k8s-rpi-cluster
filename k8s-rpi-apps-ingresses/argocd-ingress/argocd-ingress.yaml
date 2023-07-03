@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd-ingress
+  namespace: argocd
+  annotations:
+    kubernetes.io/ingress.class: traefik  
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`<argocdhostname>.<domainname>`)
+    kind: Rule
+    services:
+    - name: argocd-server
+      port: 80
+
+

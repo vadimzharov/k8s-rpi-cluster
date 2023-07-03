@@ -4,10 +4,10 @@ metadata:
   name: vaultwarden
   namespace: forecastle
   annotations:
-    avp.kubernetes.io/path: "k8secrets/vaultwarden"    
+    avp.kubernetes.io/path: "k8secrets/ingresses"    
 spec:
   name: Vaultwarden
   group: Home
   icon: https://assets.website-files.com/627ba6588811eca90ffd6f2a/6282a6c78eb870e948fcc709_vaultwarden.png
-  url: https://<vwhostname>
+  url: https://<vwhostname>.<domainname>
   networkRestricted: false

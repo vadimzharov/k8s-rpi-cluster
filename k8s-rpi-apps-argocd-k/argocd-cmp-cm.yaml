@@ -18,14 +18,11 @@ data:
             - sh
             - "-c"
             - "test -f values.yaml && find . -name 'kustomization.yaml' && find . -name 'Chart.yaml'"
-      init:
-        command: ["sh", "-c"]
-        args: ["helm dependency build"]
       generate:
         command:
           - sh
           - "-c"
-          - 'helm template "$ARGOCD_APP_NAME" --include-crds -f values.yaml --namespace="$ARGOCD_APP_NAMESPACE" . > all.yaml && kustomize build | argocd-vault-plugin generate -'
+          - 'rm -rf charts/* && kustomize build --enable-helm | argocd-vault-plugin generate -'
       lockRepo: false
 
   avp-kustomize-helm.yaml: |
@@ -87,7 +84,7 @@ data:
           command:
             - sh
             - "-c"
-            - "find . -name '*.yaml' | xargs -I {} grep \"<path\\|avp\\.kubernetes\\.io\" {} | grep ."
+            - "test ! -f kustomization.yaml && find . -name '*.yaml' | xargs -I {} grep \"<path\\|avp\\.kubernetes\\.io\" {} | grep ."
       generate:
         command:
           - argocd-vault-plugin

@@ -1,0 +1,87 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: traefik
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/traefik"  
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          traefik-installed: "true"
+      values:
+        revision: '{{metadata.annotations.branch-name}}' 
+  template:
+    metadata:
+      name: '{{name}}-traefik'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: traefik      
+          values: |
+            logs:
+              general:
+                level: DEBUG
+            providers:
+              kubernetesCRD:
+                enabled: true
+                allowCrossNamespace: false
+                namespaces: []
+              kubernetesIngress:
+                enabled: true
+                publishedService:
+                  enabled: true
+                publishedServicePath: "namespace/foo-service"
+            globalArguments: []
+            ingressRoute:
+              dashboard:
+                enabled: true
+                matchRule: Host(`<traefikhostname>`)
+                entryPoints: ["websecure"]
+                middlewares: 
+                  - name: basic-auth
+            ports:
+              web:
+                port: 8000
+                expose: true
+                exposedPort: 80
+                protocol: TCP
+              websecure:
+                port: 8443
+                expose: true
+                exposedPort: 443
+              websecure-ext:
+                port: 6443
+                expose: true
+                exposedPort: 6443
+            service:
+              enabled: true
+              single: true
+              type: LoadBalancer
+              labels:
+                exposed-service: bgp
+              spec:
+                loadBalancerIP: <traefikingressip>
+            tlsStore:
+              default:
+                defaultCertificate:
+                  secretName: wildcard-apps-certificate
+        repoURL: https://traefik.github.io/charts
+        chart: traefik
+        targetRevision: 23.0.1
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        path: k8s-rpi-apps-traefik
+        targetRevision: '{{values.revision}}'
+      destination:
+        server: '{{server}}'
+        namespace: traefik-v2
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

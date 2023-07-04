@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: traefik-certificates
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          traefik-installed: "true"
+          traefik-certs: "read"
+      values:
+        revision: '{{metadata.annotations.branch-name}}' 
+        certs: 'read'
+  - clusters:
+      selector:
+        matchLabels:
+          traefik-installed: "true"
+          traefik-certs: "generate"
+      values:
+        revision: '{{metadata.annotations.branch-name}}' 
+        certs: 'generate'        
+  template:
+    metadata:
+      name: '{{name}}-traefik-certs'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        path: k8s-rpi-apps-traefik-certs-{{values.certs}}
+        targetRevision: '{{values.revision}}'
+      destination:
+        server: '{{server}}'
+        namespace: traefik-v2
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
+          

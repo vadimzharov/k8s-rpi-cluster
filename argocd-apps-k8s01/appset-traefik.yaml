@@ -10,7 +10,7 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          traefik-installed: "true"
+          traefik: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}' 
   template:

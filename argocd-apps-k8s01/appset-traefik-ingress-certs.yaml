@@ -8,7 +8,7 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          traefik-installed: "true"
+          traefik: "installed"
           traefik-certs: "read"
       values:
         revision: '{{metadata.annotations.branch-name}}' 
@@ -16,7 +16,7 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          traefik-installed: "true"
+          traefik: "installed"
           traefik-certs: "generate"
       values:
         revision: '{{metadata.annotations.branch-name}}' 

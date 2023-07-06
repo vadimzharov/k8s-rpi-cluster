@@ -20,8 +20,6 @@ spec:
       - helm:
           releaseName: pihole      
           values: |
-            serviceDhcp:
-              enabled: true
             ingress:
               enabled: true
               ingressClassName: traefik

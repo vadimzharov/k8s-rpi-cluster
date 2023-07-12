@@ -77,7 +77,7 @@ spec:
                   certValidityDuration: 1095
         repoURL: https://helm.cilium.io/
         chart: cilium
-        targetRevision: 1.13.2
+        targetRevision: 1.13.4
       destination:
         server: '{{server}}'
         namespace: kube-system

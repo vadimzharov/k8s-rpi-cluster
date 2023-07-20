@@ -42,7 +42,6 @@ spec:
               useAPIServer: true
               config:
                 enabled: true
-                domain: <path:k8secrets/cilium-clustermesh#domain>
                 clusters:
                   - name: <path:k8secrets/cilium-clustermesh#clustername>
                     ips: 

@@ -38,6 +38,23 @@ spec:
             cluster:
               id: <cilium-clusterid>
               name: <cilium-clustername>
+            clustermesh:
+              useAPIServer: true
+              enabled: true
+              domain: <path:k8secrets/cilium-clustermesh#domain>
+              clusters:
+                - name: <path:k8secrets/cilium-clustermesh#clustername>
+                  ips: 
+                    - <path:k8secrets/cilium-clustermesh#clusteraddress>
+                  port: <path:k8secrets/cilium-clustermesh#remoteport>
+                  tls:
+                    cert: <path:k8secrets/cilium-clustermesh#cert>
+                    key: <path:k8secrets/cilium-clustermesh#key>
+                    caCert: <path:k8secrets/cilium-clustermesh#ca>
+              apiserver:
+                service:
+                  type: NodePort
+                  nodePort: <path:k8secrets/cilium-clustermesh#port>
             ipv4:
               enabled: true
             nodePort:

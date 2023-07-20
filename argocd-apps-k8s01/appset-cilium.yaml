@@ -54,9 +54,6 @@ spec:
                 service:
                   type: NodePort
                   nodePort: <path:k8secrets/cilium-clustermesh#port>
-                tls:
-                  ca:
-                    cert: <path:k8secrets/cilium-clustermesh#ca>
             ipv4:
               enabled: true
             nodePort:

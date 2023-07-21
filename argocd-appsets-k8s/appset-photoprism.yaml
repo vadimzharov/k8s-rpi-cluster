@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: photoprism
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          photoprism: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+    template:
+      metadata: {}
+      spec:
+        sources:
+        - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+          targetRevision: '{{values.revision}}'
+          path: k8s-rpi-apps-photoprism
+  template:
+    metadata:
+      name: '{{name}}-photoprism' 
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-rpi-apps-ingresses/photoprism-ingress
+      destination:
+        server: '{{server}}'
+        namespace: photoprism
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

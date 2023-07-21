@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: rclone-s3-photos-mount
-  namespace: rclone-mount
   labels:
     app: rclone-photos
 spec:

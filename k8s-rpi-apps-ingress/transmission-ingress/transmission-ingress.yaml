@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: transmission-ingress
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: transmissionhostname>.<domainname>
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: k8s-rpi-transmission
+              port:
+                number: 9091

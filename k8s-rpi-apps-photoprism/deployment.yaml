@@ -18,13 +18,11 @@ spec:
         - name: originals
           hostPath:
             path: /var/mnt/s3-photos
-            type: Directory
         - name: storage
           emptyDir: {}
         - name: import
           hostPath:
             path: /var/mnt/s3-photos-import
-            type: Directory
       containers:
         - name: photoprism
           image: 'photoprism/photoprism:latest'

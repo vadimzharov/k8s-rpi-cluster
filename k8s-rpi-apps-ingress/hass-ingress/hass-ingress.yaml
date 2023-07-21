@@ -25,7 +25,9 @@ metadata:
   annotations:
     avp.kubernetes.io/path: "k8secrets/ingresses"
     nginx.ingress.kubernetes.io/service-upstream: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
+  tls:
   ingressClassName: nginx
   rules:
     - host: <hasshostname>.<domainname>

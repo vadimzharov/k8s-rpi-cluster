@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: syncthing
-  namespace: syncthing
   labels:
     app: syncthing
     release: syncthing

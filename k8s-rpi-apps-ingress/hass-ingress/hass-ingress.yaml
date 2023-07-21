@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: home-assistant-shared
+  annotations:
+    service.cilium.io/global: "true"    
   labels:
     app.kubernetes.io/name: home-assistant
     app.kubernetes.io/instance: home-assistant

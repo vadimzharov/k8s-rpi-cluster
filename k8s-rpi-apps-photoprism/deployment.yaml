@@ -86,6 +86,7 @@ spec:
       dnsPolicy: ClusterFirst
       nodeSelector:
         kubernetes.io/arch: amd64
+        shared-s3: "true"        
       serviceAccountName: default
       serviceAccount: default
       automountServiceAccountToken: true

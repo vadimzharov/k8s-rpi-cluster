@@ -18,6 +18,9 @@ spec:
           - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
             targetRevision: '{{values.revision}}'
             path: k8s-rpi-apps-photoprism
+          - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+            targetRevision: '{{values.revision}}'
+            path: k8s-rpi-apps-ingresses/photoprism-ingress            
           destination:
             server: '{{server}}'
             namespace: photoprism

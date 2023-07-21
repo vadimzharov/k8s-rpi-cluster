@@ -24,7 +24,7 @@ metadata:
   name: home-assistant-shared
   annotations:
     avp.kubernetes.io/path: "k8secrets/ingresses"
-    nginx.ingress.kubernetes.io/service-upstream: true
+    nginx.ingress.kubernetes.io/service-upstream: "true"
 spec:
   ingressClassName: nginx
   rules:

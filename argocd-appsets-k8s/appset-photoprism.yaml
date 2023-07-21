@@ -25,6 +25,12 @@ spec:
             server: '{{server}}'
             namespace: photoprism
           project: k8s-rpi-apps
+  - clusters:
+      selector:
+        matchLabels:
+          photoprism: "passive"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'          
   template:
     metadata:
       name: '{{name}}-photoprism' 

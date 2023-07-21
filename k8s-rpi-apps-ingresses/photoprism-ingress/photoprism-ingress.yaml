@@ -33,8 +33,7 @@ spec:
     services:
     - name: photoprism-s3-shared
       port: 80
-  tls:
-    certResolver: godaddy
+
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -68,7 +67,6 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: svc-https-headers
-  namespace: photoprism-s3 
 spec:
   headers:
     customRequestHeaders:

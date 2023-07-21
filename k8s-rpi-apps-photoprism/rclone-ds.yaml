@@ -20,7 +20,7 @@ spec:
         args:
           - mount
           - "minio:photos"
-          - "/mnt/s3-photos"
+          - "/var/mnt/s3-photos"
           - --config=/etc/rclone/rclone.conf
           - --cache-info-age=4h
           - --cache-chunk-clean-interval=15m
@@ -45,7 +45,7 @@ spec:
           - name: data
             mountPath: /var/lib/rclone
           - name: media
-            mountPath: /mnt/s3-photos
+            mountPath: /var/mnt/s3-photos
             mountPropagation: Bidirectional
       volumes:
       - name: config-data
@@ -53,7 +53,7 @@ spec:
           secretName: rclone-s3-config
       - name: media
         hostPath:
-          path: /mnt/s3-photos
+          path: /var/mnt/s3-photos
       - name: data
         hostPath:
           path: /var/lib/rclone-photos/

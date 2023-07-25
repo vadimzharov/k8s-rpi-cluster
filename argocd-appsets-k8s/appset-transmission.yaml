@@ -20,9 +20,6 @@ spec:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         targetRevision: '{{values.revision}}'
         path: k8s-rpi-apps-transmission
-      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        targetRevision: '{{values.revision}}'
-        path: k8s-rpi-apps-ingress/transmission-ingress
       destination:
         server: '{{server}}'
         namespace: transmission

@@ -294,7 +294,7 @@ spec:
                 datasources:
                 - name: victoriametrics
                   type: prometheus
-                  url: http://vmcluster-victoria-metrics-cluster-vmselect.victoriam-k8s.svc.cluster.local:8481/select/0/prometheus/
+                  url: http://victoriam-k8s-victoria-metrics-cluster-vmselect.victoriam-k8s.svc.cluster.local:8481/select/0/prometheus/
                   access: proxy
                   isDefault: true
                   updateIntervalSeconds: 10

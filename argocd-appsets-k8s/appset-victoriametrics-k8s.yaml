@@ -46,7 +46,11 @@ spec:
               create: true
               pspEnabled: false
             persistence:
-              enabled: false 
+              enabled: false
+            deployment:
+              enabled: true
+            statefulset:
+              enabled: false
             config:
               global:
                 scrape_interval: 10s

@@ -38,7 +38,7 @@ spec:
         chart: victoria-metrics-cluster
         targetRevision: 0.10.0  
       - helm:
-          releaseName: victoriam-k8s-agent  
+          releaseName: vm-k8s-agent  
           values: |
             remoteWriteUrls:
               - http://victoriam-k8s-victoria-metrics-cluster-vminsert.victoriam-k8s.svc.cluster.local:8480/insert/0/prometheus/

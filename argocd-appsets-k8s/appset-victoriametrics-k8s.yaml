@@ -29,6 +29,8 @@ spec:
                   prometheus.io/scrape: "true"
                   prometheus.io/port: "8480"
             vmstorage:
+              persistentVolume:
+                enabled: false
               podAnnotations:
                   prometheus.io/scrape: "true"
                   prometheus.io/port: "8482"

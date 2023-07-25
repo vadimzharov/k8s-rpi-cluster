@@ -270,7 +270,7 @@ spec:
                       action: replace
                       target_label: kubernetes_pod_name
         repoURL: https://victoriametrics.github.io/helm-charts/
-        chart: victoria-metrics-cluster
+        chart: victoria-metrics-agent
         targetRevision: 0.9.0
       destination:
         server: '{{server}}'

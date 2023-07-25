@@ -28,6 +28,8 @@ spec:
               service:
                 enabled: true
                 loadBalancerIP: <nginxingressip>
+              ingressClassResource:
+                default: true
         repoURL: https://kubernetes.github.io/ingress-nginx
         chart: ingress-nginx
         targetRevision: 4.7.1

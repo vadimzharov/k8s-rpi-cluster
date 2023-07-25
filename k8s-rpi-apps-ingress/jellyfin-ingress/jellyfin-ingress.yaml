@@ -15,7 +15,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: jellyfin-s3
+              name: jellyfin-s3-shared
               port:
                 number: 8096
 

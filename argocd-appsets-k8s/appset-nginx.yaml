@@ -39,6 +39,7 @@ spec:
           destination:
             server: '{{server}}'
             namespace: ingress-nginx-external
+          project: k8s-rpi-apps
   template:
     metadata:
       name: '{{name}}-nginx'

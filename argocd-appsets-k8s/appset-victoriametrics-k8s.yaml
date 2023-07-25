@@ -34,6 +34,7 @@ spec:
                   prometheus.io/port: "8482"
         repoURL: https://victoriametrics.github.io/helm-charts/
         chart: victoria-metrics-cluster
+        targetRevision: 0.10.0  
       destination:
         server: '{{server}}'
         namespace: victoriam-k8s

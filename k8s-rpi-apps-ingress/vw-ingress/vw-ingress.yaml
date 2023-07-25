@@ -14,7 +14,7 @@ spec:
     - host: <vwexternalhostname>
       http:
         paths:
-        - path: ^<vwpathprefix>/(.*)
+        - path: <vwpathprefix>/(.*)
           pathType: Prefix
           backend:
             service:

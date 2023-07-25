@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: victoriametrics-k8s
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          victoriam-k8s: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'          
+  template:
+    metadata:
+      name: '{{name}}-victoriam-k8s'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: victoriam-k8s      
+          values: |
+            vmselect:
+              podAnnotations:
+                  prometheus.io/scrape: "true"
+                  prometheus.io/port: "8481"
+            vminsert:
+              podAnnotations:
+                  prometheus.io/scrape: "true"
+                  prometheus.io/port: "8480"
+            vmstorage:
+              podAnnotations:
+                  prometheus.io/scrape: "true"
+                  prometheus.io/port: "8482"
+        repoURL: https://victoriametrics.github.io/helm-charts/
+        chart: victoria-metrics-cluster
+      destination:
+        server: '{{server}}'
+        namespace: victoriam-k8s
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

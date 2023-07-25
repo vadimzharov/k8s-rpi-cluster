@@ -11,8 +11,34 @@ spec:
       selector:
         matchLabels:
           nginx: "installed"
-      values:
-        revision: '{{metadata.annotations.branch-name}}'
+  - clusters:
+      selector:
+        matchLabels:
+          nginx-external: "installed"
+      template:
+        metadata: 
+          name: '{{name}}-nginx-external'
+        spec:
+          sources:
+          - helm:
+              releaseName: nginx-ex   
+              values: |
+                controller:
+                  extraArgs:
+                    default-ssl-certificate: "ingress-nginx/wildcard-apps-certificate"
+                  service:
+                    enabled: true
+                    loadBalancerIP: <nginxexternalingressip>
+                  ingressClassResource:
+                    name: nginx-external
+                    default: false
+                  ingressClass: nginx-external
+            repoURL: https://kubernetes.github.io/ingress-nginx
+            chart: ingress-nginx
+            targetRevision: 4.7.1
+          destination:
+            server: '{{server}}'
+            namespace: ingress-nginx-external
   template:
     metadata:
       name: '{{name}}-nginx'

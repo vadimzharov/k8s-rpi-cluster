@@ -44,7 +44,9 @@ spec:
               - http://victoriam-k8s-victoria-metrics-cluster-vminsert.victoriam-k8s.svc.cluster.local:8480/insert/0/prometheus/
             rbac:
               create: true
-              pspEnabled: false            
+              pspEnabled: false
+            persistence:
+              enabled: false 
             config:
               global:
                 scrape_interval: 10s

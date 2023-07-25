@@ -30,7 +30,7 @@ spec:
         path: k8s-rpi-apps-invidious/main
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         targetRevision: '{{values.revision}}'
-        path: k8s-rpi-apps-invidious/'{{values.invidious-type}}'
+        path: 'k8s-rpi-apps-invidious/{{values.invidious-type}}'
       destination:
         server: '{{server}}'
         namespace: 'invidious-{{values.invidious-type}}'

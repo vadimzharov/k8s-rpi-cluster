@@ -3,6 +3,8 @@ kind: ApplicationSet
 metadata:
   name: victoriametrics-k8s
   namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/vm-k8s"
 spec:
   generators:
   - clusters:
@@ -272,6 +274,60 @@ spec:
         repoURL: https://victoriametrics.github.io/helm-charts/
         chart: victoria-metrics-agent
         targetRevision: 0.9.0
+      - helm:
+          releaseName: grafana      
+          values: |
+            persistence:
+              type: pvc
+              enabled: false
+            adminUser: admin
+            adminPassword: <grafanaadminpassword>
+            ingress:
+              enabled: true
+              hosts:
+                - <path:k8secrets/ingresses#grafana-k8shostname>.<path:k8secrets/ingresses#domainname>
+            plugins: 
+              - grafana-piechart-panel
+            datasources: 
+              datasources.yaml:
+                apiVersion: 1
+                datasources:
+                - name: victoriametrics
+                  type: prometheus
+                  url: http://vmcluster-victoria-metrics-cluster-vmselect.victoriam-k8s.svc.cluster.local:8481/select/0/prometheus/
+                  access: proxy
+                  isDefault: true
+                  updateIntervalSeconds: 10
+                  editable: true
+            dashboardProviders: 
+              dashboardproviders.yaml:
+                apiVersion: 1
+                providers:
+                - name: 'default'
+                  orgId: 1
+                  folder: ''
+                  type: file
+                  disableDeletion: true
+                  editable: true
+                  options:
+                    path: /var/lib/grafana/dashboards/default
+            dashboards:
+              default:
+                victoriametrics:
+                  gnetId: 11176
+                  revision: 18
+                  datasource: victoriametrics
+                vmagent:
+                  gnetId: 12683
+                  revision: 7
+                  datasource: victoriametrics
+                kubernetes:
+                  gnetId: 14205
+                  revision: 1
+                  datasource: victoriametrics 
+        repoURL: https://grafana.github.io/helm-charts
+        chart: grafana
+        targetRevision: 6.40.3        
       destination:
         server: '{{server}}'
         namespace: victoriam-k8s

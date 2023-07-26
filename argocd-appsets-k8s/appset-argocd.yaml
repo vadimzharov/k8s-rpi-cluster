@@ -8,7 +8,7 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          argocd-installed: "true"
+          argocd: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}' 
   template:

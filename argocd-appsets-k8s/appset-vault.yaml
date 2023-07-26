@@ -4,6 +4,8 @@ metadata:
   name: vault
   namespace: argocd
 spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
   generators:
   - clusters:
       selector:
@@ -28,7 +30,6 @@ spec:
         automated:
           prune: true
           selfHeal: true
-          preserveResourcesOnDeletion: true          
         syncOptions:
           - CreateNamespace=true
           

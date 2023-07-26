@@ -123,7 +123,7 @@ spec:
         automated:
           prune: true
           selfHeal: true
-          preserveResourcesOnDeletion: true          
+        preserveResourcesOnDeletion: true          
         syncOptions:
           - CreateNamespace=true
           

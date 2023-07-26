@@ -6,6 +6,8 @@ metadata:
   annotations:
     avp.kubernetes.io/path: "k8secrets/cilium"
 spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
   generators:
   - clusters:
       selector:
@@ -123,7 +125,6 @@ spec:
         automated:
           prune: true
           selfHeal: true
-        preserveResourcesOnDeletion: true          
         syncOptions:
           - CreateNamespace=true
           

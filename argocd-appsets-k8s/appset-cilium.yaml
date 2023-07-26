@@ -103,6 +103,8 @@ spec:
               autoMount:
                 enabled: false
               hostRoot: /sys/fs/cgroup                    
+            externalWorkloads:
+              enabled: true
             hubble:
               metrics:
                 enabled: 

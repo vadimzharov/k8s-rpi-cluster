@@ -47,7 +47,7 @@ spec:
             clustermesh:
               useAPIServer: true
               config:
-                enabled: true
+                enabled: false
                 clusters:
                   - name: <path:k8secrets/cilium-clustermesh#clustername>
                     ips: 
@@ -66,9 +66,6 @@ spec:
                   ca:
                     cert: <path:k8secrets/cilium-clustermesh#ca>
                     key: <path:k8secrets/cilium-clustermesh#cakey>
-                  remote:
-                    cert: <path:k8secrets/cilium-clustermesh#remotecert>
-                    key: <path:k8secrets/cilium-clustermesh#remotekey>
             ipv4:
               enabled: true
             nodePort:

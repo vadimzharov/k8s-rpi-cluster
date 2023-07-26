@@ -17,4 +17,3 @@ spec:
               name: invidious
               port:
                 number: 3000
-

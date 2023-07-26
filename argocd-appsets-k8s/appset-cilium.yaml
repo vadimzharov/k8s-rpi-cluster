@@ -40,15 +40,19 @@ spec:
             cluster:
               id: <cilium-clusterid>
               name: <cilium-clustername>
+            tls:
+              ca:
+                cert: <cilium-ca>
+                key: <cilium-ca-key>
             clustermesh:
               useAPIServer: true
               config:
                 enabled: true
-                # clusters:
-                #   - name: <path:k8secrets/cilium-clustermesh#clustername>
-                #     ips: 
-                #       - <path:k8secrets/cilium-clustermesh#clusteraddress>
-                #     port: <path:k8secrets/cilium-clustermesh#remoteport>
+                  clusters:
+                    - name: <path:k8secrets/cilium-clustermesh#clustername>
+                      ips: 
+                        - <path:k8secrets/cilium-clustermesh#clusteraddress>
+                      port: <path:k8secrets/cilium-clustermesh#remoteport>
                 #     tls:
                 #       cert: <path:k8secrets/cilium-clustermesh#cert>
                 #       key: <path:k8secrets/cilium-clustermesh#key>
@@ -56,12 +60,12 @@ spec:
                 service:
                   type: NodePort
                   nodePort: <path:k8secrets/cilium-clustermesh#port>
-                tls:
-                  auto:
-                    method: cronJob
-                  ca:
-                    cert: <path:k8secrets/cilium-clustermesh#ca>
-                    key: <path:k8secrets/cilium-clustermesh#cakey>
+                # tls:
+                #   auto:
+                #     method: cronJob
+                #   ca:
+                #     cert: <path:k8secrets/cilium-clustermesh#ca>
+                #     key: <path:k8secrets/cilium-clustermesh#cakey>
             ipv4:
               enabled: true
             nodePort:

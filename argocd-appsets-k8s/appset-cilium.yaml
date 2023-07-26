@@ -54,8 +54,8 @@ spec:
                       - <path:k8secrets/cilium-clustermesh#clusteraddress>
                     port: <path:k8secrets/cilium-clustermesh#remoteport>
                     tls:
-                      cert: <path:k8secrets/cilium-clustermesh#remotecert>
-                      key: <path:k8secrets/cilium-clustermesh#remotekey>
+                      cert: <path:k8secrets/cilium-clustermesh#peercert>
+                      key: <path:k8secrets/cilium-clustermesh#peerkey>
               apiserver:
                 service:
                   type: NodePort
@@ -66,9 +66,9 @@ spec:
                   ca:
                     cert: <path:k8secrets/cilium-clustermesh#ca>
                     key: <path:k8secrets/cilium-clustermesh#cakey>
-                  client:
-                    cert: <path:k8secrets/cilium-clustermesh#clientcert>
-                    key: <path:k8secrets/cilium-clustermesh#clientkey>
+                  remote:
+                    cert: <path:k8secrets/cilium-clustermesh#remotecert>
+                    key: <path:k8secrets/cilium-clustermesh#remotekey>
             ipv4:
               enabled: true
             nodePort:

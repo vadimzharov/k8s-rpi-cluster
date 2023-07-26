@@ -57,6 +57,8 @@ spec:
                   type: NodePort
                   nodePort: <path:k8secrets/cilium-clustermesh#port>
                 tls:
+                  auto:
+                    method: cronJob
                   ca:
                     cert: <path:k8secrets/cilium-clustermesh#ca>
                     key: <path:k8secrets/cilium-clustermesh#cakey>

@@ -275,7 +275,7 @@ spec:
         chart: victoria-metrics-agent
         targetRevision: 0.9.0
       - helm:
-          releaseName: grafana      
+          releaseName: grafana-k8s      
           values: |
             persistence:
               type: pvc

@@ -48,7 +48,7 @@ spec:
                   metrics_path: /api/prometheus
                   scheme: http
                   static_configs:
-                    - targets: ['metrics.mikrotik-exporter.svc.cluster.local:8123']                        
+                    - targets: ['mikrotik-exporter.mikrotik-exporter.svc.cluster.local:9436']                        
         repoURL: https://victoriametrics.github.io/helm-charts/
         chart: victoria-metrics-single
         targetRevision: 0.9.0

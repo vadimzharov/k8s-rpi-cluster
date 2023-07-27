@@ -45,6 +45,9 @@ spec:
         server: '{{server}}'
         namespace: trilium
       syncPolicy:
+        managedNamespaceMetadata:
+          labels: 
+            pod-security.kubernetes.io/enforce: privileged      
         automated:
           prune: true
           selfHeal: true

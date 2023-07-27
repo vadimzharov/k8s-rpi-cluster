@@ -44,6 +44,9 @@ spec:
         server: '{{server}}'
         namespace: jellyfin
       syncPolicy:
+        managedNamespaceMetadata:
+          labels: # The labels to set on the application namespace
+            pod-security.kubernetes.io/enforce: privileged
         automated:
           prune: true
           selfHeal: true

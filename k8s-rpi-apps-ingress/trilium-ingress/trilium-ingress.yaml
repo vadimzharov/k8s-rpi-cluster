@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: trilium-ingress-shared
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+    nginx.ingress.kubernetes.io/service-upstream: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"    
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: <triliumhostname>.<domainname>
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: trilium-shared
+              port:
+                number: 8080
+

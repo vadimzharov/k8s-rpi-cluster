@@ -42,10 +42,62 @@ spec:
                   bearer_token: <hasstoken>
                   scheme: http
                   static_configs:
-                    - targets: ['home-assistant-shared.home-assistant.svc.cluster.local:8123']  
+                    - targets: ['home-assistant-shared.home-assistant.svc.cluster.local:8123']
+                - job_name: "mikrotik"
+                  scrape_interval: 30s
+                  metrics_path: /api/prometheus
+                  scheme: http
+                  static_configs:
+                    - targets: ['metrics.mikrotik-exporter.svc.cluster.local:8123']                        
         repoURL: https://victoriametrics.github.io/helm-charts/
         chart: victoria-metrics-single
-        targetRevision: 0.9.0  
+        targetRevision: 0.9.0
+      - helm:
+          releaseName: grafana      
+          values: |
+            persistence:
+              type: pvc
+              enabled: false
+            adminUser: admin
+            adminPassword: <path:k8secrets/grafana#grafanaadminpassword>
+            ingress:
+              enabled: true
+              hosts:
+                - <path:k8secrets/ingresses#grafana-apps-k8shostname>.<path:k8secrets/ingresses#domainname>
+            plugins: 
+              - grafana-piechart-panel
+            datasources: 
+              datasources.yaml:
+                apiVersion: 1
+                datasources:
+                - name: victoriametrics
+                  type: prometheus
+                  url: http://victoriam-victoria-metrics-single-server.victoriam-apps.svc.cluster.local:8428/select/0/prometheus/
+                  access: proxy
+                  isDefault: true
+                  updateIntervalSeconds: 10
+                  editable: true
+            dashboardProviders: 
+              dashboardproviders.yaml:
+                apiVersion: 1
+                providers:
+                - name: 'default'
+                  orgId: 1
+                  folder: ''
+                  type: file
+                  disableDeletion: true
+                  editable: true
+                  options:
+                    path: /var/lib/grafana/dashboards/default
+            dashboards:
+              default:
+                mikrotik-exporter:
+                  gnetId: 10950
+                  revision: 1
+                  datasource: victoriametrics 
+        repoURL: https://grafana.github.io/helm-charts
+        chart: grafana
+        targetRevision: 6.40.3          
       destination:
         server: '{{server}}'
         namespace: victoriam-apps

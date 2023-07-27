@@ -72,7 +72,7 @@ spec:
                 datasources:
                 - name: victoriametrics
                   type: prometheus
-                  url: http://victoriam-victoria-metrics-single-server.victoriam-apps.svc.cluster.local:8428/select/0/prometheus/
+                  url: http://victoriam-apps-victoria-metrics-single-server.victoriam-apps.svc.cluster.local:8428/select/0/prometheus/
                   access: proxy
                   isDefault: true
                   updateIntervalSeconds: 10

@@ -45,7 +45,7 @@ spec:
                     - targets: ['home-assistant-shared.home-assistant.svc.cluster.local:8123']
                 - job_name: "mikrotik"
                   scrape_interval: 30s
-                  metrics_path: /api/prometheus
+                  metrics_path: /metrics
                   scheme: http
                   static_configs:
                     - targets: ['mikrotik-exporter.mikrotik-exporter:9436']                        

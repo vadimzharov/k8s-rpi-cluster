@@ -48,7 +48,7 @@ spec:
                   metrics_path: /metrics
                   scheme: http
                   static_configs:
-                    - targets: ['mikrotik-exporter.mikrotik-exporter:9436']                        
+                    - targets: ['mikrotik-exporter.mikrotik-exporter.svc.cluster.local:9436']                        
         repoURL: https://victoriametrics.github.io/helm-charts/
         chart: victoria-metrics-single
         targetRevision: 0.9.0

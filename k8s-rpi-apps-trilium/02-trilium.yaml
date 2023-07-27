@@ -35,6 +35,8 @@ spec:
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 90
+      podSecurityContext:
+        fsGroup: 10000
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
       volumes:
@@ -44,7 +46,7 @@ spec:
         - name: trilium
           securityContext:
             capabilities:
-              add:
+              drop:
                 - ALL
             runAsNonRoot: true
             runAsUser: 1000

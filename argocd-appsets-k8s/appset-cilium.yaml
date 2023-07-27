@@ -75,7 +75,8 @@ spec:
             ipam:
               mode: "cluster-pool"
               operator:
-                clusterPoolIPv4PodCIDR: <cilium-podcidr>
+                clusterPoolIPv4PodCIDRList: 
+                  - <cilium-podcidr>
                 clusterPoolIPv4MaskSize: 24
             l7Proxy: false  
             kubeProxyReplacement: strict

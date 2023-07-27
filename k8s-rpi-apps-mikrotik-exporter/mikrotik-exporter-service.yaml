@@ -5,7 +5,7 @@ metadata:
   annotations:
     service.cilium.io/global: "true"    
   labels:
-    app.kubernetes.io/name: mikrotik-exporter
+    app: mikrotik-exporter
 spec:
   ports:
     - name: metrics
@@ -13,6 +13,6 @@ spec:
       port: 9436
       targetPort: 9436
   selector:
-    app.kubernetes.io/name: mikrotik-exporter
+    app: mikrotik-exporter
   type: ClusterIP
 

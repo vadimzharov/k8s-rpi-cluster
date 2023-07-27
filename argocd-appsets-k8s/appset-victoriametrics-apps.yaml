@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: victoriametrics-apps
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/victoriametrics"  
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          victoriam-apps: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'          
+  template:
+    metadata:
+      name: '{{name}}-victoriam-apps'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: victoriam-apps 
+          values: |
+            rbac:
+              create: true
+              pspEnabled: false
+            server:
+              retentionPeriod: 2
+              persistentVolume:
+                enabled: false
+              scrape:
+                enabled: true
+                config:
+                  global:
+                    scrape_interval: 30s
+                  scrape_configs: []
+                extraScrapeConfigs:
+                - job_name: "hass"
+                  scrape_interval: 30s
+                  metrics_path: /api/prometheus
+                  bearer_token: <hasstoken>
+                  scheme: http
+                  static_configs:
+                    - targets: ['home-assistant-shared.home-assistant.svc.cluster.local:8123']  
+        repoURL: https://victoriametrics.github.io/helm-charts/
+        chart: victoria-metrics-single
+        targetRevision: 0.9.0  
+      destination:
+        server: '{{server}}'
+        namespace: victoriam-apps
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

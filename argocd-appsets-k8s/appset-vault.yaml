@@ -4,11 +4,13 @@ metadata:
   name: vault
   namespace: argocd
 spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
   generators:
   - clusters:
       selector:
         matchLabels:
-          cluster-apps: "true"
+          cluster-apps: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}'
   template:

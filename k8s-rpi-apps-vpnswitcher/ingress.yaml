@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vpn-switcher-ingress
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: <vpnswitcherhostname>.<domainname>
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: vpnswitcher
+              port:
+                number: 80

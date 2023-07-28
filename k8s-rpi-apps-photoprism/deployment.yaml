@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: photoprism-s3
-  namespace: photoprism-s3
   labels:
     app.kubernetes.io/name: photoprism-s3
 spec:
@@ -18,14 +17,12 @@ spec:
       volumes:
         - name: originals
           hostPath:
-            path: /mnt/s3-photos
-            type: Directory
+            path: /var/mnt/s3-photos
         - name: storage
           emptyDir: {}
         - name: import
           hostPath:
-            path: /mnt/s3-photos-import
-            type: Directory
+            path: /var/mnt/s3-photos-import
       containers:
         - name: photoprism
           image: 'photoprism/photoprism:latest'
@@ -87,6 +84,7 @@ spec:
       dnsPolicy: ClusterFirst
       nodeSelector:
         kubernetes.io/arch: amd64
+        shared-s3: "true"        
       serviceAccountName: default
       serviceAccount: default
       automountServiceAccountToken: true

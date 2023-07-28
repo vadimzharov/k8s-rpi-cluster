@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mikrotik-exporter
+  annotations:
+    service.cilium.io/global: "true"    
+  labels:
+    app: mikrotik-exporter
+spec:
+  ports:
+    - name: metrics
+      protocol: TCP
+      port: 9436
+      targetPort: 9436
+  selector:
+    app: mikrotik-exporter
+  type: ClusterIP
+

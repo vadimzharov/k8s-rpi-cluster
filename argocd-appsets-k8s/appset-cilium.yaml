@@ -6,11 +6,13 @@ metadata:
   annotations:
     avp.kubernetes.io/path: "k8secrets/cilium"
 spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
   generators:
   - clusters:
       selector:
         matchLabels:
-          cluster-apps: "true"
+          cluster-apps: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}'           
   template:
@@ -38,23 +40,29 @@ spec:
             cluster:
               id: <cilium-clusterid>
               name: <cilium-clustername>
+            tls:
+              ca:
+                cert: <cilium-ca>
+                key: <cilium-ca-key>
             clustermesh:
               useAPIServer: true
               config:
-                enabled: true
+                enabled: false
                 clusters:
                   - name: <path:k8secrets/cilium-clustermesh#clustername>
                     ips: 
                       - <path:k8secrets/cilium-clustermesh#clusteraddress>
                     port: <path:k8secrets/cilium-clustermesh#remoteport>
                     tls:
-                      cert: <path:k8secrets/cilium-clustermesh#cert>
-                      key: <path:k8secrets/cilium-clustermesh#key>
+                      cert: <path:k8secrets/cilium-clustermesh#peercert>
+                      key: <path:k8secrets/cilium-clustermesh#peerkey>
               apiserver:
                 service:
                   type: NodePort
                   nodePort: <path:k8secrets/cilium-clustermesh#port>
                 tls:
+                  auto:
+                    method: helm
                   ca:
                     cert: <path:k8secrets/cilium-clustermesh#ca>
                     key: <path:k8secrets/cilium-clustermesh#cakey>
@@ -67,7 +75,8 @@ spec:
             ipam:
               mode: "cluster-pool"
               operator:
-                clusterPoolIPv4PodCIDR: <cilium-podcidr>
+                clusterPoolIPv4PodCIDRList: 
+                  - <cilium-podcidr>
                 clusterPoolIPv4MaskSize: 24
             l7Proxy: false  
             kubeProxyReplacement: strict
@@ -95,6 +104,8 @@ spec:
               autoMount:
                 enabled: false
               hostRoot: /sys/fs/cgroup                    
+            externalWorkloads:
+              enabled: true
             hubble:
               metrics:
                 enabled: 
@@ -115,7 +126,7 @@ spec:
                   certValidityDuration: 1095
         repoURL: https://helm.cilium.io/
         chart: cilium
-        targetRevision: 1.13.4
+        targetRevision: 1.14.0
       destination:
         server: '{{server}}'
         namespace: kube-system

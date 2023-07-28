@@ -20,7 +20,7 @@ spec:
         args:
           - mount
           - "minio:torrents"
-          - "/mnt/s3-torrents"
+          - "/var/mnt/s3-torrents"
           - --config=/etc/rclone/rclone.conf
           - --allow-non-empty
           - --allow-other
@@ -34,7 +34,7 @@ spec:
         lifecycle:
           preStop:
             exec:
-              command: ["/bin/sh","-c","fusermount -uz /mnt/rclone-s3"]
+              command: ["/bin/sh","-c","fusermount -uz /var/mnt/rclone-s3"]
         securityContext:
           privileged: true
           capabilities:
@@ -48,7 +48,7 @@ spec:
           - name: data
             mountPath: /var/lib/rclone
           - name: media
-            mountPath: /mnt/s3-torrents
+            mountPath: /var/mnt/s3-torrents
             mountPropagation: Bidirectional
       volumes:
       - name: config-data
@@ -56,9 +56,9 @@ spec:
           secretName: rclone-s3-config
       - name: media
         hostPath:
-          path: /mnt/s3-torrents
+          path: /var/mnt/s3-torrents
       - name: data
         hostPath:
-          path: /var/lib/rclone/
+          path: /var/lib/rclone-jellyfin/
       nodeSelector:
         shared-s3: "true"

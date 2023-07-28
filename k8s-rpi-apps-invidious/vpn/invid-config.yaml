@@ -20,4 +20,5 @@ stringData:
     external_port: 443
     https_only: true
     domain: <invidiousvpnhostname>
+    hmac_key: <hmackey>
 

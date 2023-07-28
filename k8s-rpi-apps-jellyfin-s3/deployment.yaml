@@ -19,8 +19,7 @@ spec:
       volumes:
         - name: downloads-complete
           hostPath:
-            path: /mnt/s3-torrents
-            type: Directory
+            path: /var/mnt/s3-torrents
         - name: jellyfin-datadir
           emptyDir: {}
       initContainers:

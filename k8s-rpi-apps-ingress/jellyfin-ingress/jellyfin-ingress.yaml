@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jellyfin-s3-shared
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+    nginx.ingress.kubernetes.io/service-upstream: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: <jellyfins3hostname>.<domainname>
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: jellyfin-s3-shared
+              port:
+                number: 8096
+

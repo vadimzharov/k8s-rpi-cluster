@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: backup-prism-aws
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          backup-prism-aws: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'                
+  template:
+    metadata:
+      name: '{{name}}-backup-prism-aws' 
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-rpi-apps-awsbackup
+      destination:
+        server: '{{server}}'
+        namespace: backup-to-aws
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

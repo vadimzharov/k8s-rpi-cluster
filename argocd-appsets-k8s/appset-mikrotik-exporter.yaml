@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: mikrotik-exporter
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          mikrotik-exporter: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'          
+  template:
+    metadata:
+      name: '{{name}}-mikrotik-exporter' 
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-rpi-apps-mikrotik-exporter
+      destination:
+        server: '{{server}}'
+        namespace: mikrotik-exporter
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

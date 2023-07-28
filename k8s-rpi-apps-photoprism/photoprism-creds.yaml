@@ -1,31 +1,39 @@
-apiVersion: "kubernetes-client.io/v1"
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: photoprism-creds
-  namespace: photoprism-s3
 spec:
-  backendType: vault
-  vaultMountPoint: k8s-rpi
-  vaultRole: k8s-rpi-auth-role
-  kvVersion: 1
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore    
+  target:
+    name: photoprism-creds
+    creationPolicy: Owner
   data:
-    - name: PHOTOPRISM_ADMIN_PASSWORD
-      key: k8secrets/photoprism
+  - secretKey: PHOTOPRISM_ADMIN_PASSWORD
+    remoteRef:
+      key: photoprism
       property: PHOTOPRISM_ADMIN_PASSWORD
-    - name: PHOTOPRISM_ADMIN_USER
-      key: k8secrets/photoprism
+  - secretKey: PHOTOPRISM_ADMIN_USER
+    remoteRef:
+      key: photoprism
       property: PHOTOPRISM_ADMIN_USER
-    - name: PHOTOPRISM_SITE_URL
-      key: k8secrets/photoprism
+  - secretKey: PHOTOPRISM_SITE_URL
+    remoteRef:
+      key: photoprism
       property: PHOTOPRISM_SITE_URL
-    - name: PHOTOPRISM_DATABASE_NAME
-      key: k8secrets/photoprism
+  - secretKey: PHOTOPRISM_DATABASE_NAME
+    remoteRef:
+      key: photoprism
       property: MARIADB_DATABASE
-    - name: PHOTOPRISM_DATABASE_USER
-      key: k8secrets/photoprism
+  - secretKey: PHOTOPRISM_DATABASE_USER
+    remoteRef:
+      key: photoprism
       property: MARIADB_USER
-    - name: PHOTOPRISM_DATABASE_PASSWORD
-      key: k8secrets/photoprism
-      property: MARIADB_PASSWORD      
+  - secretKey: PHOTOPRISM_DATABASE_PASSWORD
+    remoteRef:
+      key: photoprism
+      property: MARIADB_PASSWORD                              
 
 

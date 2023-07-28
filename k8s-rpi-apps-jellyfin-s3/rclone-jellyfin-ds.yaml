@@ -28,8 +28,11 @@ spec:
           - --cache-info-age=4h
           - --cache-chunk-clean-interval=15m
           - --dir-cache-time=5s
-          - --vfs-cache-mode=writes
+          - --vfs-cache-mode=full
           - --allow-non-empty=true
+          - --vfs-fast-fingerprint
+          - --vfs-cache-max-size 15G
+          - --cache-dir=/var/cache
           - --allow-other=true
         lifecycle:
           preStop:
@@ -50,6 +53,8 @@ spec:
           - name: media
             mountPath: /var/mnt/s3-torrents
             mountPropagation: Bidirectional
+          - name: cache
+            mountPath: /var/cache            
       volumes:
       - name: config-data
         secret:
@@ -60,5 +65,8 @@ spec:
       - name: data
         hostPath:
           path: /var/lib/rclone-jellyfin/
+      - name: cache
+        hostPath:
+          path: /var/lib/rclone-jellycache/
       nodeSelector:
         shared-s3: "true"

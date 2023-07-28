@@ -16,12 +16,16 @@ spec:
       terminationGracePeriodSeconds: 120
       containers:
       - name: rclone-s3-mount
+        env:
+          - name: RCLONE_LOG_LEVEL
+            value: DEBUG     
         image: "docker.io/rclone/rclone:latest"
         args:
           - mount
           - "minio:torrents"
           - "/var/mnt/s3-torrents"
           - --config=/etc/rclone/rclone.conf
+          - --allow-non-empty
           - --allow-other
           - --read-only
           - --cache-info-age=4h

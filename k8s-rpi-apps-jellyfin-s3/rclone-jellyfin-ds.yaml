@@ -31,7 +31,7 @@ spec:
           - --vfs-cache-mode=full
           - --allow-non-empty=true
           - --vfs-fast-fingerprint
-          - --vfs-cache-max-size 15G
+          - --vfs-cache-max-size=16G
           - --cache-dir=/var/cache
           - --allow-other=true
         lifecycle:

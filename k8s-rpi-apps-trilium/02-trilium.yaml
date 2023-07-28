@@ -35,8 +35,8 @@ spec:
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 90
-      podSecurityContext:
-        fsGroup: 10000
+      # podSecurityContext:
+      #   fsGroup: 10000
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
       volumes:
@@ -48,8 +48,8 @@ spec:
             capabilities:
               drop:
                 - ALL
-            runAsNonRoot: true
-            runAsUser: 1000
+            # runAsNonRoot: true
+            # runAsUser: 1000
             allowPrivilegeEscalation: true
             privileged: true
           resources:

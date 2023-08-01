@@ -86,9 +86,9 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: IfNotPresent
-          resources:
-            limits:
-              gpu.intel.com/i915: 1          
+          # resources:
+          #   limits:
+          #     gpu.intel.com/i915: 1          
         - name: jellyfin-backup-daemon
           image: 'quay.io/vadimzharov/podbackup:latest'
           command:

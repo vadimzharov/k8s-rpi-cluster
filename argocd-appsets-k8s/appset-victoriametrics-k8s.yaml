@@ -27,6 +27,9 @@ spec:
                   prometheus.io/scrape: "true"
                   prometheus.io/port: "8481"
             vminsert:
+              service:
+                annotations:
+                  service.cilium.io/global: "true"
               podAnnotations:
                   prometheus.io/scrape: "true"
                   prometheus.io/port: "8480"

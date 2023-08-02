@@ -60,12 +60,12 @@ spec:
                 service:
                   type: NodePort
                   nodePort: <path:k8secrets/cilium-clustermesh#port>
-                tls:
-                  auto:
-                    method: helm
-                  ca:
-                    cert: <path:k8secrets/cilium-clustermesh#ca>
-                    key: <path:k8secrets/cilium-clustermesh#cakey>
+                # tls:
+                #   auto:
+                #     method: helm
+                #   ca:
+                #     cert: <path:k8secrets/cilium-clustermesh#ca>
+                #     key: <path:k8secrets/cilium-clustermesh#cakey>
             ipv4:
               enabled: true
             nodePort:

@@ -111,8 +111,8 @@ spec:
       - configMap:
           name: cmp-plugin
         name: cmp-plugin
-      nodeSelector:
-        beta.kubernetes.io/arch: arm64        
+      # nodeSelector:
+      #   beta.kubernetes.io/arch: arm64        
       initContainers:
       - name: download-tools
         image: registry.access.redhat.com/ubi8

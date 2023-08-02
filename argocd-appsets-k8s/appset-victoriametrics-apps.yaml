@@ -19,6 +19,9 @@ spec:
     spec:
       project: k8s-rpi-apps
       sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-rpi-apps-victoriam-backup
       - helm:
           releaseName: victoriam-apps 
           values: |
@@ -29,6 +32,51 @@ spec:
               retentionPeriod: 2
               persistentVolume:
                 enabled: false
+              extraVolumes:
+              - name: vmbackup-config-secret
+                secret:
+                  secretName: vmbackup-config-secret
+              - name: backup-script
+                configMap:
+                  name: vmbackup-script
+                  defaultMode: 0777
+              - name: restore-script
+                configMap:
+                  name: vmrestore-script
+                  defaultMode: 0777
+              extraContainers:
+              - name: victoriametrics-backup
+                command: ["/script/backup.sh"]
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 64Mi
+                  limits:
+                    cpu: 100m
+                    memory: 128Mi        
+                image: "docker.io/victoriametrics/vmbackup:latest"
+                imagePullPolicy: IfNotPresent
+                volumeMounts:
+                  - name: vmbackup-config-secret
+                    mountPath: /etc/vmbackup-config
+                  - name: server-volume
+                    mountPath: /storage
+                  - name: backup-script
+                    mountPath: /script/backup.sh
+                    subPath: backup.sh
+              initContainers:
+              - name: vm-restore
+                image: "docker.io/victoriametrics/vmrestore:latest"
+                command: ["/script/restore.sh"]
+                imagePullPolicy: IfNotPresent
+                volumeMounts:
+                  - name: vmbackup-config-secret
+                    mountPath: /etc/vmbackup-config
+                  - name: server-volume
+                    mountPath: /storage
+                  - name: restore-script
+                    mountPath: /script/restore.sh
+                    subPath: restore.sh
               scrape:
                 enabled: true
                 config:

@@ -15,7 +15,9 @@ data:
             ARCH="arm64"
             echo "Downloading arm64 argo plugin"
     fi
-    curl -L https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$AVP_VERSION/argocd-vault-plugin_$AVP_VERSION_linux_$ARCH -o argocd-vault-plugin
+    ARGO_URL="https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$AVP_VERSION/argocd-vault-plugin_"$AVP_VERSION"_linux_$ARCH"
+    echo "Downloading from URL:" $ARGO_URL
+    curl -L $ARGO_URL -o argocd-vault-plugin    
     chmod +x argocd-vault-plugin
     mv argocd-vault-plugin /custom-tools/
     echo "Downloading complete"

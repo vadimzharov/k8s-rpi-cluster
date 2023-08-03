@@ -115,8 +115,8 @@ spec:
         configMap:
           name: argocd-download-plugin
           defaultMode: 0777        
-      nodeSelector:
-        beta.kubernetes.io/arch: arm64        
+      # nodeSelector:
+      #   beta.kubernetes.io/arch: arm64        
       initContainers:
       - name: download-tools
         image: registry.access.redhat.com/ubi8

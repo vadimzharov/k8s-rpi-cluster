@@ -9,8 +9,8 @@ resources:
 - argocd-cmp-cm.yaml
 - argocd-ingress.yaml
 
-#patchesStrategicMerge:
-patches:
+patchesStrategicMerge:
+#patches:
 - argocd-repo-server-deploy.yaml
 - argocd-cm.yaml
 - argocd-server-deploy.yaml

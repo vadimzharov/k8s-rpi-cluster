@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-download-plugin
+data:
+  download.sh: |
+    #!/bin/sh
+    # Check processor type
+    PROC=$(uname -p)
+    echo "Processor type is" $PROC
+    if [[ "$PROC" == *"x86"* ]]; then
+            ARCH="amd64"
+            echo "Downloading amd64 argo plugin"
+    else
+            ARCH="arm64"
+            echo "Downloading arm64 argo plugin"
+    fi
+    curl -L https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$AVP_VERSION/argocd-vault-plugin_$AVP_VERSION_linux_$ARCH -o argocd-vault-plugin
+    chmod +x argocd-vault-plugin
+    mv argocd-vault-plugin /custom-tools/
+    echo "Downloading complete"
+

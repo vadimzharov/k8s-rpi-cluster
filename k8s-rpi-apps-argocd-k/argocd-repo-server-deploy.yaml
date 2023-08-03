@@ -111,26 +111,28 @@ spec:
       - configMap:
           name: cmp-plugin
         name: cmp-plugin
-      # nodeSelector:
-      #   beta.kubernetes.io/arch: arm64        
+      - name: download-script
+        configMap:
+          name: argocd-download-plugin
+          defaultMode: 0777        
+      nodeSelector:
+        beta.kubernetes.io/arch: arm64        
       initContainers:
       - name: download-tools
         image: registry.access.redhat.com/ubi8
-        command: [sh, -c]
+        command: ["/script/download.sh"]
 
         # Don't forget to update this to whatever the stable release version is
         # Note the lack of the `v` prefix unlike the git tag
         env:
           - name: AVP_VERSION
             value: "1.14.0"
-        args:
-          - >-
-            curl -L
-            https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$(AVP_VERSION)/argocd-vault-plugin_$(AVP_VERSION)_linux_arm64
-            -o argocd-vault-plugin && chmod +x argocd-vault-plugin && mv argocd-vault-plugin /custom-tools/
         volumeMounts:
           - mountPath: /custom-tools
             name: custom-tools
+          - name: download-script
+            mountPath: /script/download.sh
+            subPath: download.sh          
 
       # Not strictly necessary, but required for passing AVP configuration from a secret and for using Kubernetes auth to Hashicorp Vault
       automountServiceAccountToken: true

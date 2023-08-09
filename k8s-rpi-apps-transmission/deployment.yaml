@@ -16,7 +16,8 @@ spec:
     spec:
       volumes:
         - name: downloads-complete
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: transmission-dwn
         - name: downloads-incomplete
           emptyDir: {}
         - name: confdir
@@ -79,23 +80,4 @@ spec:
             failureThreshold: 30
             timeoutSeconds: 1
             periodSeconds: 5
-        - name: transmission-sync-daemon
-          image: quay.io/vadimzharov/podbackup:latest
-          imagePullPolicy: Always
-          command: ["podbackup"]
-          args: ["sync-to-s3"]
-          resources:
-            requests:
-              cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 500m
-              memory: 512Mi
-          envFrom:
-          - configMapRef:
-              name: sync-s3-settings
-          - secretRef:
-              name: sync-s3-secret
-          volumeMounts:
-            - name: downloads-complete
-              mountPath: /data
+

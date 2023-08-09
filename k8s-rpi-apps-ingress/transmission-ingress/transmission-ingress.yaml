@@ -1,9 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: transmission-ingress
+  name: transmission-ingress-shared
   annotations:
     avp.kubernetes.io/path: "k8secrets/ingresses"
+    nginx.ingress.kubernetes.io/service-upstream: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"    
 spec:
   ingressClassName: nginx
   rules:
@@ -14,6 +17,6 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: k8s-rpi-transmission
+              name: k8s-rpi-transmission-shared
               port:
                 number: 9091

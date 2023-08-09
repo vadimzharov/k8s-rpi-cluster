@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: k8s-csi-s3
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          k8s-csi-s3: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'                
+  template:
+    metadata:
+      name: '{{name}}-k8s-csi-s3' 
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-infra-csi-s3
+      destination:
+        server: '{{server}}'
+        namespace: kube-system
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
+          

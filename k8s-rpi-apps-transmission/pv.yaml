@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: transmission-dwn
+spec:
+  storageClassName: csi-s3-torrents
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  claimRef:
+    namespace: transmission
+    name: transmission-dwn
+  csi:
+    driver: ru.yandex.s3.csi
+    controllerPublishSecretRef:
+      name: csi-s3-secret
+      namespace: kube-system
+    nodePublishSecretRef:
+      name: csi-s3-secret
+      namespace: kube-system
+    nodeStageSecretRef:
+      name: csi-s3-secret
+      namespace: kube-system
+    volumeAttributes:
+      capacity: 10Gi
+      mounter: geesefs
+      options: --memory-limit 1000 --dir-mode 0777 --file-mode 0666
+    volumeHandle: torrents-test/
+          

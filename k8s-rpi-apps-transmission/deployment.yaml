@@ -16,7 +16,8 @@ spec:
     spec:
       volumes:
         - name: downloads-complete
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: transmission-dwn
         - name: downloads-incomplete
           emptyDir: {}
         - name: confdir

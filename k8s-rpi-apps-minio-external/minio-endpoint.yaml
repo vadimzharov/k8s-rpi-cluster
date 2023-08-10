@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: minio
+  namespace: external-services
+  labels:
+    kubernetes.io/service-name: minio  
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/external-services"
+subsets:
+  - addresses:
+      - ip: <minio-ip>
+    ports:
+      - name: minio-s3
+        port: 9000
+        protocol: TCP

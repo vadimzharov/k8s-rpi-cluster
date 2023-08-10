@@ -9,6 +9,7 @@ spec:
       selector:
         matchLabels:
           jellyfin: "installed"
+          k8s-csi-s3: "installed"          
       values:
         revision: '{{metadata.annotations.branch-name}}'
   - clusters:
@@ -44,9 +45,6 @@ spec:
         server: '{{server}}'
         namespace: jellyfin
       syncPolicy:
-        managedNamespaceMetadata:
-          labels: 
-            pod-security.kubernetes.io/enforce: privileged
         automated:
           prune: true
           selfHeal: true

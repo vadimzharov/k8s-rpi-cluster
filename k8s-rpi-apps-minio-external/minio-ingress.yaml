@@ -5,6 +5,7 @@ metadata:
   annotations:
     avp.kubernetes.io/path: "k8secrets/ingresses"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 20m
 spec:
   ingressClassName: nginx
   rules:

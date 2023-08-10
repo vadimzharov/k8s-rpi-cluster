@@ -16,13 +16,13 @@ spec:
     spec:
       volumes:
         - name: originals
-          hostPath:
-            path: /var/mnt/s3-photos
+          persistentVolumeClaim:
+            claimName: photos
         - name: storage
           emptyDir: {}
         - name: import
-          hostPath:
-            path: /var/mnt/s3-photos-import
+          persistentVolumeClaim:
+            claimName: import
       containers:
         - name: photoprism
           image: 'photoprism/photoprism:latest'
@@ -84,7 +84,6 @@ spec:
       dnsPolicy: ClusterFirst
       nodeSelector:
         kubernetes.io/arch: amd64
-        shared-s3: "true"        
       serviceAccountName: default
       serviceAccount: default
       automountServiceAccountToken: true

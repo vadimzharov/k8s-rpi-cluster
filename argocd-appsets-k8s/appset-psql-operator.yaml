@@ -3,8 +3,6 @@ kind: ApplicationSet
 metadata:
   name: psql-operator
   namespace: argocd
-  annotations:
-    avp.kubernetes.io/path: "k8secrets/psql-operator"
 spec:
   syncPolicy:
     preserveResourcesOnDeletion: false

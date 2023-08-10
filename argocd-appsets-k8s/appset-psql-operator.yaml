@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: psql-operator
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/psql-operator"
+spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: false
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          psql-operator: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  - clusters:
+      selector:
+        matchLabels:
+          psql-operator-ui: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+      template:
+        metadata: 
+          name: '{{name}}-psql-operator-ui' 
+        spec:
+          sources:
+          - helm:
+              releaseName: postgres-operator-ui
+            repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator-ui
+            chart: postgres-operator-ui
+            targetRevision: 1.10.0
+          destination:
+            server: '{{server}}'
+            namespace: postgres-operator
+          project: k8s-rpi-apps        
+  template:
+    metadata:
+      name: '{{name}}-psql-operator' 
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: postgres-operator
+        repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+        chart: postgres-operator
+        targetRevision: 1.10.0
+      destination:
+        server: '{{server}}'
+        namespace: postgres-operator
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

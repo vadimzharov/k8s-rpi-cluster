@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: jellyfin-s3
 data:
   ARCHIVE_TYPE: tarzip
-  BACKUP_INTERVAL: 24h
+  BACKUP_INTERVAL: 2h
   COPIES_TO_KEEP: '35'
   DIR_TO_BACKUP: /jellyfin-data
   DIR_TO_RESTORE: /jellyfin-data

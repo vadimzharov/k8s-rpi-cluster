@@ -18,8 +18,8 @@ spec:
     spec:
       volumes:
         - name: downloads-complete
-          hostPath:
-            path: /var/mnt/s3-torrents
+          persistentVolumeClaim:
+            claimName: jellyfin-torrents
         - name: jellyfin-datadir
           emptyDir: {}
       initContainers:
@@ -116,8 +116,6 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
-      nodeSelector:
-        shared-s3: "true"
       serviceAccountName: default
       serviceAccount: default
       automountServiceAccountToken: true

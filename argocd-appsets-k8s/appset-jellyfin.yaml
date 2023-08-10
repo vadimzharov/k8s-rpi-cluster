@@ -19,7 +19,8 @@ spec:
       values:
         revision: '{{metadata.annotations.branch-name}}'
       template:
-        metadata: {}
+        metadata: 
+          name: '{{name}}-jellyfin-passive' 
         spec:
           sources:
           - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git

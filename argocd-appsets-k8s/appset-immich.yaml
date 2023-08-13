@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: immich
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          immich: "installed"
+  template:
+    metadata:
+      name: '{{name}}-immich'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: pgsql-immich
+          values: |
+            primary:
+              persistense:
+                enabled: false
+        repoURL: oci://registry-1.docker.io/bitnamicharts/postgresql
+        chart: postgresql
+        targetRevision: 12.8.2
+      destination:
+        server: '{{server}}' 
+        namespace: immich
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

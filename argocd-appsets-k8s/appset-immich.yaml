@@ -19,7 +19,7 @@ spec:
           releaseName: pgsql-immich
           values: |
             primary:
-              persistense:
+              persistence:
                 enabled: false
         repoURL: https://charts.bitnami.com/bitnami
         chart: postgresql

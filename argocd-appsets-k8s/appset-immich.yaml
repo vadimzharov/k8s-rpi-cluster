@@ -64,7 +64,7 @@ spec:
             immich:
               persistence:
                 library:
-                  enabled: false
+                  existingClaim: photos
             machine-learning:
               enabled: false                  
             postgresql:

@@ -11,6 +11,8 @@ spec:
       selector:
         matchLabels:
           immich: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'            
   template:
     metadata:
       name: '{{name}}-immich'

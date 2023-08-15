@@ -73,7 +73,7 @@ spec:
                     exec:
                       command:
                         - podbackup
-                        - restore-sql
+                        - restore-pgsql
         repoURL: https://charts.bitnami.com/bitnami
         chart: postgresql
         targetRevision: 12.8.2

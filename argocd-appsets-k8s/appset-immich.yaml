@@ -31,6 +31,20 @@ spec:
             primary:
               persistence:
                 enabled: false
+              extraVolumes:
+                - name: pgsql-restored-mark
+                  emptyDir: {}
+              extraVolumeMounts:
+                - name:  pgsql-restored-mark
+                  mountPath: /tmp/pgsqlrestore/
+              startupProbe:
+                exec:
+                  command:
+                    - cat
+                    - /tmp/pgsqlrestore/restored
+                failureThreshold: 30
+                periodSeconds: 20
+                initialDelaySeconds: 10                  
               sidecars:
               - name: pgsql-backup-daemon
                 image: quay.io/vadimzharov/podbackup:test-postgresql
@@ -46,12 +60,20 @@ spec:
                     name: pgsql-b-r-settings
                 - secretRef:
                     name: pgsql-creds
+                volumeMounts:
+                - name:  pgsql-restored-mark
+                  mountPath: /tmp/pgsqlrestore/                
                 lifecycle:
                   preStop:
                     exec:
                       command:
                         - podbackup
-                        - backup-pgsql                            
+                        - backup-pgsql
+                  postStart:
+                    exec:
+                      command:
+                        - podbackup
+                        - restore-sql
         repoURL: https://charts.bitnami.com/bitnami
         chart: postgresql
         targetRevision: 12.8.2

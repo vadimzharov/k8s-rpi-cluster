@@ -83,8 +83,6 @@ spec:
       - helm:
           releaseName: immich
           values: |
-            image:
-              tag: noml
             immich:
               persistence:
                 library:
@@ -107,6 +105,12 @@ spec:
                     username: <pgsql_username>
                     password: <pgsql_password>
                     database: <pgsql_database>
+            server:
+              enabled: true
+              image:
+                repository: ghcr.io/immich-app/immich-server
+                pullPolicy: IfNotPresent
+                tag: noml
             proxy:
               ingress:
                 main:

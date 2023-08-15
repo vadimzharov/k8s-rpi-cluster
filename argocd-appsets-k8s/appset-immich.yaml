@@ -75,6 +75,17 @@ spec:
                     username: <pgsql_username>
                     password: <pgsql_password>
                     database: <pgsql_database>
+            proxy:
+              ingress:
+                main:
+                  enabled: true
+                  annotations:
+                    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+                  hosts:
+                    - host: <path:k8secrets/ingresses#immichhostname>.<path:k8secrets/ingresses#domainname>
+                      paths:
+                        - path: "/"
+                  tls: []                                  
         repoURL: https://immich-app.github.io/immich-charts
         chart: immich
         targetRevision: 0.1.2

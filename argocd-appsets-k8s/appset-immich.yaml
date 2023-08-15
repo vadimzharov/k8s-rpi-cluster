@@ -3,6 +3,8 @@ kind: ApplicationSet
 metadata:
   name: immich
   namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/immich"
 spec:
   generators:
   - clusters:
@@ -18,12 +20,63 @@ spec:
       - helm:
           releaseName: pgsql-immich
           values: |
+            global:
+              postgresql:
+                auth:
+                  username: <pgsql_username>
+                  password: <pgsql_password>
+                  database: <pgsql_database>
             primary:
               persistence:
                 enabled: false
+          sidecars:
+          - name: pgsql-backup-daemon
+            image: quay.io/vadimzharov/podbackup:test-postgresql
+            imagePullPolicy: Always
+            command:
+              - podbackup
+            args:
+              - backup-pgsql-daemon
+            envFrom:
+            - secretRef:
+                name: sync-s3-secret
+            - configMapRef:
+                name: pgsql-b-r-settings
+            - secretRef:
+                name: pgsql-creds
+            lifecycle:
+              preStop:
+                exec:
+                  command:
+                    - podbackup
+                    - backup-sql                            
+
         repoURL: https://charts.bitnami.com/bitnami
         chart: postgresql
         targetRevision: 12.8.2
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-apps-immich
+      - helm:
+          releaseName: immich
+          values: |
+            immich:
+              persistence:
+                library:
+                  enabled: false
+            machine-learning:
+              enabled: false                  
+            postgresql:
+              enabled: false
+              global:
+                postgresql:
+                  auth:
+                    username: <pgsql_username>
+                    password: <pgsql_password>
+                    database: <pgsql_database>
+        repoURL: https://immich-app.github.io/immich-charts
+        chart: immich
+        targetRevision: 0.1.2
       destination:
         server: '{{server}}' 
         namespace: immich

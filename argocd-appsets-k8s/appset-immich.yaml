@@ -68,6 +68,9 @@ spec:
             redis:
               enabled: true
               architecture: standalone
+              master:
+                persistence:
+                  enabled: false
               auth:
                 enabled: false
             machine-learning:

@@ -83,6 +83,8 @@ spec:
       - helm:
           releaseName: immich
           values: |
+            image:
+              tag: noml
             immich:
               persistence:
                 library:

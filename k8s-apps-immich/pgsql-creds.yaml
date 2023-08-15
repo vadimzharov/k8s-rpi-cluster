@@ -18,7 +18,7 @@ spec:
   - secretKey: PGSQL_USER
     remoteRef:
       key: immich
-      property: pgsql_user
+      property: pgsql_username
   - secretKey: PGSQL_PASSWORD
     remoteRef:
       key: immich

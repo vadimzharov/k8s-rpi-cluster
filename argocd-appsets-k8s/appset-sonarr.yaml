@@ -31,13 +31,13 @@ spec:
                     port: 8989
             ingress:
               main:
-                enabled: true
-                  ingressClassName: nginx
-                  hosts:
-                    - host: <sonarrhostname>
-                      paths:
-                        - path: /
-                          pathType: Prefix
+                enabled: false
+                  # ingressClassName: nginx
+                  # hosts:
+                  #   - host: <sonarrhostname>
+                  #     paths:
+                  #       - path: /
+                  #         pathType: Prefix
             persistence:
               config:
                 enabled: true

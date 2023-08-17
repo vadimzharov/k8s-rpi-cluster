@@ -32,12 +32,12 @@ spec:
             ingress:
               main:
                 enabled: false
-                  # ingressClassName: nginx
-                  # hosts:
-                  #   - host: <sonarrhostname>
-                  #     paths:
-                  #       - path: /
-                  #         pathType: Prefix
+                ingressClassName: nginx
+                hosts:
+                  - host: <sonarrhostname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
             persistence:
               config:
                 enabled: true

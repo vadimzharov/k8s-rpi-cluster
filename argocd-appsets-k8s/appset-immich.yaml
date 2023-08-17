@@ -12,7 +12,25 @@ spec:
         matchLabels:
           immich: "installed"
       values:
-        revision: '{{metadata.annotations.branch-name}}'            
+        revision: '{{metadata.annotations.branch-name}}'
+  - clusters:
+      selector:
+        matchLabels:
+          immich: "passive"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+      template:
+        metadata: 
+          name: '{{name}}-immich-passive' 
+        spec:
+          sources:
+            - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+              targetRevision: '{{values.revision}}'
+              path: k8s-rpi-apps-ingress/immich-ingress
+          destination:
+            server: '{{server}}'
+            namespace: immich
+          project: k8s-rpi-apps              
   template:
     metadata:
       name: '{{name}}-immich'
@@ -80,6 +98,9 @@ spec:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         targetRevision: '{{values.revision}}'
         path: k8s-apps-immich
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-rpi-apps-ingress/immich-ingress
       - helm:
           releaseName: immich
           values: |
@@ -116,14 +137,7 @@ spec:
             proxy:
               ingress:
                 main:
-                  enabled: true
-                  annotations:
-                    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-                  hosts:
-                    - host: <path:k8secrets/ingresses#immichhostname>.<path:k8secrets/ingresses#domainname>
-                      paths:
-                        - path: "/"
-                  tls: []                                  
+                  enabled: false
         repoURL: https://immich-app.github.io/immich-charts
         chart: immich
         targetRevision: 0.1.2

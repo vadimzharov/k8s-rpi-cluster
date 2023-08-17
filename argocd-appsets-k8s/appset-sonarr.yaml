@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: sonarr
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/sonarr"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          sonarr: "installed"
+  template:
+    metadata:
+      name: '{{name}}-sonarr'   
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: sonarr      
+          values: |
+            image:
+              repository: lscr.io/linuxserver/sonarr
+              pullPolicy: IfNotPresent
+              tag: latest
+            service:
+              main:
+                ports:
+                  http:
+                    port: 8989
+            ingress:
+              main:
+                enabled: true
+                  ingressClassName: nginx
+                  hosts:
+                    - host: <sonarrhostname>
+                      paths:
+                        - path: /
+                          pathType: Prefix
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                mountPath: /config
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+      destination:
+        server: '{{server}}' 
+        namespace: sonarr
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

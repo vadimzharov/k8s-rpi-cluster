@@ -45,6 +45,7 @@ spec:
                 mountPath: /config
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
+        targetRevision: 1.5.1        
       destination:
         server: '{{server}}' 
         namespace: sonarr

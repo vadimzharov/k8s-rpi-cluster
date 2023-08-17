@@ -31,7 +31,7 @@ spec:
                     port: 8989
             ingress:
               main:
-                enabled: false
+                enabled: true
                 ingressClassName: nginx
                 hosts:
                   - host: <sonarrhostname>

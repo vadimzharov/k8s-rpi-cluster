@@ -65,7 +65,7 @@ spec:
                 initialDelaySeconds: 10                  
               sidecars:
               - name: pgsql-backup-daemon
-                image: quay.io/vadimzharov/podbackup:test-postgresql
+                image: quay.io/vadimzharov/podbackup:latest
                 imagePullPolicy: Always
                 command:
                   - podbackup

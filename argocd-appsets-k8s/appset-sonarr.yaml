@@ -58,7 +58,10 @@ spec:
         targetRevision: '{{values.revision}}'
         path: k8s-apps-arr/sonarr
       - helm:
-          releaseName: sonarr      
+          releaseName: sonarr
+          repoURL: https://bjw-s.github.io/helm-charts
+          chart: app-template
+          targetRevision: 1.5.1          
           values: |
             image:
               repository: lscr.io/linuxserver/sonarr

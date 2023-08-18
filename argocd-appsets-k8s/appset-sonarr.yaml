@@ -43,7 +43,10 @@ spec:
                       - host: <sonarrhostname>.<domainname>
                         paths:
                           - path: /
-                      pathType: Prefix              
+                      pathType: Prefix
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 1.5.1                      
           destination:
             server: '{{server}}'
             namespace: sonarr
@@ -59,9 +62,6 @@ spec:
         path: k8s-apps-arr/sonarr
       - helm:
           releaseName: sonarr
-          repoURL: https://bjw-s.github.io/helm-charts
-          chart: app-template
-          targetRevision: 1.5.1          
           values: |
             image:
               repository: lscr.io/linuxserver/sonarr
@@ -150,7 +150,7 @@ spec:
                   mountPath: /config
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
-        targetRevision: 1.5.1        
+        targetRevision: 1.5.1
       destination:
         server: '{{server}}' 
         namespace: sonarr

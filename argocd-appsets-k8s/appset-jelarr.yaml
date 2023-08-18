@@ -43,7 +43,7 @@ spec:
                       - host: <jelarrhostname>.<domainname>
                         paths:
                           - path: /
-                      pathType: Prefix
+                            pathType: Prefix
             repoURL: https://bjw-s.github.io/helm-charts
             chart: app-template
             targetRevision: 1.5.1                      

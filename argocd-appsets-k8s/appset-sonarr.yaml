@@ -74,10 +74,26 @@ spec:
                   BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
-                  FORCE_RESTORE: "false"
+                  FORCE_RESTORE: "true"
                   DIR_TO_BACKUP: /config
                   DIR_TO_RESTORE: /config
                   ARCHIVE_TYPE: targz
+            initContainers:
+              sonarr-restore
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - restore
+                envFrom:
+                - secretRef:
+                    name: sonarr-b-r-secret
+                - configMapRef:
+                    name: sonarr-b-r-settings
+                volumeMounts:
+                - name:  config
+                  mountPath: /config              
             sidecars:
               sonarr-backup-daemon:
                 image: quay.io/vadimzharov/podbackup:latest

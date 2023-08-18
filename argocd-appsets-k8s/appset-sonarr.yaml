@@ -4,7 +4,7 @@ metadata:
   name: sonarr
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/sonarr"
+    avp.kubernetes.io/path: "k8secrets/ingresses"
 spec:
   generators:
   - clusters:
@@ -40,7 +40,7 @@ spec:
                     enabled: true
                     ingressClassName: nginx
                     hosts:
-                      - host: <sonarrhostname>
+                      - host: <sonarrhostname>.<domainname>
                         paths:
                           - path: /
                       pathType: Prefix              
@@ -76,7 +76,7 @@ spec:
                 enabled: true
                 ingressClassName: nginx
                 hosts:
-                  - host: <sonarrhostname>
+                  - host: <sonarrhostname>.<domainname>
                     paths:
                       - path: /
                         pathType: Prefix

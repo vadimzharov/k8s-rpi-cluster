@@ -57,9 +57,6 @@ spec:
     spec:
       project: k8s-rpi-apps
       sources:
-      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        targetRevision: '{{values.revision}}'
-        path: k8s-apps-arr/overseerr
       - helm:
           releaseName: overseerr
           values: |

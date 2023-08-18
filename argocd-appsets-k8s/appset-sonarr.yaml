@@ -71,7 +71,7 @@ spec:
                   COPIES_TO_KEEP: "35"
                   FORCE_RESTORE: "false"
             sidecars:
-              - name: sonarr-backup-daemon
+              sonarr-backup-daemon:
                 image: quay.io/vadimzharov/podbackup:latest
                 imagePullPolicy: Always
                 command:

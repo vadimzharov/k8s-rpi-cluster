@@ -13,7 +13,41 @@ spec:
           sonarr: "installed"
           k8s-csi-s3: "installed"          
       values:
-        revision: '{{metadata.annotations.branch-name}}'          
+        revision: '{{metadata.annotations.branch-name}}'
+  - clusters:
+      selector:
+        matchLabels:
+          sonarr: "passive"
+      template:
+        metadata: 
+          name: '{{name}}-sonarr-passive' 
+        spec:
+          sources:
+          - helm:
+              releaseName: sonarr
+              values: |
+                controller:
+                  enabled: false
+                service:
+                  main:
+                    ports:
+                      http:
+                        port: 8989
+                    annotations:
+                      service.cilium.io/global: "true"
+                ingress:
+                  main:
+                    enabled: true
+                    ingressClassName: nginx
+                    hosts:
+                      - host: <sonarrhostname>
+                        paths:
+                          - path: /
+                      pathType: Prefix              
+          destination:
+            server: '{{server}}'
+            namespace: sonarr
+          project: k8s-rpi-apps        
   template:
     metadata:
       name: '{{name}}-sonarr'

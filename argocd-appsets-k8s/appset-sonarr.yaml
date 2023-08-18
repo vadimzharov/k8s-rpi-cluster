@@ -40,13 +40,13 @@ spec:
                     paths:
                       - path: /
                         pathType: Prefix
-            podSecurityContext:
-              runAsUser: 1000
-              runAsGroup: 1000
-              fsGroup: 1000
+            # podSecurityContext:
+            #   runAsUser: 568
+            #   runAsGroup: 568
+            #   fsGroup: 568
             env:
-              PUID: 1000
-              PGID: 1000
+              PUID: 568
+              PGID: 568
               TZ: CST
             persistence:
               config:

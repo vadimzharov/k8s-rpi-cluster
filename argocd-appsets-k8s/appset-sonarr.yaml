@@ -40,14 +40,6 @@ spec:
                     paths:
                       - path: /
                         pathType: Prefix
-            podSecurityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              fsGroup: 568
-            env:
-              PUID: 568
-              PGID: 568
-              TZ: CST
             persistence:
               config:
                 enabled: true
@@ -55,20 +47,15 @@ spec:
                 mountPath: /config
             secrets:
               b-r-secret:
-                # -- Enables or disables the Secret
                 enabled: true
-                # -- Labels to add to the Secret
                 labels: {}
-                # -- Annotations to add to the Secret
                 annotations: {}
-                # -- Secret stringData content. Helm template enabled.
                 stringData:
                   S3_ENDPOINT: <path:k8secrets/minios3creds#minioendpoint>
                   AWS_KEY: <path:k8secrets/minios3creds#miniokey>
                   AWS_SECRET_KEY: <path:k8secrets/minios3creds#miniosecretkey>
             configMaps:
               b-r-settings:
-                # -- Enables or disables the configMap
                 enabled: true
                 data:
                   AWS_BUCKET: "sonarr"

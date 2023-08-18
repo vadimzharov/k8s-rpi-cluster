@@ -134,7 +134,7 @@ spec:
                 command:
                   - podbackup
                 args:
-                  - prowlarr-daemon
+                  - backup-daemon
                 envFrom:
                 - secretRef:
                     name: prowlarr-b-r-secret

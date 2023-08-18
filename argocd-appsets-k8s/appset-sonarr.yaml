@@ -79,7 +79,7 @@ spec:
                   DIR_TO_RESTORE: /config
                   ARCHIVE_TYPE: targz
             initContainers:
-              sonarr-restore
+              sonarr-restore:
                 image: quay.io/vadimzharov/podbackup:latest
                 imagePullPolicy: Always
                 command:

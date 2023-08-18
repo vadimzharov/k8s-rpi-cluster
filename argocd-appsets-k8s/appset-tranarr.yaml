@@ -1,0 +1,151 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tranarr
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          tranarr: "installed"
+          k8s-csi-s3: "installed"          
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  - clusters:
+      selector:
+        matchLabels:
+          tranarr: "passive"
+      template:
+        metadata: 
+          name: '{{name}}-tranarr-passive' 
+        spec:
+          sources:
+          - helm:
+              releaseName: tranarr
+              values: |
+                controller:
+                  enabled: false
+                service:
+                  main:
+                    ports:
+                      http:
+                        port: 9091
+                    annotations:
+                      service.cilium.io/global: "true"
+                ingress:
+                  main:
+                    enabled: true
+                    ingressClassName: nginx
+                    hosts:
+                      - host: <tranarrhostname>.<domainname>
+                        paths:
+                          - path: /
+                      pathType: Prefix
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 1.5.1                      
+          destination:
+            server: '{{server}}'
+            namespace: tranarr
+          project: k8s-rpi-apps        
+  template:
+    metadata:
+      name: '{{name}}-tranarr'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-apps-arr/tranarr
+      - helm:
+          releaseName: tranarr
+          values: |
+            image:
+              repository: ghcr.io/k8s-at-home/transmission
+              pullPolicy: IfNotPresent
+              tag: latest
+            service:
+              main:
+                ports:
+                  http:
+                    port: 9091
+                annotations:
+                  service.cilium.io/global: "true"
+            env:
+              TRANSMISSION_DOWNLOAD_DIR: "/downloads/complete"
+              TRANSMISSION_INCOMPLETE_DIR: "/downloads/incomplete"
+              TRANSMISSION_INCOMPLETE_DIR_ENABLED: "true"
+              TRANSMISSION_WATCH_DIR: "/watch"
+              TRANSMISSION_WATCH_DIR_ENABLED: "false"
+              TRANSMISSION_WEB_HOME: "/web"
+              TZ: "CDT"            
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                hosts:
+                  - host: <tranarrhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                mountPath: /config
+              downloads-incomplete:
+                enabled: true
+                type: emptyDir
+                mountPath: /downloads/incomplete
+              downloads-complete:
+                enabled: true
+                type: pvc
+                existingClaim: tranarr
+                mountPath: /downloads/complete
+            probes:
+              liveness:
+                enabled: true
+                type: TCP
+                spec:
+                  tcpSocket:
+                    port: 9091
+                  initialDelaySeconds: 0
+                  failureThreshold: 3
+                  timeoutSeconds: 30
+                  periodSeconds: 10
+              readiness:
+                enabled: true
+                type: TCP
+                spec:
+                  tcpSocket:
+                    port: 9091
+                  initialDelaySeconds: 0
+                  failureThreshold: 3
+                  timeoutSeconds: 30
+                  periodSeconds: 10
+              startup:
+                enabled: true
+                type: TCP
+                spec:
+                  tcpSocket:
+                    port: 9091
+                  initialDelaySeconds: 0
+                  failureThreshold: 30
+                  timeoutSeconds: 1
+                  periodSeconds: 5                
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 1.5.1
+      destination:
+        server: '{{server}}' 
+        namespace: tranarr
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

@@ -93,6 +93,11 @@ spec:
                 type: pvc
                 existingClaim: sonarr-root
                 mountPath: /sonarr
+              tranar:
+                enabled: true
+                type: pvc
+                existingClaim: tranarr
+                mountPath: /tranarr
             secrets:
               b-r-secret:
                 enabled: true

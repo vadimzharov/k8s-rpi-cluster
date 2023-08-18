@@ -72,6 +72,7 @@ spec:
                   FORCE_RESTORE: "false"
                   DIR_TO_BACKUP: /config
                   DIR_TO_RESTORE: /config
+                  ARCHIVE_TYPE: targz
             sidecars:
               sonarr-backup-daemon:
                 image: quay.io/vadimzharov/podbackup:latest

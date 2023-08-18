@@ -80,9 +80,9 @@ spec:
                   - backup-daemon
                 envFrom:
                 - secretRef:
-                    name: b-r-secret
+                    name: sonarr-b-r-secret
                 - configMapRef:
-                    name: b-r-settings
+                    name: sonarr-b-r-settings
                 volumeMounts:
                 - name:  config
                   mountPath: /config

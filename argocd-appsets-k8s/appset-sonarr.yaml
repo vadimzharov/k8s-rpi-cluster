@@ -11,12 +11,17 @@ spec:
       selector:
         matchLabels:
           sonarr: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'          
   template:
     metadata:
       name: '{{name}}-sonarr'
     spec:
       project: k8s-rpi-apps
       sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-apps-arr/sonarr
       - helm:
           releaseName: sonarr      
           values: |
@@ -45,6 +50,11 @@ spec:
                 enabled: true
                 type: emptyDir
                 mountPath: /config
+              root-folder:
+                enabled: true
+                type: pvc
+                existingClaim: sonarr-root
+                mountPath: /sonarr
             secrets:
               b-r-secret:
                 enabled: true

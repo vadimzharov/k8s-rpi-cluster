@@ -117,7 +117,7 @@ spec:
                   BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
-                  FORCE_RESTORE: "true"
+                  FORCE_RESTORE: "false"
                   DIR_TO_BACKUP: /config
                   DIR_TO_RESTORE: /config
                   ARCHIVE_TYPE: targz

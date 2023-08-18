@@ -40,10 +40,10 @@ spec:
                     paths:
                       - path: /
                         pathType: Prefix
-            # podSecurityContext:
-            #   runAsUser: 568
-            #   runAsGroup: 568
-            #   fsGroup: 568
+            podSecurityContext:
+              runAsUser: 568
+              runAsGroup: 568
+              fsGroup: 568
             env:
               PUID: 568
               PGID: 568

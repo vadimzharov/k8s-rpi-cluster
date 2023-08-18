@@ -1,0 +1,158 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: overseerr
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          overseerr: "installed"
+          k8s-csi-s3: "installed"          
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  - clusters:
+      selector:
+        matchLabels:
+          overseerr: "passive"
+      template:
+        metadata: 
+          name: '{{name}}-overseerr-passive' 
+        spec:
+          sources:
+          - helm:
+              releaseName: overseerr
+              values: |
+                controller:
+                  enabled: false
+                service:
+                  main:
+                    ports:
+                      http:
+                        port: 5055
+                    annotations:
+                      service.cilium.io/global: "true"
+                ingress:
+                  main:
+                    enabled: true
+                    ingressClassName: nginx
+                    hosts:
+                      - host: <overseerrhostname>.<domainname>
+                        paths:
+                          - path: /
+                      pathType: Prefix
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 1.5.1                      
+          destination:
+            server: '{{server}}'
+            namespace: overseerr
+          project: k8s-rpi-apps        
+  template:
+    metadata:
+      name: '{{name}}-overseerr'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-apps-arr/overseerr
+      - helm:
+          releaseName: overseerr
+          values: |
+            image:
+              repository: docker.io/sctx/overseerr
+              pullPolicy: IfNotPresent
+              tag: latest
+            service:
+              main:
+                ports:
+                  http:
+                    port: 5055
+                annotations:
+                  service.cilium.io/global: "true"                
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                hosts:
+                  - host: <overseerrhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                mountPath: /app/config
+            secrets:
+              b-r-secret:
+                enabled: true
+                labels: {}
+                annotations: {}
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/minios3creds#miniosecretkey>
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "overseerr-config"
+                  S3_FILE_PREFIX: "overseerr-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "false"
+                  DIR_TO_BACKUP: /app/config
+                  DIR_TO_RESTORE: /app/config
+                  ARCHIVE_TYPE: targz
+            initContainers:
+              overseerr-restore:
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - restore
+                envFrom:
+                - secretRef:
+                    name: overseerr-b-r-secret
+                - configMapRef:
+                    name: overseerr-b-r-settings
+                volumeMounts:
+                - name:  config
+                  mountPath: /app/config           
+            sidecars:
+              overseerr-backup-daemon:
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - backup-daemon
+                envFrom:
+                - secretRef:
+                    name: overseerr-b-r-secret
+                - configMapRef:
+                    name: overseerr-b-r-settings
+                volumeMounts:
+                - name:  config
+                  mountPath: /app/config
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 1.5.1
+      destination:
+        server: '{{server}}' 
+        namespace: overseerr
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

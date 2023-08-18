@@ -13,7 +13,7 @@ spec:
           sonarr: "installed"
   template:
     metadata:
-      name: '{{name}}-sonarr'   
+      name: '{{name}}-sonarr'
     spec:
       project: k8s-rpi-apps
       sources:
@@ -29,6 +29,8 @@ spec:
                 ports:
                   http:
                     port: 8989
+                annotations:
+                  service.cilium.io/global: "true"                
             ingress:
               main:
                 enabled: true
@@ -43,6 +45,47 @@ spec:
                 enabled: true
                 type: emptyDir
                 mountPath: /config
+            secrets:
+              b-r-secret:
+                # -- Enables or disables the Secret
+                enabled: true
+                # -- Labels to add to the Secret
+                labels: {}
+                # -- Annotations to add to the Secret
+                annotations: {}
+                # -- Secret stringData content. Helm template enabled.
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/minios3creds#miniosecretkey>
+            configMaps:
+              b-r-settings:
+                # -- Enables or disables the configMap
+                enabled: true
+                data:
+                  AWS_BUCKET: "sonarr"
+                  S3_BUCKET_FOLDER: "sonarr-config"
+                  S3_FILE_PREFIX: "sonarr-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "false"
+            sidecars:
+              - name: sonarr-backup-daemon
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - backup-daemon
+                envFrom:
+                - secretRef:
+                    name: b-r-secret
+                - configMapRef:
+                    name: b-r-settings
+                volumeMounts:
+                - name:  config
+                  mountPath: /config
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 1.5.1        

@@ -83,6 +83,10 @@ spec:
                     paths:
                       - path: /
                         pathType: Prefix
+            env:
+              JELLYFIN_DATA_DIR: "/jellyfin-data"
+              JELLYFIN_CONFIG_DIR: "/jellyfin-data/config"
+              TZ: "CST"
             persistence:
               config:
                 enabled: true
@@ -112,7 +116,7 @@ spec:
                   BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
-                  FORCE_RESTORE: "true"
+                  FORCE_RESTORE: "false"
                   DIR_TO_BACKUP: /jellyfin-data
                   DIR_TO_RESTORE: /jellyfin-data
                   ARCHIVE_TYPE: targz

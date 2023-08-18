@@ -43,6 +43,10 @@ spec:
             securityContext:
               runAsUser: 1000
               runAsGroup: 1000
+            env:
+              PUID: 1000
+              PGID: 1000
+              TZ: CST
             persistence:
               config:
                 enabled: true

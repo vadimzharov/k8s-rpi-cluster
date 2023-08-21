@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: firefox
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          firefox: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-firefox'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-apps-firefox
+      - helm:
+          releaseName: firefox
+          values: |
+            image:
+              repository: docker.io/jlesage/firefox
+              pullPolicy: IfNotPresent
+              tag: latest
+            service:
+              main:
+                ports:
+                  http:
+                    port: 5800
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                hosts:
+                  - host: <firefoxhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 1.5.1
+      destination:
+        server: '{{server}}' 
+        namespace: firefox
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

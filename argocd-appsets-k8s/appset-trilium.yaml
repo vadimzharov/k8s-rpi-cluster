@@ -132,6 +132,10 @@ spec:
               trilium-backup-daemon:
                 image: quay.io/vadimzharov/podbackup:latest
                 imagePullPolicy: IfNotPresent
+                lifecycle:
+                  preStop:
+                    exec:
+                      command: ["/usr/local/bin/podbackup", "backup"]                
                 command:
                   - podbackup
                 args:
@@ -151,9 +155,6 @@ spec:
         server: '{{server}}'
         namespace: trilium
       syncPolicy:
-        managedNamespaceMetadata:
-          labels: 
-            pod-security.kubernetes.io/enforce: privileged
         automated:
           prune: true
           selfHeal: true

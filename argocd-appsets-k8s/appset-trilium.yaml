@@ -3,6 +3,8 @@ kind: ApplicationSet
 metadata:
   name: trilium
   namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"  
 spec:
   generators:
   - clusters:

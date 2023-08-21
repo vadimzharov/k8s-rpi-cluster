@@ -19,12 +19,35 @@ spec:
         revision: '{{metadata.annotations.branch-name}}'
       template:
         metadata:
-          name: '{{name}}-trilium-psv' 
+          name: '{{name}}-trilium-passive'
         spec:
           sources:
-          - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-            targetRevision: '{{values.revision}}'
-            path: k8s-rpi-apps-ingress/trilium-ingress
+          - helm:
+              releaseName: trilium
+              values: |
+                controller:
+                  enabled: false
+                service:
+                  main:
+                    ports:
+                      http:
+                        port: 8080
+                    annotations:
+                      service.cilium.io/global: "true"
+                ingress:
+                  main:
+                    enabled: true
+                    annotations:
+                      nginx.ingress.kubernetes.io/service-upstream: "true"
+                    ingressClassName: nginx
+                    hosts:
+                      - host: <triliumhostname>.<domainname>
+                        paths:
+                          - path: /
+                            pathType: Prefix
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 1.5.1
           destination:
             server: '{{server}}'
             namespace: trilium
@@ -35,19 +58,98 @@ spec:
     spec:
       project: k8s-rpi-apps
       sources:
-      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        targetRevision: '{{values.revision}}'
-        path: k8s-rpi-apps-trilium
-      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        targetRevision: '{{values.revision}}'
-        path: k8s-rpi-apps-ingress/trilium-ingress
+      - helm:
+          releaseName: trilium
+          values: |
+            image:
+              repository: docker.io/zadam/trilium
+              pullPolicy: IfNotPresent
+              tag: latest
+            service:
+              main:
+                ports:
+                  http:
+                    port: 8080
+                annotations:
+                  service.cilium.io/global: "true"                
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                hosts:
+                  - host: <triliumhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+            persistence:
+              trilium-workingdir:
+                enabled: true
+                type: emptyDir
+                mountPath: /home/node/trilium-data
+            secrets:
+              b-r-secret:
+                enabled: true
+                labels: {}
+                annotations: {}
+                stringData:
+                  AWS_BUCKET: <path:k8secrets/backupawscreds#awsbucket>
+                  AWS_KEY: <path:k8secrets/backupawscreds#awskey>
+                  AWS_SECRET_KEY: <path:k8secrets/backupawscreds#awssecretkey>
+                  ENCRYPT_PASSWORD: <path:k8secrets/backupawscreds#encryptpassword>
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  S3_BUCKET_FOLDER: "trilium"
+                  S3_FILE_PREFIX: "trilium-backup"
+                  DIR_TO_BACKUP: "/trilium-workdir"
+                  DIR_TO_RESTORE: "/trilium-workdir"  
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "True"
+            initContainers:
+              trilium-restore:
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: IfNotPresent
+                command:
+                  - podbackup
+                args:
+                  - restore
+                envFrom:
+                - secretRef:
+                    name: trilium-b-r-secret
+                - configMapRef:
+                    name: trilium-b-r-settings
+                volumeMounts:
+                - name: trilium-workingdir
+                  mountPath: /trilium-workdir
+            sidecars:
+              trilium-backup-daemon:
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: IfNotPresent
+                command:
+                  - podbackup
+                args:
+                  - backup-daemon
+                envFrom:
+                - secretRef:
+                    name: trilium-b-r-secret
+                - configMapRef:
+                    name: trilium-b-r-settings
+                volumeMounts:
+                - name:  trilium-workingdir
+                  mountPath: /trilium-workdir
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 1.5.1
       destination:
         server: '{{server}}'
         namespace: trilium
       syncPolicy:
         managedNamespaceMetadata:
           labels: 
-            pod-security.kubernetes.io/enforce: privileged      
+            pod-security.kubernetes.io/enforce: privileged
         automated:
           prune: true
           selfHeal: true

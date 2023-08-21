@@ -74,6 +74,8 @@ spec:
                     port: 8080
                 annotations:
                   service.cilium.io/global: "true"                
+            env:
+              TRILIUM_PORT: "8080"
             ingress:
               main:
                 enabled: true

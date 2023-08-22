@@ -105,7 +105,7 @@ spec:
           releaseName: immich
           values: |
             image:
-              tag: v1.73.0
+              tag: latest
             immich:
               persistence:
                 library:
@@ -133,7 +133,7 @@ spec:
               image:
                 repository: ghcr.io/immich-app/immich-server
                 pullPolicy: IfNotPresent
-                tag: v1.73.0
+                tag: latest
             proxy:
               ingress:
                 main:

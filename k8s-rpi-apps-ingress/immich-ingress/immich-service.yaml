@@ -4,7 +4,6 @@ metadata:
   name: immich-shared
   annotations:
     service.cilium.io/global: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
   labels:
     app.kubernetes.io/name: proxy
 spec:

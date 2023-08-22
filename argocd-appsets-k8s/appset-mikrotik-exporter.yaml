@@ -24,6 +24,8 @@ spec:
               repository: quay.io/vadimzharov/mikrotik-exporter
               pullPolicy: IfNotPresent
               tag: latest
+            nodeSelector:
+              beta.kubernetes.io/arch: arm64                  
             service:
               main:
                 ports:

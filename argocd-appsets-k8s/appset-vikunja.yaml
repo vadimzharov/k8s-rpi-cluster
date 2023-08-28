@@ -4,7 +4,7 @@ metadata:
   name: vikunja
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/ingress"
+    avp.kubernetes.io/path: "k8secrets/ingresses"
 spec:
   generators:
   - clusters:

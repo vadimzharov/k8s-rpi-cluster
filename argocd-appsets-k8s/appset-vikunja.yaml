@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: vikunja
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingress"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          vikunja: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-vikunja'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: vikunja
+          values: |
+            frontend:
+              # Public API URL that client's browser will reach
+              apiUrl: "http://vikunja.vikunja.svc.cluster.local"
+              ingress:
+                enabled: false
+                className: ""
+                annotations: {}
+                hosts:
+                  - host: <vikunjahostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: ImplementationSpecific
+                tls: []              
+            api:
+              cache:
+                enabled: false
+                type: redis
+        repoURL: https://kolaente.dev/api/packages/vikunja/helm
+        chart: vikunja
+        targetRevision: 0.2.0
+      destination:
+        server: '{{server}}' 
+        namespace: vikunja
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

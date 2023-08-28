@@ -39,6 +39,12 @@ spec:
               cache:
                 enabled: false
                 type: redis
+              extraVolumes:
+                - name: sqlite
+                  emptyDir: {}
+              extraVolumeMounts:
+                - name:  sqlite
+                  mountPath: /sqlite
         repoURL: https://kolaente.dev/api/packages/vikunja/helm
         chart: vikunja
         targetRevision: 0.2.0

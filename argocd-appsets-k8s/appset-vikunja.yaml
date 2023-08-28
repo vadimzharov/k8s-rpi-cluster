@@ -26,7 +26,8 @@ spec:
               # Public API URL that client's browser will reach
               apiUrl: "http://vikunja.vikunja.svc.cluster.local"
               env:
-                VIKUNJA_HTTP2_PORT: "8081"
+                - name: "VIKUNJA_HTTP2_PORT"
+                  value: "8081"
               ingress:
                 enabled: false
                 className: ""

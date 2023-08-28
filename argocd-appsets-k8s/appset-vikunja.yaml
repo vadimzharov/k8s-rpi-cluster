@@ -24,7 +24,7 @@ spec:
           values: |
             frontend:
               # Public API URL that client's browser will reach
-              apiUrl: "https://<vikunjahostname>.<domainname>"
+              apiUrl: "https://<vikunjahostname>.<domainname>/api"
               env:
                 - name: "VIKUNJA_HTTP2_PORT"
                   value: "8081"
@@ -37,13 +37,25 @@ spec:
                 hosts:
                   - host: <vikunjahostname>.<domainname>
                     paths:
-                      - path: /
+                      - path: /ui
                         pathType: ImplementationSpecific
                 tls: []              
             api:
               cache:
                 enabled: false
                 type: redis
+              ingress:
+                enabled: true
+                className: ""
+                annotations:
+                  nginx.ingress.kubernetes.io/ssl-redirect: "true"
+                  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"                
+                hosts:
+                  - host: <vikunjahostname>.<domainname>
+                    paths:
+                      - path: /api
+                        pathType: ImplementationSpecific
+                tls: []                   
               extraVolumes:
                 - name: sqlite
                   emptyDir: {}

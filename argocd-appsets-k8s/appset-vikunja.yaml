@@ -29,7 +29,7 @@ spec:
                 - name: "VIKUNJA_HTTP2_PORT"
                   value: "8081"
               ingress:
-                enabled: false
+                enabled: true
                 className: ""
                 annotations: {}
                 hosts:

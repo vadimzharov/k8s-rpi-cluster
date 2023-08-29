@@ -10,7 +10,7 @@ spec:
     - ReadWriteMany
   claimRef:
     namespace: tranarr
-    name: dedicated-movies
+    name: tranarr-dedicated-movies
   csi:
     driver: ru.yandex.s3.csi
     controllerPublishSecretRef:

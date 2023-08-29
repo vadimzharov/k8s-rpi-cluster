@@ -33,7 +33,7 @@ spec:
                     port: 3456
                     primary: true
                   http:
-                    port: 8080
+                    port: 80
                     primary: false
                 annotations:
                   service.cilium.io/global: "true"                  
@@ -69,7 +69,7 @@ spec:
                         pathType: ImplementationSpecific
                         service:
                           name: vikunja
-                          port: 8080
+                          port: 80
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 1.5.1

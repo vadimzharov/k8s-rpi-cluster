@@ -47,7 +47,7 @@ spec:
                   interface: ":3456"
                   frontendurl: "https://<vikunjahostname>.<domainname>/"
                   enableregistration: true
-                  timezone: GMT-5       
+                  timezone: GMT       
               cache:
                 enabled: false
                 type: redis

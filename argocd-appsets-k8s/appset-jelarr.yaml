@@ -99,6 +99,11 @@ spec:
                 type: pvc
                 existingClaim: jelarr-arr
                 mountPath: /arr
+              dedicated-movies:
+                enabled: true
+                type: pvc
+                existingClaim: dedicated-movies
+                mountPath: /dedicated-movies/
             secrets:
               b-r-secret:
                 enabled: true

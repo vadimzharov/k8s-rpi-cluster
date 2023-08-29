@@ -41,6 +41,13 @@ spec:
                         pathType: ImplementationSpecific
                 tls: []              
             api:
+              config:
+                service:
+                  JWTSecret: <path:k8secrets/vikunja#jwtsecret>
+                  interface: ":3456"
+                  frontendurl: "https://<vikunjahostname>.<domainname>/"
+                  enableregistration: true
+                  timezone: CST            
               cache:
                 enabled: false
                 type: redis

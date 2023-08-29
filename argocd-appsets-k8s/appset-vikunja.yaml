@@ -22,56 +22,50 @@ spec:
       - helm:
           releaseName: vikunja
           values: |
-            frontend:
-              # Public API URL that client's browser will reach
-              apiUrl: "https://<vikunjaapihostname>.<domainname>/api/v1"
-              env:
-                - name: "VIKUNJA_HTTP2_PORT"
-                  value: "8081"
-              ingress:
-                enabled: true
-                className: ""
+            image:
+              repository: vikunja/api
+              pullPolicy: IfNotPresent
+              tag: 0.21.0
+            service:
+              main:
+                ports:
+                  http:
+                    port: 8080
                 annotations:
-                  nginx.ingress.kubernetes.io/ssl-redirect: "true"
-                  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"                
-                hosts:
-                  - host: <vikunjahostname>.<domainname>
-                    paths:
-                      - path: /
-                        pathType: ImplementationSpecific
-                tls: []              
+                  service.cilium.io/global: "true"
+            sidecars:
+              frontend:
+                image: vikunja/frontend:0.21.0
+                env:
+                  VIKUNJA_HTTP2_PORT: "8081"                
             api:
+              env:
+                - name: VIKUNJA_SERVICE_FRONTENDURL
+                  value: https://tasks.${EXTERNAL_DOMAIN}
+                - name: VIKUNJA_SERVICE_JWT
+                  value: <path:k8secrets/vikunja#jwtsecret>
+                - name: VIKUNJA_SERVICE_ENABLEREGISTRATION
+                  value: "1"
+            persistence:
               config:
-                service:
-                  JWTSecret: <path:k8secrets/vikunja#jwtsecret>
-                  interface: ":3456"
-                  frontendurl: "https://<vikunjahostname>.<domainname>/"
-                  enableregistration: true
-                  timezone: GMT       
-              cache:
-                enabled: false
-                type: redis
-              ingress:
                 enabled: true
-                className: ""
-                annotations:
-                  nginx.ingress.kubernetes.io/ssl-redirect: "true"
-                  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"                
-                hosts:
-                  - host: <vikunjaapihostname>.<domainname>
-                    paths:
-                      - path: /
-                        pathType: ImplementationSpecific
-                tls: []                   
-              extraVolumes:
-                - name: sqlite
-                  emptyDir: {}
-              extraVolumeMounts:
-                - name:  sqlite
-                  mountPath: /sqlite
-        repoURL: https://kolaente.dev/api/packages/vikunja/helm
-        chart: vikunja
-        targetRevision: 0.2.0
+                type: emptyDir
+                mountPath: /sqlite
+            ingress:
+              enabled: true
+              className: ""
+              annotations:
+                nginx.ingress.kubernetes.io/ssl-redirect: "true"
+                nginx.ingress.kubernetes.io/force-ssl-redirect: "true"                
+              hosts:
+                - host: <vikunjahostname>.<domainname>
+                  paths:
+                    - path: /
+                      pathType: ImplementationSpecific
+              tls: []                  
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 1.5.1
       destination:
         server: '{{server}}' 
         namespace: vikunja

@@ -107,6 +107,11 @@ spec:
                 type: pvc
                 existingClaim: tranarr
                 mountPath: /downloads/complete
+              dedicated-movies:
+                enabled: true
+                type: pvc
+                existingClaim: tranarr-dedicated-movies
+                mountPath: /downloads/movies
             probes:
               liveness:
                 enabled: true

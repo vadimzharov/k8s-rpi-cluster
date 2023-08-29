@@ -29,7 +29,7 @@ spec:
             service:
               main:
                 ports:
-                  api:
+                  http:
                     port: 3456
               frontend:
                 ports:

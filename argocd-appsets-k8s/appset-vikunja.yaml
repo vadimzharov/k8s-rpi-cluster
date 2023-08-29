@@ -29,12 +29,12 @@ spec:
             service:
               main:
                 ports:
-                  http:
+                  api:
                     port: 3456
-              frontend:
-                ports:
+                    primary: true
                   http:
                     port: 8080
+                    primary: false
                 annotations:
                   service.cilium.io/global: "true"                  
             sidecars:
@@ -68,7 +68,7 @@ spec:
                       - path: /
                         pathType: ImplementationSpecific
                         service:
-                          name: vikunja-frontend
+                          name: vikunja
                           port: 8080
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template

@@ -63,6 +63,17 @@ spec:
                     paths:
                       - path: /
                         pathType: ImplementationSpecific
+            probes:
+              liveness:
+                enabled: true
+                custom: false
+                type: TCP
+                port: 3456
+              readiness:
+                enabled: true
+                custom: false
+                type: TCP
+                port: 3456
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 1.5.1

@@ -24,7 +24,7 @@ spec:
           values: |
             frontend:
               # Public API URL that client's browser will reach
-              apiUrl: "https://<vikunjaapihostname>.<domainname>/"
+              apiUrl: "https://<vikunjaapihostname>.<domainname>/api/v1"
               env:
                 - name: "VIKUNJA_HTTP2_PORT"
                   value: "8081"

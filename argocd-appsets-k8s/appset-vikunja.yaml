@@ -52,17 +52,17 @@ spec:
                 type: emptyDir
                 mountPath: /sqlite
             ingress:
-              enabled: true
-              className: ""
-              annotations:
-                nginx.ingress.kubernetes.io/ssl-redirect: "true"
-                nginx.ingress.kubernetes.io/force-ssl-redirect: "true"                
-              hosts:
-                - host: <vikunjahostname>.<domainname>
-                  paths:
-                    - path: /
-                      pathType: ImplementationSpecific
-              tls: []                  
+              main:
+                enabled: true
+                className: ""
+                annotations:
+                  nginx.ingress.kubernetes.io/ssl-redirect: "true"
+                  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"                
+                hosts:
+                  - host: <vikunjahostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: ImplementationSpecific
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 1.5.1

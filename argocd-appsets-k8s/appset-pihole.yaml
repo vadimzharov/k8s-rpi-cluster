@@ -38,6 +38,8 @@ spec:
             adminPassword: <password>
             blacklist:  
             <blacklist>
+            whitelist:
+            <whitelist>
             podDnsConfig:
               enabled: true
               policy: "None"

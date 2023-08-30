@@ -130,8 +130,8 @@ spec:
                   S3_FILE_PREFIX: "tranarr-config"
                   BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
-                  COPIES_TO_KEEP: "35"
-                  FORCE_RESTORE: "true"
+                  COPIES_TO_KEEP: "15"
+                  FORCE_RESTORE: "false"
                   DIR_TO_BACKUP: /config
                   DIR_TO_RESTORE: /config
                   ARCHIVE_TYPE: targz

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backup-restore-settings
+  labels:
+    app.kubernetes.io/instance: jellyfin-s3
+data:
+  ARCHIVE_TYPE: tarzip
+  BACKUP_INTERVAL: 2h
+  COPIES_TO_KEEP: '35'
+  DIR_TO_BACKUP: /jellyfin-data
+  DIR_TO_RESTORE: /jellyfin-data
+  FORCE_RESTORE: 'False'
+  PRUNE_INTERVAL: 48h
+  S3_BUCKET_FOLDER: jellyfin-s3-data
+  S3_FILE_PREFIX: jellyfin-s3-data

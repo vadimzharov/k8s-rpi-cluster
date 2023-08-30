@@ -107,6 +107,66 @@ spec:
                 type: pvc
                 existingClaim: tranarr
                 mountPath: /downloads/complete
+              dedicated-movies:
+                enabled: true
+                type: pvc
+                existingClaim: tranarr-dedicated-movies
+                mountPath: /downloads/movies
+            secrets:
+              b-r-secret:
+                enabled: true
+                labels: {}
+                annotations: {}
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/minios3creds#miniosecretkey>
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "tranarr-config"
+                  S3_FILE_PREFIX: "tranarr-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "15"
+                  FORCE_RESTORE: "true"
+                  DIR_TO_BACKUP: /config
+                  DIR_TO_RESTORE: /config
+                  ARCHIVE_TYPE: targz
+            initContainers:
+              tranarr-restore:
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - restore
+                envFrom:
+                - secretRef:
+                    name: tranarr-b-r-secret
+                - configMapRef:
+                    name: tranarr-b-r-settings
+                volumeMounts:
+                - name:  config
+                  mountPath: /config              
+            sidecars:
+              tranarr-backup-daemon:
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - backup-daemon
+                envFrom:
+                - secretRef:
+                    name: tranarr-b-r-secret
+                - configMapRef:
+                    name: tranarr-b-r-settings
+                volumeMounts:
+                - name:  config
+                  mountPath: /config
             probes:
               liveness:
                 enabled: true

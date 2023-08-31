@@ -43,7 +43,7 @@ spec:
             limits:
               cpu: 200m
               memory: 256Mi
-          image: docker.io/library/vault:latest
+          image: docker.io/hashicorp/vault:latest
           imagePullPolicy: IfNotPresent
           command:
           - "vault" 

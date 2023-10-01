@@ -28,7 +28,7 @@ spec:
           releaseName: cilium
           values: |
             debug:
-              enabled: true
+              enabled: false
             bgpControlPlane:
               enabled: true
             operator:

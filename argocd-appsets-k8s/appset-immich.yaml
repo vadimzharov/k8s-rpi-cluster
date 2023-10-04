@@ -40,8 +40,6 @@ spec:
       - helm:
           releaseName: immich
           values: |
-            env:
-              IMMICH_MACHINE_LEARNING_URL: "false"
             global:
               postgresql:
                 auth:
@@ -106,6 +104,8 @@ spec:
       - helm:
           releaseName: immich
           values: |
+            env:
+              IMMICH_MACHINE_LEARNING_URL: "false"          
             image:
               tag: v1.74.0
             immich:

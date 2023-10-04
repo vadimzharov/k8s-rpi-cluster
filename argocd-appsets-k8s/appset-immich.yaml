@@ -107,7 +107,7 @@ spec:
             env:
               IMMICH_MACHINE_LEARNING_URL: "false"          
             image:
-              tag: v1.74.0
+              tag: v1.81.0
             immich:
               persistence:
                 library:

@@ -104,8 +104,10 @@ spec:
       - helm:
           releaseName: immich
           values: |
+            env:
+              IMMICH_MACHINE_LEARNING_URL: "false"
             image:
-              tag: v1.74.0
+              tag: v1.79.1
             immich:
               persistence:
                 library:

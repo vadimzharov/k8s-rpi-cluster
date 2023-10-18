@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: csi-driver-nfs
+  name: k8s-csi-nfs
   namespace: argocd
 spec:
   syncPolicy:
@@ -10,12 +10,12 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          csi-driver-nfs: "installed"
+          k8s-csi-nfs: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}'           
   template:
     metadata:
-      name: '{{name}}-csi-driver-nfs' 
+      name: '{{name}}-k8s-csi-nfs' 
     spec:
       project: k8s-rpi-apps
       sources:

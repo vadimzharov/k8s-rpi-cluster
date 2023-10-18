@@ -8,6 +8,7 @@ resources:
 - argocd-project.yaml
 - argocd-cmp-cm.yaml
 - argocd-ingress.yaml
+- argocd-download-plugin.yaml
 
 #patchesStrategicMerge:
 patches:

@@ -47,7 +47,7 @@ spec:
             clustermesh:
               useAPIServer: true
               config:
-                enabled: false
+                enabled: true
                 clusters:
                   - name: <path:k8secrets/cilium-clustermesh#clustername>
                     ips: 

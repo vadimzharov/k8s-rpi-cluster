@@ -23,7 +23,7 @@ spec:
           releaseName: csi-driver-nfs
           parameters:
             - name: controller.replicas
-              value: 1
+              value: "1"
         repoURL: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
         chart: csi-driver-nfs
         targetRevision: v4.4.0

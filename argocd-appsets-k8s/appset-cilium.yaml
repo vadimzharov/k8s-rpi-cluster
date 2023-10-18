@@ -47,15 +47,15 @@ spec:
             clustermesh:
               useAPIServer: true
               config:
-                enabled: false
+                enabled: true
                 clusters:
                   - name: <path:k8secrets/cilium-clustermesh#clustername>
                     ips: 
                       - <path:k8secrets/cilium-clustermesh#clusteraddress>
                     port: <path:k8secrets/cilium-clustermesh#remoteport>
-                    tls:
-                      cert: <path:k8secrets/cilium-clustermesh#peercert>
-                      key: <path:k8secrets/cilium-clustermesh#peerkey>
+                    #tls:
+                    #  cert: <path:k8secrets/cilium-clustermesh#peercert>
+                    #  key: <path:k8secrets/cilium-clustermesh#peerkey>
               apiserver:
                 service:
                   type: NodePort

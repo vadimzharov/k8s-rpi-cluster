@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: csi-driver-nfs
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/csi-driver-nfs"
+spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          csi-driver-nfs: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'           
+  template:
+    metadata:
+      name: '{{name}}-csi-driver-nfs' 
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: csi-driver-nfs
+          parameters:
+            - name: controller.replicas
+              value: 1
+        repoURL: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+        chart: csi-driver-nfs
+        targetRevision: v4.4.0
+      destination:
+        server: '{{server}}'
+        namespace: kube-system
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

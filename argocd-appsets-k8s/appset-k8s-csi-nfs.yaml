@@ -27,6 +27,9 @@ spec:
         repoURL: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
         chart: csi-driver-nfs
         targetRevision: v4.4.0
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-infra-csi-nfs
       destination:
         server: '{{server}}'
         namespace: kube-system

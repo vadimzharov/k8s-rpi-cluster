@@ -3,8 +3,6 @@ kind: ApplicationSet
 metadata:
   name: csi-driver-nfs
   namespace: argocd
-  annotations:
-    avp.kubernetes.io/path: "k8secrets/csi-driver-nfs"
 spec:
   syncPolicy:
     preserveResourcesOnDeletion: true

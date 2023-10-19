@@ -2,28 +2,22 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: tranarr
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/arr" 
 spec:
-  storageClassName: csi-s3-arr
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteMany
-  claimRef:
-    namespace: tranarr
-    name: tranarr
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-csi
   csi:
-    driver: ru.yandex.s3.csi
-    controllerPublishSecretRef:
-      name: csi-s3-secret
-      namespace: kube-system
-    nodePublishSecretRef:
-      name: csi-s3-secret
-      namespace: kube-system
-    nodeStageSecretRef:
-      name: csi-s3-secret
-      namespace: kube-system
+    driver: nfs.csi.k8s.io
+    readOnly: false
+    # volumeHandle format: {nfs-server-address}#{sub-dir-name}#{share-name}
+    # make sure this value is unique for every share in the cluster
+    volumeHandle: <tranarr-arr-volume-handle>
     volumeAttributes:
-      capacity: 10Gi
-      mounter: geesefs
-      options: --memory-limit 1000 --dir-mode 0777 --file-mode 0666
-    volumeHandle: tranarr/
+      server: <nfs-server-name>
+      share: <tranarr-arr-share>
+

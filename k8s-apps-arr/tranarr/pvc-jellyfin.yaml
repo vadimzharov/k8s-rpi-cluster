@@ -3,11 +3,11 @@ kind: PersistentVolumeClaim
 metadata:
   name: tranarr-dedicated-movies
 spec:
-  # Empty storage class disables dynamic provisioning
-  storageClassName: ""
+  storageClassName: nfs-csi      
   accessModes:
     - ReadWriteMany
   resources:
     requests:
       storage: 10Gi
+  volumeName: tranarr-dedicated-movies
       

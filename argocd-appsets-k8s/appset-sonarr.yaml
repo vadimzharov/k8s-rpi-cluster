@@ -11,7 +11,7 @@ spec:
       selector:
         matchLabels:
           sonarr: "installed"
-          k8s-csi-s3: "installed"          
+          k8s-csi-nfs: "installed"          
       values:
         revision: '{{metadata.annotations.branch-name}}'
   - clusters:

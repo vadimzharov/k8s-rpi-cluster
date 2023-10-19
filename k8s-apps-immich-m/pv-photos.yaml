@@ -3,7 +3,7 @@ kind: PersistentVolume
 metadata:
   name: immich-m-photos
   annotations:
-    avp.kubernetes.io/path: "k8secrets/arr"  
+    avp.kubernetes.io/path: "k8secrets/k8s-nfs-csi"
 spec:
   capacity:
     storage: 10Gi

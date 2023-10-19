@@ -112,7 +112,7 @@ spec:
             immich:
               persistence:
                 library:
-                  existingClaim: photos
+                  existingClaim: immich-photos
             redis:
               enabled: true
               architecture: standalone

@@ -3,27 +3,18 @@ kind: PersistentVolume
 metadata:
   name: radarr-root
 spec:
-  storageClassName: csi-s3-arr
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteMany
-  claimRef:
-    namespace: radarr
-    name: radarr-root
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-csi
   csi:
-    driver: ru.yandex.s3.csi
-    controllerPublishSecretRef:
-      name: csi-s3-secret
-      namespace: kube-system
-    nodePublishSecretRef:
-      name: csi-s3-secret
-      namespace: kube-system
-    nodeStageSecretRef:
-      name: csi-s3-secret
-      namespace: kube-system
+    driver: nfs.csi.k8s.io
+    readOnly: false
+    # volumeHandle format: {nfs-server-address}#{sub-dir-name}#{share-name}
+    # make sure this value is unique for every share in the cluster
+    volumeHandle: <radarr-root-volume-handle>
     volumeAttributes:
-      capacity: 10Gi
-      mounter: geesefs
-      options: --memory-limit 1000 --dir-mode 0777 --file-mode 0666
-    volumeHandle: arr/media/movies
+      server: <nfs-server-name>
+      share: <radarr-root-share>

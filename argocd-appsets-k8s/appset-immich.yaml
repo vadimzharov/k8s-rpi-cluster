@@ -11,6 +11,7 @@ spec:
       selector:
         matchLabels:
           immich: "installed"
+          k8s-csi-nfs: "installed"          
       values:
         revision: '{{metadata.annotations.branch-name}}'
   - clusters:
@@ -107,11 +108,11 @@ spec:
             env:
               IMMICH_MACHINE_LEARNING_URL: "false"          
             image:
-              tag: v1.81.0
+              tag: v1.82.1
             immich:
               persistence:
                 library:
-                  existingClaim: photos
+                  existingClaim: immich-photos
             redis:
               enabled: true
               architecture: standalone

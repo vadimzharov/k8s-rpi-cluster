@@ -11,6 +11,7 @@ spec:
       selector:
         matchLabels:
           immich-m: "installed"
+          k8s-csi-nfs: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}'
   - clusters:
@@ -82,11 +83,6 @@ spec:
                 - name:  pgsql-restored-mark
                   mountPath: /tmp/pgsqlrestore/                
                 lifecycle:
-                  preStop:
-                    exec:
-                      command:
-                        - podbackup
-                        - backup-pgsql
                   postStart:
                     exec:
                       command:
@@ -107,11 +103,11 @@ spec:
             env:
               IMMICH_MACHINE_LEARNING_URL: "false"
             image:
-              tag: v1.81.0
+              tag: v1.82.1
             immich:
               persistence:
                 library:
-                  existingClaim: photos
+                  existingClaim: immich-m-photos
             redis:
               enabled: true
               architecture: standalone

@@ -98,7 +98,7 @@ spec:
               storage:
                 enabled: true
                 type: pvc
-                existingClaim: photoprism-storage
+                existingClaim: photoprism-old-storage
                 mountPath: /photoprism/storage
               originals:
                 enabled: true

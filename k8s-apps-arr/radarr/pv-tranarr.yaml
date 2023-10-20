@@ -3,7 +3,7 @@ kind: PersistentVolume
 metadata:
   name: radarr-tranarr
   annotations:
-    avp.kubernetes.io/path: "k8secrets/arr"      
+    avp.kubernetes.io/path: "k8secrets/arr"
 spec:
   capacity:
     storage: 10Gi

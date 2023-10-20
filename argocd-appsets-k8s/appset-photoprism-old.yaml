@@ -197,14 +197,10 @@ spec:
                 enabled: true
                 type: emptyDir
                 mountPath: /var/lib/mysql
-              mysql-dump:
-                enabled: true
-                type: emptyDir
-                mountPath: /var/lib/mysql
               mysql-restored-mark:
                 enabled: true
                 type: emptyDir
-                mountPath: /var/lib/mysql                
+                mountPath: /tmp/mysqlrestore/           
             secrets:
               b-r-secret:
                 enabled: true

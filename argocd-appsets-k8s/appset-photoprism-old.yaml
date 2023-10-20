@@ -139,6 +139,9 @@ spec:
                   PHOTOPRISM_DATABASE_NAME: <MARIADB_DATABASE>
                   PHOTOPRISM_DATABASE_USER: <MARIADB_USER>
                   PHOTOPRISM_DATABASE_PASSWORD: <MARIADB_PASSWORD>
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 1.5.1
       - helm:
           releaseName: mariadb
           values: |

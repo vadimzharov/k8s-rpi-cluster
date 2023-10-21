@@ -166,6 +166,15 @@ spec:
               MYSQL_ROOT_PASSWORD: <MARIADB_ROOT_PASSWORD>
               MARIADB_AUTO_UPGRADE: "1"
               MARIADB_INITDB_SKIP_TZINFO: "1"
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+            lifecycle:
+              postStart:
+                exec:
+                  command:
+                    - podbackup
+                    - restore-sql            
             probes:
               startup:
                 enabled: true
@@ -222,38 +231,19 @@ spec:
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
                   FORCE_RESTORE: "True"
-            # initContainers:
-            #   radarr-restore:
-            #     image: quay.io/vadimzharov/podbackup:latest
-            #     imagePullPolicy: Always
-            #     command:
-            #       - podbackup
-            #     args:
-            #       - restore
-            #     envFrom:
-            #     - secretRef:
-            #         name: radarr-b-r-secret
-            #     - configMapRef:
-            #         name: radarr-b-r-settings
-            #     volumeMounts:
-            #     - name:  config
-            #       mountPath: /config              
-            # sidecars:
-            #   radarr-backup-daemon:
-            #     image: quay.io/vadimzharov/podbackup:latest
-            #     imagePullPolicy: Always
-            #     command:
-            #       - podbackup
-            #     args:
-            #       - backup-daemon
-            #     envFrom:
-            #     - secretRef:
-            #         name: radarr-b-r-secret
-            #     - configMapRef:
-            #         name: radarr-b-r-settings
-            #     volumeMounts:
-            #     - name:  config
-            #       mountPath: /config                  
+            sidecars:
+              mariadb-backup-daemon:
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - backup-sql-daemon
+                envFrom:
+                - secretRef:
+                    name: b-r-secret
+                - configMapRef:
+                    name: b-r-settings
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 1.5.1

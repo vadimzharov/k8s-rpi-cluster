@@ -93,7 +93,7 @@ spec:
                         pathType: Prefix
             envFrom: 
               - secretRef:
-                  name: photoprism-config
+                  name: photoprism-old-photoprism-config
             persistence:
               storage:
                 enabled: true
@@ -169,12 +169,6 @@ spec:
             securityContext:
               runAsUser: 1000
               runAsGroup: 1000
-            lifecycle:
-              postStart:
-                exec:
-                  command:
-                    - podbackup
-                    - restore-sql            
             probes:
               startup:
                 enabled: true
@@ -239,6 +233,12 @@ spec:
                   - podbackup
                 args:
                   - backup-sql-daemon
+              lifecycle:
+                postStart:
+                  exec:
+                    command:
+                      - podbackup
+                      - restore-sql                  
                 envFrom:
                 - secretRef:
                     name: b-r-secret

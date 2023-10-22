@@ -148,7 +148,7 @@ spec:
             image:
               repository: docker.io/library/mariadb
               pullPolicy: IfNotPresent
-              tag: 10.10
+              tag: 11.1
             args:
               - --innodb-buffer-pool-size=512M 
               - --transaction-isolation=READ-COMMITTED 

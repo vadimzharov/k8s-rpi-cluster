@@ -224,7 +224,7 @@ spec:
                   BACKUP_INTERVAL: "3h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
-                  FORCE_RESTORE: "True"
+                  FORCE_RESTORE: "False"
             sidecars:
               mariadb-backup-daemon:
                 image: quay.io/vadimzharov/podbackup:latest

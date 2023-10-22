@@ -206,7 +206,7 @@ spec:
                 type: emptyDir
                 mountPath: /tmp/mysqlrestore/           
             secrets:
-              mariadb-b-r-secret:
+              b-r-secret:
                 enabled: true
                 labels: {}
                 annotations: {}
@@ -215,7 +215,7 @@ spec:
                   AWS_KEY: <path:k8secrets/minios3creds#miniokey>
                   AWS_SECRET_KEY: <path:k8secrets/minios3creds#miniosecretkey>
             configMaps:
-              mariadb-b-r-settings:
+              b-r-settings:
                 enabled: true
                 data:
                   AWS_BUCKET: "photoprism-old-db"
@@ -241,9 +241,9 @@ spec:
                         - restore-sql                  
                 envFrom:
                 - secretRef:
-                    name: b-r-secret
+                    name: mariadb-b-r-secret
                 - configMapRef:
-                    name: b-r-settings
+                    name: mariadb-b-r-settings
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 1.5.1

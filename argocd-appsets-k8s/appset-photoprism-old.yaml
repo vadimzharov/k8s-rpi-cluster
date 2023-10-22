@@ -170,17 +170,17 @@ spec:
               runAsUser: 1000
               runAsGroup: 1000
             probes:
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command:
-                      - cat
-                      - /tmp/mysqlrestore/restored
-                  failureThreshold: 30
-                  periodSeconds: 20
-                  initialDelaySeconds: 10
+              # startup:
+              #   enabled: true
+              #   custom: true
+              #   spec:
+              #     exec:
+              #       command:
+              #         - cat
+              #         - /tmp/mysqlrestore/restored
+              #     failureThreshold: 30
+              #     periodSeconds: 20
+              #     initialDelaySeconds: 10
               readiness:
                 enabled: true
                 type: TCP

@@ -233,12 +233,12 @@ spec:
                   - podbackup
                 args:
                   - backup-sql-daemon
-                lifecycle:
-                  postStart:
-                    exec:
-                      command:
-                        - podbackup
-                        - restore-sql                  
+                # lifecycle:
+                #   postStart:
+                #     exec:
+                #       command:
+                #         - podbackup
+                #         - restore-sql                  
                 envFrom:
                 - secretRef:
                     name: mariadb-b-r-secret

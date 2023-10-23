@@ -237,6 +237,9 @@ spec:
                       command:
                         - podbackup
                         - restore-sql
+                volumeMounts:
+                  - name:  mysql-restored-mark
+                    mountPath: /tmp/mysqlrestore/
                 env:
                   MYSQL_PASSWORD: <MARIADB_ROOT_PASSWORD>
                 envFrom:

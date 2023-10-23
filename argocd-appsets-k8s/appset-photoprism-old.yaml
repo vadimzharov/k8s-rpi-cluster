@@ -162,25 +162,23 @@ spec:
               MARIADB_ROOT_PASSWORD: <MARIADB_ROOT_PASSWORD>
               MARIADB_USER: <MARIADB_USER>
               MARIADB_PASSWORD: <MARIADB_PASSWORD>
-            #  #MYSQL_PASSWORD: <MARIADB_ROOT_PASSWORD>
-            #  #MYSQL_ROOT_PASSWORD: <MARIADB_ROOT_PASSWORD>
               MARIADB_AUTO_UPGRADE: "1"
               MARIADB_INITDB_SKIP_TZINFO: "1"
             securityContext:
               runAsUser: 1000
               runAsGroup: 1000
             probes:
-              # startup:
-              #   enabled: true
-              #   custom: true
-              #   spec:
-              #     exec:
-              #       command:
-              #         - cat
-              #         - /tmp/mysqlrestore/restored
-              #     failureThreshold: 30
-              #     periodSeconds: 20
-              #     initialDelaySeconds: 10
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - cat
+                      - /tmp/mysqlrestore/restored
+                  failureThreshold: 30
+                  periodSeconds: 20
+                  initialDelaySeconds: 10
               readiness:
                 enabled: true
                 type: TCP
@@ -224,7 +222,7 @@ spec:
                   BACKUP_INTERVAL: "3h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
-                  FORCE_RESTORE: "False"
+                  FORCE_RESTORE: "True"
             sidecars:
               mariadb-backup-daemon:
                 image: quay.io/vadimzharov/podbackup:latest
@@ -233,12 +231,14 @@ spec:
                   - podbackup
                 args:
                   - backup-sql-daemon
-                # lifecycle:
-                #   postStart:
-                #     exec:
-                #       command:
-                #         - podbackup
-                #         - restore-sql                  
+                lifecycle:
+                  postStart:
+                    exec:
+                      command:
+                        - podbackup
+                        - restore-sql
+                env:
+                  MYSQL_PASSWORD: <MARIADB_ROOT_PASSWORD>
                 envFrom:
                 - secretRef:
                     name: mariadb-b-r-secret

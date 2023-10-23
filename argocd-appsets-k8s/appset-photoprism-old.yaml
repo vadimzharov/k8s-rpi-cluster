@@ -219,7 +219,7 @@ spec:
                   AWS_BUCKET: "photoprism-old-db"
                   S3_BUCKET_FOLDER: "photoprism-db"
                   S3_FILE_PREFIX: "photoprism-db"
-                  BACKUP_INTERVAL: "3h"
+                  BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
                   FORCE_RESTORE: "True"

@@ -87,9 +87,19 @@ spec:
                     paths:
                       - path: /
                         pathType: Prefix
-            envFrom: 
-              - secretRef:
-                  name: local-registry-config
+            persistence:
+              config:
+                enabled: true
+                type: secret
+                advancedMounts:
+                  main: # the controller with the "main" identifier
+                    main: # the container with the "main" identifier
+                      - path: /etc/docker/registry/config.yml
+                        readOnly: true
+                        subPath: config.yml                
+            #envFrom: 
+            #  - secretRef:
+            #      name: local-registry-config
             secrets:
               config:
                 enabled: true

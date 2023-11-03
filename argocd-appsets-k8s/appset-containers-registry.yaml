@@ -1,0 +1,123 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: local-registry
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/minios3creds"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          local-registry: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  - clusters:
+      selector:
+        matchLabels:
+          local-registry: "passive"
+      template:
+        metadata: 
+          name: '{{name}}-local-registry-passive' 
+        spec:
+          sources:
+          - helm:
+              releaseName: local-registry
+              values: |
+                controller:
+                  enabled: false
+                service:
+                  main:
+                    ports:
+                      http:
+                        port: 5000
+                    annotations:
+                      service.cilium.io/global: "true"
+                ingress:
+                  main:
+                    enabled: true
+                    annotations:
+                      nginx.ingress.kubernetes.io/service-upstream: "true"
+                      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+                    ingressClassName: nginx
+                    hosts:
+                      - host: <path:k8secrets/ingresses#local-registry>.<path:k8secrets/ingresses#domainname>
+                        paths:
+                          - path: /
+                            pathType: Prefix
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 1.5.1                      
+          destination:
+            server: '{{server}}'
+            namespace: local-registry
+          project: k8s-rpi-apps        
+  template:
+    metadata:
+      name: '{{name}}-local-registry'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: local-registry
+          values: |
+            image:
+              repository: docker.io/library/registry
+              pullPolicy: IfNotPresent
+              tag: latest
+            service:
+              main:
+                ports:
+                  http:
+                    port: 5000
+                annotations:
+                  service.cilium.io/global: "true"                
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                annotations:
+                  nginx.ingress.kubernetes.io/service-upstream: "true"
+                  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                  nginx.ingress.kubernetes.io/proxy-body-size: "0"
+                hosts:
+                  - host: <path:k8secrets/ingresses#local-registry>.<path:k8secrets/ingresses#domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+            envFrom: 
+              - secretRef:
+                  name: local-registry-config
+            secrets:
+              config:
+                enabled: true
+                labels: {}
+                annotations: {}
+                stringData:
+                  REGISTRY_STORAGE=s3 
+                  REGISTRY_STORAGE_REGION=us-east1
+                  REGISTRY_STORAGE_REGIONENDPOINT=<minioendpoint> 
+                  REGISTRY_STORAGE_S3_BUCKET=local-registry
+                  REGISTRY_STORAGE_S3_ACCESSKEY=<miniokey>
+                  REGISTRY_STORAGE_S3_SECRET_KEY=<miniosecretkey>
+                  REGISTRY_STORAGE_S3_ENCRYPT=false
+                  REGISTRY_STORAGE_S3_SECURE=true
+                  REGISTYR_STORAGE_S3_SKIPVERIFY=true
+                  REGISTRY_STORAGE_S3_V4AUTH=false
+                  REGISTRY_STORAGE_S3_CHUNKSIZE=5242880
+                  REGISTRY_STORAGE_S3_ROOTDIRECTORY=/image-registry                
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 1.5.1
+      destination:
+        server: '{{server}}' 
+        namespace: local-registry
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

@@ -97,7 +97,7 @@ spec:
                 annotations: {}
                 stringData:
                   REGISTRY_STORAGE: "s3"
-                  # REGISTRY_STORAGE_REGION: "us-east-1"
+                  REGISTRY_STORAGE_REGION: "us-east-1"
                   REGISTRY_STORAGE_REGIONENDPOINT: "<minioendpoint>"
                   REGISTRY_STORAGE_S3_BUCKET: "local-registry"
                   REGISTRY_STORAGE_S3_ACCESSKEY: "<miniokey>"
@@ -107,7 +107,6 @@ spec:
                   REGISTYR_STORAGE_S3_SKIPVERIFY: "true"
                   REGISTRY_STORAGE_S3_V4AUTH: "false"
                   REGISTRY_STORAGE_S3_CHUNKSIZE: "5242880"
-                  REGISTRY_STORAGE_S3_ROOTDIRECTORY: "/image-registry"
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 1.5.1

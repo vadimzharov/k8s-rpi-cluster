@@ -107,16 +107,14 @@ spec:
                     loglevel: debug
                     storage:
                       s3:
-                        accesskey: <minio access key>
-                        secretkey: <minio secret key>
+                        accesskey: <miniokey>
+                        secretkey: <miniosecretkey>
                         region: us-east-1
-                        regionendpoint: http://<docker host ip running minio>:9000
-                        # Make sure you've created the following bucket.
-                        bucket: docker
+                        regionendpoint: http://<minioendpoint>
+                        bucket: local-registry
                         encrypt: false
-                        keyid: mykeyid
-                        secure: true
-                        v4auth: true
+                        secure: false
+                        v4auth: false
                         chunksize: 5242880
                         rootdirectory: /
                       delete:

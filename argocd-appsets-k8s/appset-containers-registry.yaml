@@ -97,7 +97,7 @@ spec:
                 annotations: {}
                 stringData:
                   REGISTRY_STORAGE: "s3"
-                  REGISTRY_STORAGE_REGION: "us-east1"
+                  REGISTRY_STORAGE_REGION: "us-east-1"
                   REGISTRY_STORAGE_REGIONENDPOINT: "<minioendpoint>"
                   REGISTRY_STORAGE_S3_BUCKET: "local-registry"
                   REGISTRY_STORAGE_S3_ACCESSKEY: "<miniokey>"

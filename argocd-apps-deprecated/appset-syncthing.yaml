@@ -8,22 +8,6 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          syncthing: "passive"
-      template:
-        metadata: 
-          name: '{{name}}-syncthing-passive' 
-        spec:
-          sources:
-          - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-            targetRevision: '{{values.revision}}'
-            path: k8s-rpi-apps-syncthing/passive
-          destination:
-            server: '{{server}}'
-            namespace: syncthing          
-          project: k8s-rpi-apps   
-  - clusters:
-      selector:
-        matchLabels:
           syncthing: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}' 
@@ -35,7 +19,7 @@ spec:
       sources:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         targetRevision: '{{values.revision}}'
-        path: k8s-rpi-apps-syncthing/active
+        path: k8s-rpi-apps-syncthing
       destination:
         server: '{{server}}'
         namespace: syncthing

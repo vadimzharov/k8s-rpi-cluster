@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: syncthing-http
+  annotations:
+    service.cilium.io/global: "true"
+  labels:
+    app: syncthing
+    release: syncthing
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8384
+  selector:
+    app: syncthing
+    release: syncthing

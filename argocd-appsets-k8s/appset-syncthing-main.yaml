@@ -22,10 +22,6 @@ spec:
       - helm:
           releaseName: syncthing-main
           values: |
-            #image:
-            #  repository: docker.io/syncthing/syncthing
-            #  pullPolicy: IfNotPresent
-            #  tag: latest
             defaultPodOptions:
               securityContext:
                 runAsUser: 1000
@@ -34,7 +30,7 @@ spec:
               config:
                 enabled: true
                 type: emptyDir
-                mountPath: /config
+                mountPath: /var/syncthing/config
               syncthing-data:
                 enabled: true
                 type: emptyDir
@@ -51,12 +47,9 @@ spec:
                       - podbackup
                     args: 
                       - restore
-                    #securityContext:
-                    #  runAsUser: 1000
-                    #  runAsGroup: 1000          
-                    volumeMounts:
-                    - name: config
-                      mountPath: /syncthing
+                    #volumeMounts:
+                    #- name: config
+                    #  mountPath: /syncthing
                     envFrom:
                     - configMapRef:
                         name: syncthing-main-br-settings
@@ -69,12 +62,9 @@ spec:
                       tag: latest
                     command: ["podbackup"]
                     args: ["copy-from-s3"]
-                    #securityContext:
-                    #  runAsUser: 1000
-                    #  runAsGroup: 1000          
-                    volumeMounts:
-                    - name: syncthing-data
-                      mountPath: /syncthing-data
+                    #volumeMounts:
+                    #- name: syncthing-data
+                    #  mountPath: /syncthing-data
                     envFrom:
                     - configMapRef:
                         name: syncthing-main-sync-s3-settings
@@ -99,11 +89,11 @@ spec:
                     - name: local-discovery
                       containerPort: 21027
                       protocol: UDP
-                    volumeMounts:
-                      - mountPath: /var/syncthing
-                        name: syncthing-data
-                      - name: config
-                        mountPath: /var/syncthing/config                    
+                    #volumeMounts:
+                    #  - mountPath: /var/syncthing
+                    #    name: syncthing-data
+                    #  - name: config
+                    #    mountPath: /var/syncthing/config
                   syncthing-backup-config-daemon:
                     image: 
                       repository: quay.io/vadimzharov/podbackup
@@ -116,24 +106,24 @@ spec:
                         name: syncthing-main-br-settings
                     - secretRef:
                         name: syncthing-main-br-creds
-                    volumeMounts:
-                      - name: config
-                        mountPath: /var/syncthing/config
+                    #volumeMounts:
+                    #  - name: config
+                    #    mountPath: /var/syncthing/config
                   syncthing-backup-data-daemon:
                     image: 
                       repository: quay.io/vadimzharov/podbackup
                       pullPolicy: IfNotPresent
                       tag: latest
                     command: ["podbackup"]
-                    args: ["backup-daemon"]
+                    args: ["sync-to-s3"]
                     envFrom:
                     - configMapRef:
                         name: syncthing-main-sync-s3-settings
                     - secretRef:
                         name: syncthing-main-sync-s3-creds
-                    volumeMounts:
-                      - name: config
-                        mountPath: /var/syncthing/config                
+                    #volumeMounts:
+                    #  - name: config
+                    #    mountPath: /var/syncthing/config                
             service:
               main:
                 primary: true              
@@ -201,9 +191,9 @@ spec:
                   BACKUP_INTERVAL: "15m"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
-                  FORCE_RESTORE: "false"
-                  DIR_TO_BACKUP: /syncthing
-                  DIR_TO_RESTORE: /syncthing
+                  FORCE_RESTORE: "true"
+                  DIR_TO_BACKUP: /var/syncthing/config
+                  DIR_TO_RESTORE: /var/syncthing/config
                   ARCHIVE_TYPE: tarzip
               sync-s3-settings:
                 enabled: true
@@ -214,7 +204,6 @@ spec:
                   BACKUP_INTERVAL: "3h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
-                  FORCE_RESTORE: "true"
                   DIR_TO_BACKUP: /syncthing-data/folders
                   DIR_TO_RESTORE: /syncthing-data/folders
         repoURL: https://bjw-s.github.io/helm-charts

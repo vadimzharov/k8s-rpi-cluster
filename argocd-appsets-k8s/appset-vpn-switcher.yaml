@@ -3,6 +3,8 @@ kind: ApplicationSet
 metadata:
   name: vpn-switcher
   namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/vpnswitcher"    
 spec:
   generators:
   - clusters:
@@ -17,9 +19,61 @@ spec:
     spec:
       project: k8s-rpi-apps
       sources:
-      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        targetRevision: '{{values.revision}}'
-        path: k8s-rpi-apps-vpnswitcher
+      - helm:
+          releaseName: vpnswitcher
+          values: |
+            defaultPodOptions:
+              securityContext:
+                runAsUser: 1000
+                runAsGroup: 1000
+            persistence:
+              config:
+                enabled: true
+                type: secret
+                name: vpnswitcher-config
+                mountPath: /etc/vpnswitcher/config.yaml
+                subPath: config.yml                
+            controllers:
+              main:
+                containers:
+                  main:
+                    nameOverride: vpnswitcher
+                    image:
+                      repository: quay.io/vadimzharov/vpnswitcher
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    ports:
+                    - name: http
+                      containerPort: 8080
+                      protocol: TCP
+            service:
+              main:
+                primary: true              
+                enabled: true
+                controller: main
+                ports:
+                  http:
+                    port: 8080
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                hosts:
+                  - host: <path:k8secrets/ingresses#vpnswitcherhostname>.<path:k8secrets/ingresses#domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: main
+                          port: http
+            secrets:
+              config:
+                enabled: true
+                data:
+                  config.yaml: <config | base64encode>
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 2.3.0
       destination:
         server: '{{server}}'
         namespace: vpn-switcher

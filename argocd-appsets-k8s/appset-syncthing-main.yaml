@@ -15,7 +15,8 @@ spec:
         revision: '{{metadata.annotations.branch-name}}'
       template:
         metadata: 
-          name: '{{name}}-syncthing-main-passive' 
+          name: '{{name}}-syncthing-main-passive'
+        project: k8s-rpi-apps          
         spec:
           sources:
           - helm:

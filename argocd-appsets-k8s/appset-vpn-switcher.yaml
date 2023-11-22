@@ -71,7 +71,7 @@ spec:
                 enabled: true
                 stringData:
                   config.yaml: >
-                                <config | indent 3>
+                                <config | indent 15>
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 2.3.0

@@ -145,7 +145,7 @@ spec:
                 annotations:
                   service.cilium.io/global: "true"
               transfer:
-                enabled:true
+                enabled: true
                 controller: main
                 type: LoadBalancer
                 loadBalancerIP: <syncthing-main-ip>

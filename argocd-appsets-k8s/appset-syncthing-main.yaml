@@ -10,6 +10,49 @@ spec:
   - clusters:
       selector:
         matchLabels:
+          syncthing-main: "passive"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+      template:
+        metadata: 
+          name: '{{name}}-syncthing-main-passive' 
+        spec:
+          sources:
+          - helm:
+              releaseName: syncthing-main-passive
+              values: |
+                controllers:
+                  enabled: false
+                service:
+                  main:
+                    enabled: true
+                    ports:
+                      http:
+                        port: 8384
+                    annotations:
+                      service.cilium.io/global: "true"
+                ingress:
+                  main:
+                    enabled: true
+                    ingressClassName: nginx
+                    annotations:
+                      nginx.ingress.kubernetes.io/service-upstream: "true"
+                      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+                    hosts:
+                      - host: <path:k8secrets/ingresses#syncthingmainhostname>.<path:k8secrets/ingresses#domainname>
+                        paths:
+                          - path: /
+                            pathType: Prefix
+                            service:
+                              name: main
+                              port: http
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 2.3.0
+  - clusters:
+      selector:
+        matchLabels:
           syncthing-main: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}'
@@ -32,13 +75,11 @@ spec:
                 type: emptyDir
                 globalMounts:
                   - path: /var/syncthing/config
-                #mountPath: /var/syncthing/config
               syncthing-data:
                 enabled: true
                 type: emptyDir
                 globalMounts:
                   - path: /syncthing-data
-                #mountPath: /syncthing-data
             controllers:
               main:
                 initContainers:
@@ -51,9 +92,6 @@ spec:
                       - podbackup
                     args: 
                       - restore
-                    #volumeMounts:
-                    #- name: config
-                    #  mountPath: /syncthing
                     envFrom:
                     - configMapRef:
                         name: syncthing-main-br-settings
@@ -66,9 +104,6 @@ spec:
                       tag: latest
                     command: ["podbackup"]
                     args: ["copy-from-s3"]
-                    #volumeMounts:
-                    #- name: syncthing-data
-                    #  mountPath: /syncthing-data
                     envFrom:
                     - configMapRef:
                         name: syncthing-main-sync-s3-settings
@@ -93,11 +128,6 @@ spec:
                     - name: local-discovery
                       containerPort: 21027
                       protocol: UDP
-                    #volumeMounts:
-                    #  - mountPath: /var/syncthing
-                    #    name: syncthing-data
-                    #  - name: config
-                    #    mountPath: /var/syncthing/config
                   syncthing-backup-config-daemon:
                     image: 
                       repository: quay.io/vadimzharov/podbackup
@@ -110,9 +140,6 @@ spec:
                         name: syncthing-main-br-settings
                     - secretRef:
                         name: syncthing-main-br-creds
-                    #volumeMounts:
-                    #  - name: config
-                    #    mountPath: /var/syncthing/config
                   syncthing-backup-data-daemon:
                     image: 
                       repository: quay.io/vadimzharov/podbackup
@@ -125,9 +152,6 @@ spec:
                         name: syncthing-main-sync-s3-settings
                     - secretRef:
                         name: syncthing-main-sync-s3-creds
-                    #volumeMounts:
-                    #  - name: config
-                    #    mountPath: /var/syncthing/config                
             service:
               main:
                 primary: true              

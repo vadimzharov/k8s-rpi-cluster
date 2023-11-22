@@ -179,7 +179,7 @@ spec:
                           name: main
                           port: http
             secrets:
-              br-secret:
+              br-creds:
                 enabled: true
                 stringData:
                   S3_ENDPOINT: <path:k8secrets/minios3creds#minioendpoint>

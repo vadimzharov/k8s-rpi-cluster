@@ -22,7 +22,6 @@ spec:
               releaseName: syncthing-main-passive
               values: |
                 controllers:
-                  enabled: false
                 service:
                   main:
                     enabled: true

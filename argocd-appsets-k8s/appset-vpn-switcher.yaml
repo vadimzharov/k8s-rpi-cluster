@@ -32,7 +32,7 @@ spec:
                 type: secret
                 name: vpnswitcher-config
                 mountPath: /etc/vpnswitcher/config.yaml
-                subPath: config.yml                
+                subPath: config.yml
             controllers:
               main:
                 containers:
@@ -69,8 +69,8 @@ spec:
             secrets:
               config:
                 enabled: true
-                data:
-                  config.yaml: <config | base64encode>
+                stringData:
+                  config.yaml: <config>
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 2.3.0

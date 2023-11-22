@@ -16,7 +16,6 @@ spec:
       template:
         metadata: 
           name: '{{name}}-syncthing-main-passive'
-        project: k8s-rpi-apps          
         spec:
           sources:
           - helm:
@@ -54,6 +53,7 @@ spec:
           destination:
             server: '{{server}}' 
             namespace: syncthing-main
+          project: k8s-rpi-apps                      
           syncPolicy:
             automated:
               prune: true

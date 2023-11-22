@@ -136,12 +136,16 @@ spec:
                         mountPath: /var/syncthing/config                
             service:
               main:
+                enabled:true
+                controller: main
                 ports:
                   http:
                     port: 8384
                 annotations:
                   service.cilium.io/global: "true"
               transfer:
+                enabled:true
+                controller: main
                 type: LoadBalancer
                 loadBalancerIP: <syncthing-main-ip>
                 ports:

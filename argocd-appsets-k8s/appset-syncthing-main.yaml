@@ -22,10 +22,10 @@ spec:
       - helm:
           releaseName: syncthing-main
           values: |
-            image:
-              repository: docker.io/syncthing/syncthing
-              pullPolicy: IfNotPresent
-              tag: latest
+            #image:
+            #  repository: docker.io/syncthing/syncthing
+            #  pullPolicy: IfNotPresent
+            #  tag: latest
             defaultPodOptions:
               securityContext:
                 runAsUser: 1000

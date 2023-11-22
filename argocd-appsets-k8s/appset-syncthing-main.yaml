@@ -136,6 +136,7 @@ spec:
                         mountPath: /var/syncthing/config                
             service:
               main:
+                primary: true              
                 enabled:true
                 controller: main
                 ports:

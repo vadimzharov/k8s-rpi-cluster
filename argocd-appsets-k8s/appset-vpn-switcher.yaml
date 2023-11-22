@@ -71,6 +71,7 @@ spec:
                 enabled: true
                 stringData:
                   config.yaml: |
+                    
                     <config>
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template

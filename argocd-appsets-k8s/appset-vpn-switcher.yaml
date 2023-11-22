@@ -70,7 +70,7 @@ spec:
               config:
                 enabled: true
                 stringData:
-                  config.yaml: >                    
+                  config.yaml: |6+
                                 <config>
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template

@@ -30,11 +30,15 @@ spec:
               config:
                 enabled: true
                 type: emptyDir
-                mountPath: /var/syncthing/config
+                globalMounts:
+                  - path: /var/syncthing/config
+                #mountPath: /var/syncthing/config
               syncthing-data:
                 enabled: true
                 type: emptyDir
-                mountPath: /syncthing-data
+                globalMounts:
+                  - path: /syncthing-data
+                #mountPath: /syncthing-data
             controllers:
               main:
                 initContainers:

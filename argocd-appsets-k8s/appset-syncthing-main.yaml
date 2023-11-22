@@ -40,83 +40,84 @@ spec:
                 type: emptyDir
                 mountPath: /syncthing-data
             controllers:
-              initContainers:
-                syncthing-restore-config:
-                  image: quay.io/vadimzharov/podbackup:latest
-                  command:
-                    - podbackup
-                  args: 
-                    - restore
-                  #securityContext:
-                  #  runAsUser: 1000
-                  #  runAsGroup: 1000          
-                  volumeMounts:
-                  - name: config
-                    mountPath: /syncthing
-                  envFrom:
-                  - configMapRef:
-                      name: syncthing-main-br-settings
-                  - secretRef:
-                      name: syncthing-main-br-creds
-                syncthing-restore-data:
-                  image: quay.io/vadimzharov/podbackup:latest
-                  command: ["podbackup"]
-                  args: ["copy-from-s3"]
-                  #securityContext:
-                  #  runAsUser: 1000
-                  #  runAsGroup: 1000          
-                  volumeMounts:
-                  - name: syncthing-data
-                    mountPath: /syncthing-data
-                  envFrom:
-                  - configMapRef:
-                      name: syncthing-main-sync-s3-settings
-                  - secretRef:
-                      name: syncthing-main-sync-s3-creds
-              containers:
-                main:
-                  ports:
-                  - name: http
-                    containerPort: 8384
-                    protocol: TCP
-                  - name: tcp-transfer
-                    containerPort: 22000
-                    protocol: TCP
-                  - name: quic-transfer
-                    containerPort: 22000
-                    protocol: UDP
-                  - name: local-discovery
-                    containerPort: 21027
-                    protocol: UDP
-                  volumeMounts:
-                    - mountPath: /var/syncthing
-                      name: syncthing-data
+              main:
+                initContainers:
+                  syncthing-restore-config:
+                    image: quay.io/vadimzharov/podbackup:latest
+                    command:
+                      - podbackup
+                    args: 
+                      - restore
+                    #securityContext:
+                    #  runAsUser: 1000
+                    #  runAsGroup: 1000          
+                    volumeMounts:
                     - name: config
-                      mountPath: /var/syncthing/config                    
-                syncthing-backup-config-daemon:
-                  image: quay.io/vadimzharov/podbackup:latest
-                  command: ["podbackup"]
-                  args: ["backup-daemon"]
-                  envFrom:
-                  - configMapRef:
-                      name: syncthing-main-br-settings
-                  - secretRef:
-                      name: syncthing-main-br-creds
-                  volumeMounts:
-                    - name: config
-                      mountPath: /var/syncthing/config
-                syncthing-backup-data-daemon:
-                  image: quay.io/vadimzharov/podbackup:latest
-                  command: ["podbackup"]
-                  args: ["backup-daemon"]
-                  envFrom:
-                  - configMapRef:
-                      name: syncthing-main-sync-s3-settings
-                  - secretRef:
-                      name: syncthing-main-sync-s3-creds
-                  volumeMounts:
-                    - name: config
-                      mountPath: /var/syncthing/config                
+                      mountPath: /syncthing
+                    envFrom:
+                    - configMapRef:
+                        name: syncthing-main-br-settings
+                    - secretRef:
+                        name: syncthing-main-br-creds
+                  syncthing-restore-data:
+                    image: quay.io/vadimzharov/podbackup:latest
+                    command: ["podbackup"]
+                    args: ["copy-from-s3"]
+                    #securityContext:
+                    #  runAsUser: 1000
+                    #  runAsGroup: 1000          
+                    volumeMounts:
+                    - name: syncthing-data
+                      mountPath: /syncthing-data
+                    envFrom:
+                    - configMapRef:
+                        name: syncthing-main-sync-s3-settings
+                    - secretRef:
+                        name: syncthing-main-sync-s3-creds
+                containers:
+                  main:
+                    ports:
+                    - name: http
+                      containerPort: 8384
+                      protocol: TCP
+                    - name: tcp-transfer
+                      containerPort: 22000
+                      protocol: TCP
+                    - name: quic-transfer
+                      containerPort: 22000
+                      protocol: UDP
+                    - name: local-discovery
+                      containerPort: 21027
+                      protocol: UDP
+                    volumeMounts:
+                      - mountPath: /var/syncthing
+                        name: syncthing-data
+                      - name: config
+                        mountPath: /var/syncthing/config                    
+                  syncthing-backup-config-daemon:
+                    image: quay.io/vadimzharov/podbackup:latest
+                    command: ["podbackup"]
+                    args: ["backup-daemon"]
+                    envFrom:
+                    - configMapRef:
+                        name: syncthing-main-br-settings
+                    - secretRef:
+                        name: syncthing-main-br-creds
+                    volumeMounts:
+                      - name: config
+                        mountPath: /var/syncthing/config
+                  syncthing-backup-data-daemon:
+                    image: quay.io/vadimzharov/podbackup:latest
+                    command: ["podbackup"]
+                    args: ["backup-daemon"]
+                    envFrom:
+                    - configMapRef:
+                        name: syncthing-main-sync-s3-settings
+                    - secretRef:
+                        name: syncthing-main-sync-s3-creds
+                    volumeMounts:
+                      - name: config
+                        mountPath: /var/syncthing/config                
             service:
               main:
                 ports:

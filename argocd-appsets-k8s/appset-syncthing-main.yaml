@@ -1,0 +1,207 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: syncthing-main
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/syncthing-main"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          syncthing-main: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-synchthing-main'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: syncthing-main
+          values: |
+            #image:
+            #  repository: docker.io/syncthing/syncthing
+            #  pullPolicy: IfNotPresent
+            #  tag: latest
+            defaultPodOptions:
+              securityContext:
+                runAsUser: 1000
+                runAsGroup: 1000
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                mountPath: /config
+              syncthing-data:
+                enabled: true
+                type: emptyDir
+                mountPath: /syncthing-data
+            controllers:
+              initContainers:
+                syncthing-restore-config:
+                  image: quay.io/vadimzharov/podbackup:latest
+                  command:
+                    - podbackup
+                  args: 
+                    - restore
+                  #securityContext:
+                  #  runAsUser: 1000
+                  #  runAsGroup: 1000          
+                  volumeMounts:
+                  - name: config
+                    mountPath: /syncthing
+                  envFrom:
+                  - configMapRef:
+                      name: syncthing-main-br-settings
+                  - secretRef:
+                      name: syncthing-main-br-creds
+                syncthing-restore-data:
+                  image: quay.io/vadimzharov/podbackup:latest
+                  command: ["podbackup"]
+                  args: ["copy-from-s3"]
+                  #securityContext:
+                  #  runAsUser: 1000
+                  #  runAsGroup: 1000          
+                  volumeMounts:
+                  - name: syncthing-data
+                    mountPath: /syncthing-data
+                  envFrom:
+                  - configMapRef:
+                      name: syncthing-main-sync-s3-settings
+                  - secretRef:
+                      name: syncthing-main-sync-s3-creds
+              containers:
+                main:
+                  ports:
+                  - name: http
+                    containerPort: 8384
+                    protocol: TCP
+                  - name: tcp-transfer
+                    containerPort: 22000
+                    protocol: TCP
+                  - name: quic-transfer
+                    containerPort: 22000
+                    protocol: UDP
+                  - name: local-discovery
+                    containerPort: 21027
+                    protocol: UDP
+                  volumeMounts:
+                    - mountPath: /var/syncthing
+                      name: syncthing-data
+                    - name: config
+                      mountPath: /var/syncthing/config                    
+                syncthing-backup-config-daemon:
+                  image: quay.io/vadimzharov/podbackup:latest
+                  command: ["podbackup"]
+                  args: ["backup-daemon"]
+                  envFrom:
+                  - configMapRef:
+                      name: syncthing-main-br-settings
+                  - secretRef:
+                      name: syncthing-main-br-creds
+                  volumeMounts:
+                    - name: config
+                      mountPath: /var/syncthing/config
+                syncthing-backup-data-daemon:
+                  image: quay.io/vadimzharov/podbackup:latest
+                  command: ["podbackup"]
+                  args: ["backup-daemon"]
+                  envFrom:
+                  - configMapRef:
+                      name: syncthing-main-sync-s3-settings
+                  - secretRef:
+                      name: syncthing-main-sync-s3-creds
+                  volumeMounts:
+                    - name: config
+                      mountPath: /var/syncthing/config                
+            service:
+              main:
+                ports:
+                  http:
+                    port: 8384
+                annotations:
+                  service.cilium.io/global: "true"
+              transfer:
+                type: LoadBalancer
+                loadBalancerIP: <syncthing-main-ip>
+                ports:
+                  tcp-transfer:
+                    protocol: TCP
+                    port: 22000
+                    targetPort: tcp-transfer
+                  quic-transfer:
+                    protocol: UDP
+                    port: 22000
+                    targetPort: quic-transfer
+                  local-discovery:
+                    protocol: UDP
+                    port: 21027
+                    targetPort: local-discovery                
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                annotations:
+                  nginx.ingress.kubernetes.io/service-upstream: "true"
+                  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                  nginx.ingress.kubernetes.io/proxy-body-size: "0"
+                hosts:
+                  - host: <path:k8secrets/ingresses#syncthing-main>.<path:k8secrets/ingresses#domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+            secrets:
+              b-r-secret:
+                enabled: true
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/minios3creds#miniosecretkey>
+              sync-s3-creds:
+                enabled: true
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/minios3creds#miniosecretkey>
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "syncthing-main"
+                  S3_BUCKET_FOLDER: "syncthing-main-config"
+                  S3_FILE_PREFIX: "syncthing-main-config"
+                  BACKUP_INTERVAL: "15m"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "false"
+                  DIR_TO_BACKUP: /syncthing
+                  DIR_TO_RESTORE: /syncthing
+                  ARCHIVE_TYPE: tarzip
+              sync-s3-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "syncthing-main"
+                  S3_BUCKET_FOLDER: "syncthing-main-data"
+                  S3_FILE_PREFIX: "syncthing-main-data"
+                  BACKUP_INTERVAL: "3h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "true"
+                  DIR_TO_BACKUP: /syncthing-data/folders
+                  DIR_TO_RESTORE: /syncthing-data/folders
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 2.3.0
+      destination:
+        server: '{{server}}' 
+        namespace: syncthing-main
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

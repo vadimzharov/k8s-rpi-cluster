@@ -149,7 +149,7 @@ spec:
                   nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
                   nginx.ingress.kubernetes.io/proxy-body-size: "0"
                 hosts:
-                  - host: <path:k8secrets/ingresses#syncthing-main>.<path:k8secrets/ingresses#domainname>
+                  - host: <path:k8secrets/ingresses#syncthingmainhostname>.<path:k8secrets/ingresses#domainname>
                     paths:
                       - path: /
                         pathType: Prefix

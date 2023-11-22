@@ -137,7 +137,7 @@ spec:
             service:
               main:
                 primary: true              
-                enabled:true
+                enabled: true
                 controller: main
                 ports:
                   http:

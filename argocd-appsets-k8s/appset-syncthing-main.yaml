@@ -43,7 +43,9 @@ spec:
               main:
                 initContainers:
                   syncthing-restore-config:
-                    image: quay.io/vadimzharov/podbackup:latest
+                    image: quay.io/vadimzharov/podbackup
+                    pullPolicy: IfNotPresent
+                    tag: latest:latest
                     command:
                       - podbackup
                     args: 
@@ -60,7 +62,9 @@ spec:
                     - secretRef:
                         name: syncthing-main-br-creds
                   syncthing-restore-data:
-                    image: quay.io/vadimzharov/podbackup:latest
+                    image: quay.io/vadimzharov/podbackup
+                    pullPolicy: IfNotPresent
+                    tag: latest:latest
                     command: ["podbackup"]
                     args: ["copy-from-s3"]
                     #securityContext:
@@ -95,7 +99,9 @@ spec:
                       - name: config
                         mountPath: /var/syncthing/config                    
                   syncthing-backup-config-daemon:
-                    image: quay.io/vadimzharov/podbackup:latest
+                    image: quay.io/vadimzharov/podbackup
+                    pullPolicy: IfNotPresent
+                    tag: latest:latest
                     command: ["podbackup"]
                     args: ["backup-daemon"]
                     envFrom:
@@ -107,7 +113,9 @@ spec:
                       - name: config
                         mountPath: /var/syncthing/config
                   syncthing-backup-data-daemon:
-                    image: quay.io/vadimzharov/podbackup:latest
+                    image: quay.io/vadimzharov/podbackup
+                    pullPolicy: IfNotPresent
+                    tag: latest:latest
                     command: ["podbackup"]
                     args: ["backup-daemon"]
                     envFrom:

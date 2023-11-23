@@ -21,7 +21,7 @@ spec:
       sources:
       - helm:
           releaseName: vpnswitcher
-          values: |
+          values: >
             secrets:
               config:
                 enabled: true

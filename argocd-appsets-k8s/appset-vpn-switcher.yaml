@@ -26,8 +26,8 @@ spec:
               config:
                 enabled: true
                 stringData:
-                  config.yaml: 
-                    <config>          
+                  config.yaml: |
+                    <config>
             defaultPodOptions:
               securityContext:
                 runAsUser: 1000

@@ -21,12 +21,12 @@ spec:
       sources:
       - helm:
           releaseName: vpnswitcher
-          values: >
+          values: |
             secrets:
               config:
                 enabled: true
                 stringData:
-                  config.yaml: |
+                  config.yaml: |-
                     <config>
             defaultPodOptions:
               securityContext:

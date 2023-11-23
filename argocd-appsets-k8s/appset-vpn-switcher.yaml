@@ -22,6 +22,12 @@ spec:
       - helm:
           releaseName: vpnswitcher
           values: |
+            secrets:
+              config:
+                enabled: true
+                stringData:
+                  config.yaml: |
+                    <config>          
             defaultPodOptions:
               securityContext:
                 runAsUser: 1000
@@ -66,13 +72,6 @@ spec:
                         service:
                           name: main
                           port: http
-            secrets:
-              config:
-                enabled: true
-                stringData:
-                  config.yaml: |
-                    <config>
-
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 2.3.0

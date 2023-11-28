@@ -24,6 +24,7 @@ spec:
                 controllers:
                 service:
                   main:
+                    nameOverride: syncthing-main
                     enabled: true
                     ports:
                       http:

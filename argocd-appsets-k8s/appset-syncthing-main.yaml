@@ -19,12 +19,11 @@ spec:
         spec:
           sources:
           - helm:
-              releaseName: syncthing-main-passive
+              releaseName: syncthing-main
               values: |
                 controllers:
                 service:
                   main:
-                    nameOverride: syncthing-main
                     enabled: true
                     ports:
                       http:

@@ -90,6 +90,8 @@ spec:
                     - name: http
                       containerPort: 8010
                       protocol: TCP
+                    env:
+                      EXTRAOPTIONS: "-Xmx382M"
             service:
               main:
                 primary: true              

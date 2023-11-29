@@ -83,7 +83,7 @@ spec:
                 containers:
                   main:
                     image:
-                      repository: docker.io/silviof/docker-languagetool
+                      repository: docker.io/erikvl87/languagetool
                       pullPolicy: IfNotPresent
                       tag: latest                  
                     ports:

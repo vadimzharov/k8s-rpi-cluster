@@ -58,6 +58,7 @@ spec:
                 enabled: true
                 type: persistentVolumeClaim
                 storageClass: "sc-nfs"
+                accessMode: ReadWriteMany
             ingress:
               main:
                 enabled: true

@@ -53,6 +53,7 @@ spec:
                   service.cilium.io/global: "true"
             persistence:
               config:
+                nameOverride: "immich-v-library"
                 # -- Enables or disables the persistence item. Defaults to true
                 enabled: true
                 type: persistentVolumeClaim
@@ -86,7 +87,7 @@ spec:
             immich:
               persistence:
                 library:
-                  existingClaim: immich-v-photos
+                  existingClaim: immich-v-library
             redis:
               enabled: true
               architecture: standalone
@@ -103,6 +104,7 @@ spec:
                 repository: quay.io/vadimzharov/immich-psql
                 tag: 15
               global:
+                storageClass: "sc-nfs"
                 postgresql:
                   auth:
                     username: <pgsql_username>

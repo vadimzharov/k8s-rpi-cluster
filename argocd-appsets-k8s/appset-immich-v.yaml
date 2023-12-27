@@ -100,8 +100,11 @@ spec:
               enabled: false
             postgresql:
               enabled: true
-              volumePermissions:
-                enabled: false
+              primary:
+                podSecurityContext:
+                  fsGroup: 1024
+                containerSecurityContext:
+                  runAsUser: 1024
               image:
                 registry: quay.io
                 repository: vadimzharov/immich-psql

@@ -113,8 +113,6 @@ spec:
                     password: <pgsql_password>
                     database: <pgsql_database>
               primary:
-                labels:
-                  test-label: "test"
                 podSecurityContext:
                   enabled: true
                   fsGroup: 1024

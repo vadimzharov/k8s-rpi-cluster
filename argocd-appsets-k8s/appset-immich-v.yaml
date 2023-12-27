@@ -101,7 +101,7 @@ spec:
             postgresql:
               enabled: true
               volumePermissions:
-                enabled: true
+                enabled: false
               image:
                 registry: quay.io
                 repository: vadimzharov/immich-psql

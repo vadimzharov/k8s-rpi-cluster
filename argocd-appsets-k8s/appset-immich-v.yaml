@@ -127,7 +127,7 @@ spec:
                     create-extensions.sql: |
                       CREATE EXTENSION cube;
                       CREATE EXTENSION earthdistance;
-                      CREATE EXTENSION vectors;                    
+                      CREATE EXTENSION vector;                    
             server:
               enabled: true
               image:

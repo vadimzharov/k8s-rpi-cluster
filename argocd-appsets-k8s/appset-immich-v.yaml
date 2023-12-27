@@ -104,6 +104,7 @@ spec:
                 registry: quay.io
                 repository: vadimzharov/immich-psql
                 tag: 15
+                debug: true
               global:
                 storageClass: "sc-nfs"
                 postgresql:

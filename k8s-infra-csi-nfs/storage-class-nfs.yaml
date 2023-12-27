@@ -9,6 +9,7 @@ parameters:
   server: <k8s-nfs-server-name>
   share: volume1/<k8s-nfs-share-name>
   subDir: ${pvc.metadata.namespace}/${pvc.metadata.name}
+  onDelete: retain
   # csi.storage.k8s.io/provisioner-secret is only needed for providing mountOptions in DeleteVolume
   # csi.storage.k8s.io/provisioner-secret-name: "mount-options"
   # csi.storage.k8s.io/provisioner-secret-namespace: "default"

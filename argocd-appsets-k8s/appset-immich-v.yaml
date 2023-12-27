@@ -99,6 +99,7 @@ spec:
             machine-learning:
               enabled: false
             postgresql:
+              postgresqlSharedPreloadLibraries: "vectors.so"
               enabled: true
               image:
                 registry: quay.io

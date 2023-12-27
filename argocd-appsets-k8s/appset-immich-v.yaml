@@ -111,6 +111,7 @@ spec:
                   auth:
                     username: <pgsql_username>
                     password: <pgsql_password>
+                    postgresPassword: <pgsql_password>
                     database: <pgsql_database>
               primary:
                 podSecurityContext:
@@ -121,6 +122,8 @@ spec:
                   runAsUser: 1024              
                 initdb:
                   scripts:
+                    user: postgres
+                    password:  <pgsql_password>
                     create-extensions.sql: |
                       CREATE EXTENSION cube;
                       CREATE EXTENSION earthdistance;

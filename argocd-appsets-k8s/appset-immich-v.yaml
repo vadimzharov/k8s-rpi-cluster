@@ -102,8 +102,10 @@ spec:
               enabled: true
               primary:
                 podSecurityContext:
+                  enabled: true
                   fsGroup: 1024
                 containerSecurityContext:
+                  enabled: true
                   runAsUser: 1024
               image:
                 registry: quay.io

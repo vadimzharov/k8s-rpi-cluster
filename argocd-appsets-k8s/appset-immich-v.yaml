@@ -51,6 +51,12 @@ spec:
                     port: 3001
                 annotations:
                   service.cilium.io/global: "true"
+            persistence:
+              config:
+                # -- Enables or disables the persistence item. Defaults to true
+                enabled: true
+                type: persistentVolumeClaim
+                storageClass: "sc-nfs"
             ingress:
               main:
                 enabled: true

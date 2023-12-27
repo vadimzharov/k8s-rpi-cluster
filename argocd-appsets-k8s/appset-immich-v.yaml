@@ -100,15 +100,6 @@ spec:
               enabled: false
             postgresql:
               enabled: true
-              primary:
-                labels:
-                  test-label: "test"
-                podSecurityContext:
-                  enabled: true
-                  fsGroup: 1024
-                containerSecurityContext:
-                  enabled: true
-                  runAsUser: 1024
               image:
                 registry: quay.io
                 repository: vadimzharov/immich-psql
@@ -122,6 +113,14 @@ spec:
                     password: <pgsql_password>
                     database: <pgsql_database>
               primary:
+                labels:
+                  test-label: "test"
+                podSecurityContext:
+                  enabled: true
+                  fsGroup: 1024
+                containerSecurityContext:
+                  enabled: true
+                  runAsUser: 1024              
                 initdb:
                   scripts:
                     create-extensions.sql: |

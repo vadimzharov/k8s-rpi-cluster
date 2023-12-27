@@ -87,7 +87,7 @@ spec:
             immich:
               persistence:
                 library:
-                  existingClaim: immich-v-library
+                  existingClaim: immich-v-deps-immich-v-library
             redis:
               enabled: true
               architecture: standalone
@@ -101,7 +101,8 @@ spec:
             postgresql:
               enabled: true
               image:
-                repository: quay.io/vadimzharov/immich-psql
+                registry: quay.io
+                repository: vadimzharov/immich-psql
                 tag: 15
               global:
                 storageClass: "sc-nfs"

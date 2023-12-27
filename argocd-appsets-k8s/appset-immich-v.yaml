@@ -18,7 +18,7 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          immich: "passive"
+          immich-v: "passive"
       values:
         revision: '{{metadata.annotations.branch-name}}'
       template:

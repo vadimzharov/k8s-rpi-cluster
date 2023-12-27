@@ -101,6 +101,8 @@ spec:
             postgresql:
               enabled: true
               primary:
+                labels:
+                  test-label: "test"
                 podSecurityContext:
                   enabled: true
                   fsGroup: 1024

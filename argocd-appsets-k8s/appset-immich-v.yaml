@@ -43,6 +43,9 @@ spec:
           releaseName: immich-v-deps
           values: |
             controllers:
+            service:
+              main:
+                enabled: false
             persistence:
               config:
                 nameOverride: "immich-v-library"

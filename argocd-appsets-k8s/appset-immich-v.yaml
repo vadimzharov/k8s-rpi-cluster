@@ -128,6 +128,7 @@ spec:
                     nginx.ingress.kubernetes.io/client-body-buffer-size: 1M
                     ### Testing
                     nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "0"
+                    nginx.ingress.kubernetes.io/proxy-request-buffering: "false"
                     #nginx.org/client-max-body-size
 
                   hosts:

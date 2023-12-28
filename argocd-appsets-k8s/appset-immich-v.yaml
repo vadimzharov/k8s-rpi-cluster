@@ -124,10 +124,7 @@ spec:
                     - host: <path:k8secrets/ingresses#immich-v-hostname>.<path:k8secrets/ingresses#domainname>
                       paths:
                         - path: /
-                          pathType: Prefix
-                          service:
-                            name: main
-                            port: http                    
+                          pathType: Prefix                 
               image:
                 repository: ghcr.io/immich-app/immich-server
                 pullPolicy: IfNotPresent

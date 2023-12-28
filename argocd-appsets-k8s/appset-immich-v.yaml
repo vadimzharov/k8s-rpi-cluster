@@ -89,6 +89,10 @@ spec:
               persistence:
                 library:
                   existingClaim: immich-v-deps-immich-v-library
+              service:
+                main:
+                  annotations:
+                    service.cilium.io/global: "true"       
             redis:
               enabled: true
               architecture: standalone
@@ -96,11 +100,7 @@ spec:
                 persistence:
                   enabled: false
               auth:
-                enabled: false
-            service:
-              main:
-                annotations:
-                  service.cilium.io/global: "true"                
+                enabled: false             
             machine-learning:
               enabled: false
             postgresql:

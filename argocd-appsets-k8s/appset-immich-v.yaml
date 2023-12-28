@@ -89,10 +89,6 @@ spec:
               persistence:
                 library:
                   existingClaim: immich-v-deps-immich-v-library
-              service:
-                main:
-                  annotations:
-                    service.cilium.io/global: "true"       
             redis:
               enabled: true
               architecture: standalone
@@ -137,6 +133,10 @@ spec:
                       CREATE EXTENSION IF NOT EXISTS vectors;
             server:
               enabled: true
+              service:
+                main:
+                  annotations:
+                    service.cilium.io/global: "true"
               image:
                 repository: ghcr.io/immich-app/immich-server
                 pullPolicy: IfNotPresent

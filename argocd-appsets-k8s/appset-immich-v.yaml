@@ -126,7 +126,10 @@ spec:
                     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
                     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
                     nginx.ingress.kubernetes.io/client-body-buffer-size: 1M
-                    nginx.org/proxy-max-temp-file-size: "0"
+                    ### Testing
+                    nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "0"
+                    #nginx.org/client-max-body-size
+
                   hosts:
                     - host: <path:k8secrets/ingresses#immich-v-hostname>.<path:k8secrets/ingresses#domainname>
                       paths:

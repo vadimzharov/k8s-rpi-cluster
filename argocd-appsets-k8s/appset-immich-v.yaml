@@ -97,6 +97,10 @@ spec:
                   enabled: false
               auth:
                 enabled: false
+            service:
+              main:
+                annotations:
+                  service.cilium.io/global: "true"                
             machine-learning:
               enabled: false
             postgresql:

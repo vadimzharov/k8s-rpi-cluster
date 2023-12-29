@@ -133,37 +133,37 @@ spec:
             machine-learning:
               enabled: false
             postgresql:
-              postgresqlSharedPreloadLibraries: "vectors.so"
-              enabled: true
-              image:
-                registry: quay.io
-                repository: vadimzharov/immich-psql
-                tag: 15
-                debug: true
+              #postgresqlSharedPreloadLibraries: "vectors.so"
+              enabled: false
+              # image:
+              #   registry: quay.io
+              #   repository: vadimzharov/immich-psql
+              #   tag: 15
+              #   debug: true
               global:
-                storageClass: "sc-nfs"
+              #   storageClass: "sc-nfs"
                 postgresql:
                   auth:
                     username: <pgsql_username>
                     password: <pgsql_password>
                     postgresPassword: <pgsql_password>
                     database: <pgsql_database>
-              primary:
-                podSecurityContext:
-                  enabled: true
-                  fsGroup: 1024
-                containerSecurityContext:
-                  enabled: true
-                  runAsUser: 1024              
-                initdb:
-                  scripts:
-                    user: postgres
-                    password:  <pgsql_password>
-                    create-extensions.sql: |
-                      ALTER SYSTEM SET shared_preload_libraries = "vectors.so"
-                      CREATE EXTENSION IF NOT EXISTS cube;
-                      CREATE EXTENSION IF NOT EXISTS earthdistance;
-                      CREATE EXTENSION IF NOT EXISTS vectors;
+              # primary:
+              #   podSecurityContext:
+              #     enabled: true
+              #     fsGroup: 1024
+              #   containerSecurityContext:
+              #     enabled: true
+              #     runAsUser: 1024              
+              #   initdb:
+              #     scripts:
+              #       user: postgres
+              #       password:  <pgsql_password>
+              #       create-extensions.sql: |
+              #         ALTER SYSTEM SET shared_preload_libraries = "vectors.so"
+              #         CREATE EXTENSION IF NOT EXISTS cube;
+              #         CREATE EXTENSION IF NOT EXISTS earthdistance;
+              #         CREATE EXTENSION IF NOT EXISTS vectors;
             server:
               enabled: true
               service:

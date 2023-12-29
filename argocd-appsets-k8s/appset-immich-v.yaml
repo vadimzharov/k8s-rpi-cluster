@@ -59,7 +59,7 @@ spec:
                       user: postgres
                       password:  <pgsql_password>
                       create-extensions.sql: |
-                        ALTER SYSTEM SET shared_preload_libraries = "vectors.so"
+                        \c immich;
                         CREATE EXTENSION IF NOT EXISTS cube;
                         CREATE EXTENSION IF NOT EXISTS earthdistance;
                         CREATE EXTENSION IF NOT EXISTS vectors;

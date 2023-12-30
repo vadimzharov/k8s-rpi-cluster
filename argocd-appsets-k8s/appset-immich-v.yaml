@@ -97,7 +97,7 @@ spec:
                           pullPolicy: IfNotPresent
                           tag: latest
                         command: ["podbackup"]
-                        args: ["backup-daemon"]
+                        args: ["backup-pgsql-daemon"]
                         envFrom:
                         - configMapRef:
                             name: db-backup-br-settings

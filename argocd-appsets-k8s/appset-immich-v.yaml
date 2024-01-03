@@ -148,7 +148,7 @@ spec:
             - helm:
                 releaseName: immich-v
                 values: |
-                  controller:
+                  controllers:
                     enabled: false
                   service:
                     main:

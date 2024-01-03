@@ -25,6 +25,7 @@ spec:
                 service:
                   main:
                     enabled: true
+                    nameOverride: server
                     ports:
                       http:
                         port: 8384

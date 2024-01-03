@@ -153,7 +153,8 @@ spec:
                       enabled: false
                   service:
                     main:
-                      enabled: true                    
+                      enabled: true
+                      nameOverride: server
                       ports:
                         http:
                           port: 3001
@@ -176,7 +177,10 @@ spec:
                         - host: <path:k8secrets/ingresses#immich-v-hostname>.<path:k8secrets/ingresses#domainname>
                           paths:
                             - path: /
-                              pathType: Prefix 
+                              pathType: Prefix
+                              service:
+                                name: main
+                                port: http                               
               repoURL: https://bjw-s.github.io/helm-charts
               chart: app-template
               targetRevision: 2.4.0

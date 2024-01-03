@@ -149,6 +149,8 @@ spec:
                 releaseName: immich-v
                 values: |
                   controllers:
+                    main:
+                      enabled: false
                   service:
                     main:
                       enabled: true                    

@@ -1,0 +1,151 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: immich-m
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/immich"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          immich-m: "installed"
+          k8s-csi-nfs: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+        version: '{{metadata.labels.immich-tag}}'        
+  - clusters:
+      selector:
+        matchLabels:
+          immich-m: "passive"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+      template:
+        metadata: 
+          name: '{{name}}-immich-m-passive' 
+        spec:
+          sources:
+            - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+              targetRevision: '{{values.revision}}'
+              path: k8s-rpi-apps-ingress/immich-m-ingress
+          destination:
+            server: '{{server}}'
+            namespace: immich-m
+          project: k8s-rpi-apps              
+  template:
+    metadata:
+      name: '{{name}}-immich-m'
+    spec:
+      project: k8s-rpi-apps
+      sources:
+      - helm:
+          releaseName: immich
+          values: |
+            global:
+              postgresql:
+                auth:
+                  username: <pgsql_username>
+                  password: <pgsql_password>
+                  database: <pgsql_database>
+            primary:
+              persistence:
+                enabled: false
+              extraVolumes:
+                - name: pgsql-restored-mark
+                  emptyDir: {}
+              extraVolumeMounts:
+                - name:  pgsql-restored-mark
+                  mountPath: /tmp/pgsqlrestore/
+              startupProbe:
+                exec:
+                  command:
+                    - cat
+                    - /tmp/pgsqlrestore/restored
+                failureThreshold: 30
+                periodSeconds: 20
+                initialDelaySeconds: 10                  
+              sidecars:
+              - name: pgsql-backup-daemon
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - backup-pgsql-daemon
+                envFrom:
+                - secretRef:
+                    name: sync-s3-secret
+                - configMapRef:
+                    name: pgsql-b-r-settings
+                - secretRef:
+                    name: pgsql-creds
+                volumeMounts:
+                - name:  pgsql-restored-mark
+                  mountPath: /tmp/pgsqlrestore/                
+                lifecycle:
+                  postStart:
+                    exec:
+                      command:
+                        - podbackup
+                        - restore-pgsql
+        repoURL: https://charts.bitnami.com/bitnami
+        chart: postgresql
+        targetRevision: 12.8.2
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-apps-immich-m
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-rpi-apps-ingress/immich-m-ingress
+      - helm:
+          releaseName: immich
+          values: |
+            env:
+              IMMICH_MACHINE_LEARNING_URL: "false"
+            image:
+              tag: '{{metadata.labels.immich-tag}}'
+            immich:
+              persistence:
+                library:
+                  existingClaim: immich-m-photos
+            redis:
+              enabled: true
+              architecture: standalone
+              master:
+                persistence:
+                  enabled: false
+              auth:
+                enabled: false
+            machine-learning:
+              enabled: false
+            postgresql:
+              enabled: false
+              global:
+                postgresql:
+                  auth:
+                    username: <pgsql_username>
+                    password: <pgsql_password>
+                    database: <pgsql_database>
+            server:
+              enabled: true
+              image:
+                repository: ghcr.io/immich-app/immich-server
+                pullPolicy: IfNotPresent
+            proxy:
+              ingress:
+                main:
+                  enabled: false
+        repoURL: https://immich-app.github.io/immich-charts
+        chart: immich
+        targetRevision: 0.2.0
+      destination:
+        server: '{{server}}' 
+        namespace: immich-m
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

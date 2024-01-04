@@ -18,7 +18,7 @@ spec:
       project: k8s-rpi-apps
       sources:
       - helm:
-          releaseName: pihole      
+          releaseName: 'pihole-{{metadata.labels.cluster-name}}'      
           values: |
             ingress:
               enabled: true

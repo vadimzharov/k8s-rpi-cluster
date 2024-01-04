@@ -18,13 +18,34 @@ spec:
       project: k8s-rpi-apps
       sources:
       - helm:
-          releaseName: pihole      
+          releaseName: pihole
+          values: |
+            controllers:
+              main:
+                enabled: false
+            service:
+              main:
+                enabled: true
+                nameOverride: '{{metadata.labels.neighbour-cluster-name}}-web'
+                ports:
+                  http:
+                    port: 80
+                annotations:
+                  service.cilium.io/global: "true"                            
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 2.4.0      
+      - helm:
+          releaseName: 'pihole-{{metadata.labels.cluster-name}}'      
           values: |
             ingress:
               enabled: true
               ingressClassName: nginx
               hosts:
                 - <piholehostname>
+            serviceWeb:
+              annotations:
+                service.cilium.io/global: "true"
             serviceDns:
               mixedService: true
               type: LoadBalancer
@@ -48,7 +69,7 @@ spec:
               - <piholeupstreamdns>      
         repoURL: https://mojo2600.github.io/pihole-kubernetes/
         chart: pihole
-        targetRevision: 2.17.0
+        targetRevision: 2.20.0
       destination:
         server: '{{server}}' 
         namespace: pihole

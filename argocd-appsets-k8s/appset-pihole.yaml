@@ -25,6 +25,9 @@ spec:
               ingressClassName: nginx
               hosts:
                 - <piholehostname>
+            serviceWeb:
+              annotations:
+                service.cilium.io/global: "true"
             serviceDns:
               mixedService: true
               type: LoadBalancer

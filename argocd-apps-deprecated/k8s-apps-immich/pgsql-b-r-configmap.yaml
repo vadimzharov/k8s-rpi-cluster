@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgsql-b-r-settings
+data:
+  AWS_BUCKET: "immich-db"
+  S3_BUCKET_FOLDER: "immich-db"
+  S3_FILE_PREFIX: "immich-db"
+  BACKUP_INTERVAL: "1h"
+  PRUNE_INTERVAL: "48h"
+  COPIES_TO_KEEP: "35"
+  FORCE_RESTORE: "True"

@@ -48,7 +48,7 @@ spec:
               - <piholeupstreamdns>      
         repoURL: https://mojo2600.github.io/pihole-kubernetes/
         chart: pihole
-        targetRevision: 2.17.0
+        targetRevision: 2.20.0
       destination:
         server: '{{server}}' 
         namespace: pihole

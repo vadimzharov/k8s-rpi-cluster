@@ -26,7 +26,7 @@ spec:
             service:
               main:
                 enabled: true
-                nameOverride: '{{metadata.labels.cluster-name}}-web'
+                nameOverride: '{{metadata.labels.neighbour-cluster-name}}-web'
                 ports:
                   http:
                     port: 80

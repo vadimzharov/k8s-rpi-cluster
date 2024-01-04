@@ -18,6 +18,24 @@ spec:
       project: k8s-rpi-apps
       sources:
       - helm:
+          releaseName: pihole
+          values: |
+            controllers:
+              main:
+                enabled: false
+            service:
+              main:
+                enabled: true
+                nameOverride: '{{metadata.labels.cluster-name}}-web'
+                ports:
+                  http:
+                    port: 80
+                annotations:
+                  service.cilium.io/global: "true"                            
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 2.4.0      
+      - helm:
           releaseName: 'pihole-{{metadata.labels.cluster-name}}'      
           values: |
             ingress:

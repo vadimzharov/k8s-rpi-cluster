@@ -13,9 +13,9 @@ spec:
   data:
   - secretKey: tls.crt
     remoteRef:
-      key: ingress-wildcard-certificate
+      key: certs/ingress-wildcard-certificate
       property: tls.crt
   - secretKey: tls.key
     remoteRef:
-      key: ingress-wildcard-certificate
+      key: certs/ingress-wildcard-certificate
       property: tls.key

@@ -4,7 +4,7 @@ metadata:
   name: pihole-external-dns
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/pihole"
+    avp.kubernetes.io/path: "k8secrets/infra/pihole"
 spec:
   generators:
   - clusters:
@@ -16,7 +16,7 @@ spec:
     metadata:
       name: '{{name}}-pihole-external-dns' 
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-infra
       sources:
       - helm:
           releaseName: pihole
@@ -46,7 +46,8 @@ spec:
             provider: pihole
             env:
               - name: "EXTERNAL_DNS_PIHOLE_SERVER"
-                value: "http://pihole-{{metadata.labels.cluster-name}}-web"
+                #value: "http://pihole-{{metadata.labels.cluster-name}}-web"
+                value: <external-dns-hostname1>
               - name: "EXTERNAL_DNS_PIHOLE_PASSWORD"
                 value: "<password>"
         repoURL: https://kubernetes-sigs.github.io/external-dns/
@@ -62,7 +63,8 @@ spec:
             provider: pihole
             env:
               - name: "EXTERNAL_DNS_PIHOLE_SERVER"
-                value: "http://pihole-{{metadata.labels.neighbour-cluster-name}}-web"
+                #value: "http://pihole-{{metadata.labels.neighbour-cluster-name}}-web"
+                value: <external-dns-hostname2>
               - name: "EXTERNAL_DNS_PIHOLE_PASSWORD"
                 value: "<password>"  
         repoURL: https://kubernetes-sigs.github.io/external-dns/

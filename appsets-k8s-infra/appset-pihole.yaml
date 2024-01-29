@@ -4,7 +4,7 @@ metadata:
   name: pihole
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/pihole"    
+    avp.kubernetes.io/path: "k8secrets/infra/pihole"    
 spec:
   generators:
   - clusters:
@@ -15,7 +15,7 @@ spec:
     metadata:
       name: '{{name}}-pihole'   
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-infra
       sources:      
       - helm:
           releaseName: 'pihole-{{metadata.labels.cluster-name}}'      

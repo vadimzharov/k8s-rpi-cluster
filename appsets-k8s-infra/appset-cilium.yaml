@@ -12,7 +12,7 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          cluster-apps: "installed"
+          infra-apps: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}'           
   template:

@@ -3,11 +3,11 @@ kind: Ingress
 metadata:
   name: vault-ingress
   annotations:
-    avp.kubernetes.io/path: "k8secrets/ingresses"
+    avp.kubernetes.io/path: "k8secrets/cluster/network"
 spec:
   ingressClassName: nginx
   rules:
-    - host: <vaulthostname>.<domainname>
+    - host: <vaulthostname>
       http:
         paths:
         - path: /

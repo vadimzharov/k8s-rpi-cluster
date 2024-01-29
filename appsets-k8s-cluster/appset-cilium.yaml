@@ -4,7 +4,7 @@ metadata:
   name: cilium
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/infra/cilium"
+    avp.kubernetes.io/path: "k8secrets/cluster/cilium"
 spec:
   syncPolicy:
     preserveResourcesOnDeletion: true

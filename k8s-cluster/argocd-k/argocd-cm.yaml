@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: argocd-cm
   annotations:
-    avp.kubernetes.io/path: "k8secrets/cluster"      
+    avp.kubernetes.io/path: "k8secrets/cluster/network"      
 data:
   url: https://<argocdhostname>
   resource.exclusions: |

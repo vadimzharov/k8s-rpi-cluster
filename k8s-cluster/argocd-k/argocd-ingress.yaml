@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: argocd-ingress
   annotations:
-    avp.kubernetes.io/path: "k8secrets/cluster"
+    avp.kubernetes.io/path: "k8secrets/cluster/network"
 spec:
   ingressClassName: nginx
   rules:

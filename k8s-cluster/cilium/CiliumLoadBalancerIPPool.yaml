@@ -3,7 +3,7 @@ kind: CiliumLoadBalancerIPPool
 metadata:
   name: bpg-ippool
   annotations:
-    avp.kubernetes.io/path: "k8secrets/infra/cilium"  
+    avp.kubernetes.io/path: "k8secrets/cluster/cilium"  
 spec:
   cidrs:
     - cidr: <load-balancer-cidr>

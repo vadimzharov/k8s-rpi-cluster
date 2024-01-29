@@ -12,17 +12,17 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          infra-apps: "installed"
+          cluster-apps: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}'           
   template:
     metadata:
       name: '{{name}}-cilium' 
     spec:
-      project: k8s-homelab-infra
+      project: k8s-homelab-cluster
       sources:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        path: k8s-infra/k8s-infra-cilium
+        path: k8s-cluster/cilium
         targetRevision: '{{values.revision}}'
       - helm:
           releaseName: cilium

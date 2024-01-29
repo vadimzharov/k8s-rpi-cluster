@@ -40,12 +40,12 @@ spec:
           destination:
             server: '{{server}}'
             namespace: ingress-nginx-external
-          project: k8s-homelab-infra
+          project: k8s-homelab-cluster
   template:
     metadata:
       name: '{{name}}-nginx'
     spec:
-      project: k8s-homelab-infra
+      project: k8s-homelab-cluster
       sources:
       - helm:
           releaseName: nginx      

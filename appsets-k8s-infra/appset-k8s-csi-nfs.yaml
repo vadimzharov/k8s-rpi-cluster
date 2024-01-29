@@ -17,7 +17,7 @@ spec:
     metadata:
       name: '{{name}}-k8s-csi-nfs' 
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-infra
       sources:
       - helm:
           releaseName: csi-driver-nfs
@@ -29,7 +29,7 @@ spec:
         targetRevision: v4.4.0
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         targetRevision: '{{values.revision}}'
-        path: k8s-infra-csi-nfs
+        path: k8s-infra/csi-nfs
       destination:
         server: '{{server}}'
         namespace: kube-system

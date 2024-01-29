@@ -22,7 +22,7 @@ spec:
       project: k8s-rpi-apps
       sources:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        path: k8s-rpi-apps-cilium
+        path: k8s-infra-cilium
         targetRevision: '{{values.revision}}'
       - helm:
           releaseName: cilium
@@ -40,32 +40,24 @@ spec:
             cluster:
               id: <cilium-clusterid>
               name: <cilium-clustername>
-            tls:
-              ca:
-                cert: <cilium-ca>
-                key: <cilium-ca-key>
             clustermesh:
-              useAPIServer: true
-              config:
-                enabled: true
-                clusters:
-                  - name: <path:k8secrets/cilium-clustermesh#clustername>
-                    ips: 
-                      - <path:k8secrets/cilium-clustermesh#clusteraddress>
-                    port: <path:k8secrets/cilium-clustermesh#remoteport>
-                    #tls:
-                    #  cert: <path:k8secrets/cilium-clustermesh#peercert>
-                    #  key: <path:k8secrets/cilium-clustermesh#peerkey>
               apiserver:
                 service:
                   type: NodePort
-                  nodePort: <path:k8secrets/cilium-clustermesh#port>
-                # tls:
-                #   auto:
-                #     method: helm
-                #   ca:
-                #     cert: <path:k8secrets/cilium-clustermesh#ca>
-                #     key: <path:k8secrets/cilium-clustermesh#cakey>
+                  nodePort: <path:k8secrets/cilium-clustermesh#api-port>
+                tls:
+                  authMode: cluster
+                  server:
+                    extraDnsNames:
+                      - "*.<path:k8secrets/cilium-clustermesh#domain>"
+              config:
+                enabled: true
+                domain: <path:k8secrets/cilium-clustermesh#domain>
+                clusters:
+                  - name: <path:k8secrets/cilium-clustermesh#peer-clustername>
+                    address: <path:k8secrets/cilium-clustermesh#peer-clusteraddress>
+                    port:  <path:k8secrets/cilium-clustermesh#peer-clusterport>
+              useAPIServer: true
             ipv4:
               enabled: true
             nodePort:
@@ -81,25 +73,7 @@ spec:
             l7Proxy: false  
             kubeProxyReplacement: strict
             k8sServiceHost: <k8s-servicehost>
-            k8sServicePort: 6443
-            securityContext:
-              capabilities:
-                ciliumAgent:
-                  - CHOWN
-                  - KILL
-                  - NET_ADMIN
-                  - NET_RAW
-                  - IPC_LOCK
-                  - SYS_ADMIN
-                  - SYS_RESOURCE
-                  - DAC_OVERRIDE
-                  - FOWNER
-                  - SETGID
-                  - SETUID
-                cleanCiliumState:
-                  - NET_ADMIN
-                  - SYS_ADMIN
-                  - SYS_RESOURCE            
+            k8sServicePort: 6443          
             cgroup:
               autoMount:
                 enabled: false

@@ -3,7 +3,7 @@ kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod
   annotations:
-    avp.kubernetes.io/path: "k8secrets/godaddy"
+    avp.kubernetes.io/path: "k8secrets/infra/godaddy"
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory

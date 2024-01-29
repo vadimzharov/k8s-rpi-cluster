@@ -13,7 +13,7 @@ spec:
     metadata:
       name: '{{name}}-cert-manager' 
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-infra
       source:
         helm:
           values: |

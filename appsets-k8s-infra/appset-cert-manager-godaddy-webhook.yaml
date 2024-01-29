@@ -4,7 +4,7 @@ metadata:
   name: cert-manager-godaddy
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/godaddy"  
+    avp.kubernetes.io/path: "k8secrets/infra/godaddy"  
 spec:
   generators:
   - clusters:
@@ -17,7 +17,7 @@ spec:
     metadata:
       name: '{{name}}-cert-manager-godaddy'
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-infra
       sources:
       - helm:
           values: |
@@ -29,7 +29,7 @@ spec:
         chart: godaddy-webhook
         targetRevision: v1.27.1
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        path: k8s-rpi-apps-cert-manager-webhook
+        path: k8s-infra-cert-manager-webhook
         targetRevision: '{{values.revision}}'
       destination:
         server: https://kubernetes.default.svc

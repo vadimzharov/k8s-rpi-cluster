@@ -28,7 +28,7 @@ spec:
       project: k8s-homelab-infra
       sources:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        path: k8s-infra-ingress-certs-{{values.certs}}
+        path: k8s-infra/k8s-infra-ingress-certs-{{values.certs}}
         targetRevision: '{{values.revision}}'
       destination:
         server: '{{server}}'

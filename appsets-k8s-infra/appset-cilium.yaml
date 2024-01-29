@@ -22,7 +22,7 @@ spec:
       project: k8s-homelab-infra
       sources:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        path: k8s-infra-cilium
+        path: k8s-infra/k8s-infra-cilium
         targetRevision: '{{values.revision}}'
       - helm:
           releaseName: cilium

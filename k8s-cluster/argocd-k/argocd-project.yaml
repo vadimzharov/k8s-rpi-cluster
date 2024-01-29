@@ -1,12 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: k8s-rpi-apps
+  name: k8s-homelab-apps
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  description: Project for k8s apps for RPI
+  description: Project for k8s homelab - applications
   orphanedResources:
     warn: false
   sourceRepos:

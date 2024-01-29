@@ -4,7 +4,7 @@ metadata:
   name: victoriam-k8s-remote-agent
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/vm-k8s"
+    avp.kubernetes.io/path: "k8secrets/infra/victoriametrics"
 spec:
   generators:
   - clusters:
@@ -17,11 +17,11 @@ spec:
     metadata:
       name: '{{name}}-victoriam-k8s-agent'
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-infra
       sources:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         targetRevision: '{{values.revision}}'
-        path: k8s-rpi-apps-vm-k8s-agent/
+        path: k8s-infra/vm-k8s-agent/
       - helm:
           releaseName: vm-k8s-agent  
           values: |

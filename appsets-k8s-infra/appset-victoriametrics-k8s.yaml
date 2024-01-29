@@ -4,7 +4,7 @@ metadata:
   name: victoriametrics-k8s
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/vm-k8s"
+    avp.kubernetes.io/path: "k8secrets/infra/victoriametrics"
 spec:
   generators:
   - clusters:
@@ -17,7 +17,7 @@ spec:
     metadata:
       name: '{{name}}-victoriam-k8s'
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-infra
       sources:
       - helm:
           releaseName: victoriam-k8s      
@@ -278,7 +278,7 @@ spec:
         chart: victoria-metrics-agent
         targetRevision: 0.9.0
       - helm:
-          releaseName: grafana-k8s      
+          releaseName: grafana-k8s
           values: |
             persistence:
               type: pvc

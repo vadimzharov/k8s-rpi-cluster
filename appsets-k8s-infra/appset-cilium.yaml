@@ -19,7 +19,7 @@ spec:
     metadata:
       name: '{{name}}-cilium' 
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-infra
       sources:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         path: k8s-infra-cilium

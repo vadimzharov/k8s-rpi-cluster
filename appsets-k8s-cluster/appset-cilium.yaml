@@ -54,6 +54,8 @@ spec:
                   server:
                     extraDnsNames:
                       - "*.<mesh-domain>"
+                      - "*.k8s03.<mesh-domain>"
+                      - "*.k8s04.<mesh-domain>"
               config:
                 enabled: true
                 domain: <mesh-domain>

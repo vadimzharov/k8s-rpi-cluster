@@ -4,7 +4,7 @@ metadata:
   name: syncthing-main
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/syncthing-main"
+    avp.kubernetes.io/path: "k8secrets/cluster/network"
 spec:
   generators:
   - clusters:
@@ -52,7 +52,7 @@ spec:
           destination:
             server: '{{server}}' 
             namespace: syncthing-main
-          project: k8s-rpi-apps                      
+          project: k8s-homelab-apps                 
           syncPolicy:
             automated:
               prune: true
@@ -69,7 +69,7 @@ spec:
     metadata:
       name: '{{name}}-synchthing-main'
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-apps
       sources:
       - helm:
           releaseName: syncthing-main
@@ -209,15 +209,15 @@ spec:
               br-creds:
                 enabled: true
                 stringData:
-                  S3_ENDPOINT: <path:k8secrets/minios3creds#minioendpoint>
-                  AWS_KEY: <path:k8secrets/minios3creds#miniokey>
-                  AWS_SECRET_KEY: <path:k8secrets/minios3creds#miniosecretkey>
+                  S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/backup/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/backup/minios3creds#miniosecretkey>
               sync-s3-creds:
                 enabled: true
                 stringData:
-                  S3_ENDPOINT: <path:k8secrets/minios3creds#minioendpoint>
-                  AWS_KEY: <path:k8secrets/minios3creds#miniokey>
-                  AWS_SECRET_KEY: <path:k8secrets/minios3creds#miniosecretkey>
+                  S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets//backup/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets//backup/minios3creds#miniosecretkey>
             configMaps:
               br-settings:
                 enabled: true

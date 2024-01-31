@@ -4,7 +4,7 @@ metadata:
   name: photoprism-old
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/photoprism-old"
+    avp.kubernetes.io/path: "k8secrets/apps/photoprism-old"
 spec:
   generators:
   - clusters:
@@ -54,12 +54,12 @@ spec:
           destination:
             server: '{{server}}'
             namespace: photoprism-old
-          project: k8s-rpi-apps        
+          project: k8s-homelab-apps
   template:
     metadata:
       name: '{{name}}-photoprism-old'
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-apps
       sources:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         targetRevision: '{{values.revision}}'
@@ -209,9 +209,9 @@ spec:
                 labels: {}
                 annotations: {}
                 stringData:
-                  S3_ENDPOINT: <path:k8secrets/minios3creds#minioendpoint>
-                  AWS_KEY: <path:k8secrets/minios3creds#miniokey>
-                  AWS_SECRET_KEY: <path:k8secrets/minios3creds#miniosecretkey>
+                  S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/backup/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/backup/minios3creds#miniosecretkey>
             configMaps:
               b-r-settings:
                 enabled: true

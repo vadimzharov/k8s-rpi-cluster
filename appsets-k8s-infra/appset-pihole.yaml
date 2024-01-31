@@ -31,7 +31,7 @@ spec:
             serviceDns:
               mixedService: true
               type: LoadBalancer
-              loadBalancerIP: <piholeip>
+              loadBalancerIP: <path:k8secrets/cluster/network#piholeip>
             serviceDhcp:
               enabled: false
             extraEnvVars:

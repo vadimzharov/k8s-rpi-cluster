@@ -4,7 +4,7 @@ metadata:
   name: immich-m
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/immich"
+    avp.kubernetes.io/path: "k8secrets/apps/immich"
 spec:
   generators:
   - clusters:
@@ -69,7 +69,7 @@ spec:
           destination:
             server: '{{server}}'
             namespace: immich-m
-          project: k8s-rpi-apps
+          project: k8s-homelab-apps
   - clusters:
       selector:
         matchLabels:
@@ -110,9 +110,9 @@ spec:
                   br-creds:
                     enabled: true
                     stringData:
-                      S3_ENDPOINT: <path:k8secrets/minios3creds#minioendpoint>
-                      AWS_KEY: <path:k8secrets/minios3creds#miniokey>
-                      AWS_SECRET_KEY: <path:k8secrets/minios3creds#miniosecretkey>
+                      S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                      AWS_KEY: <path:k8secrets/backup/minios3creds#miniokey>
+                      AWS_SECRET_KEY: <path:k8secrets/backup/minios3creds#miniosecretkey>
                 configMaps:
                   br-settings:
                     enabled: true
@@ -133,7 +133,7 @@ spec:
           destination:
             server: '{{server}}'
             namespace: immich-m
-          project: k8s-rpi-apps          
+          project: k8s-homelab-apps
   - clusters:
       selector:
         matchLabels:
@@ -187,12 +187,12 @@ spec:
           destination:
             server: '{{server}}'
             namespace: immich-m
-          project: k8s-rpi-apps              
+          project: k8s-homelab-apps 
   template:
     metadata:
       name: '{{name}}-immich-m'
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-apps
       sources:
       - helm:
           releaseName: immich-m-deps

@@ -3,7 +3,7 @@ kind: PersistentVolume
 metadata:
   name: tranarr-dedicated-movies
   annotations:
-    avp.kubernetes.io/path: "k8secrets/arr"      
+    avp.kubernetes.io/path: "k8secrets/apps/arr"      
 spec:
   capacity:
     storage: 10Gi

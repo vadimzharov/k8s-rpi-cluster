@@ -3,7 +3,7 @@ kind: Secret
 metadata:
   name: invidious-config
   annotations:
-    avp.kubernetes.io/path: "k8secrets/invidious"
+    avp.kubernetes.io/path: "k8secrets/apps/invidious"
 stringData:
   config.yml: |  
     db:

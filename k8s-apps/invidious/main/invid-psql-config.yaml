@@ -3,7 +3,7 @@ kind: Secret
 metadata:
   name: invidious-psql-config
   annotations:
-    avp.kubernetes.io/path: "k8secrets/invidious"
+    avp.kubernetes.io/path: "k8secrets/apps/invidious"
 stringData:
   POSTGRES_DB: "invidious"
   POSTGRES_USER: "kemal"

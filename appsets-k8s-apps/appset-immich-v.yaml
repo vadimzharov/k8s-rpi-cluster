@@ -192,7 +192,7 @@ spec:
     metadata:
       name: '{{name}}-immich-v'
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-apps
       sources:
       - helm:
           releaseName: immich-v-deps

@@ -10,8 +10,7 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          prowlarr: "installed"
-          k8s-csi-s3: "installed"          
+          prowlarr: "installed"  
       values:
         revision: '{{metadata.annotations.branch-name}}'
   - clusters:

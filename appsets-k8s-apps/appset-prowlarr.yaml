@@ -60,7 +60,7 @@ spec:
       sources:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         targetRevision: '{{values.revision}}'
-        path: k8s-apps-arr/prowlarr
+        path: k8s-apps/arr/prowlarr
       - helm:
           releaseName: prowlarr
           values: |

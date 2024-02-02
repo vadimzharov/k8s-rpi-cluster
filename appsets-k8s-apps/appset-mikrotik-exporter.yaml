@@ -21,11 +21,9 @@ spec:
           releaseName: mikrotik-exporter
           values: |
             image:
-              repository: quay.io/vadimzharov/mikrotik-exporter
+              repository: nshttpd/mikrotik-exporter
               pullPolicy: IfNotPresent
-              tag: latest
-            nodeSelector:
-              beta.kubernetes.io/arch: arm64                  
+              tag: 1.0.12-DEVEL               
             service:
               main:
                 ports:

@@ -3,7 +3,7 @@ kind: Certificate
 metadata:
   name: wildcard-apps-certificate
   annotations:
-    avp.kubernetes.io/path: "k8secrets/ingress-wildcard-certificate"  
+    avp.kubernetes.io/path: "k8secrets/certs/ingress-wildcard-certificate"  
 spec:
   secretName: wildcard-apps-certificate
   renewBefore: 240h0m0s

@@ -101,10 +101,6 @@ spec:
             periodSeconds: 5
         - name: hass-backup-daemon
           image: quay.io/vadimzharov/podbackup:latest
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/usr/local/bin/podbackup", "backup"]
           command: ["podbackup"]
           args: ["backup-daemon"]
           resources:
@@ -112,7 +108,7 @@ spec:
               cpu: 50m
               memory: 64Mi
             limits:
-              cpu: 150m
+              cpu: 500m
               memory: 128Mi
           volumeMounts:
             - name: hass-workingdir

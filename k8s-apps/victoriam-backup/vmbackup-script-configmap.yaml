@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: vmbackup-script
   annotations:
-    avp.kubernetes.io/path: "k8secrets/infra/victoriametrics"  
+    avp.kubernetes.io/path: "k8secrets/apps/victoriametrics"  
 data:
   backup.sh: |
     #!/bin/sh

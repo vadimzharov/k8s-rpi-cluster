@@ -4,7 +4,7 @@ metadata:
   name: mikrotik-exporter
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/mikrotik-exporter"  
+    avp.kubernetes.io/path: "k8secrets/apps/mikrotik-exporter"  
 spec:
   generators:
   - clusters:
@@ -15,7 +15,7 @@ spec:
     metadata:
       name: '{{name}}-mikrotik-exporter' 
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-apps
       sources:
       - helm:
           releaseName: mikrotik-exporter

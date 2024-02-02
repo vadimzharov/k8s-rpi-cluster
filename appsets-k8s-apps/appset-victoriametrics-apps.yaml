@@ -4,7 +4,7 @@ metadata:
   name: victoriametrics-apps
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/victoriametrics"  
+    avp.kubernetes.io/path: "k8secrets/apps/victoriametrics"  
 spec:
   generators:
   - clusters:
@@ -17,11 +17,11 @@ spec:
     metadata:
       name: '{{name}}-victoriam-apps'
     spec:
-      project: k8s-rpi-apps
+      project: k8s-homelab-apps
       sources:
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
         targetRevision: '{{values.revision}}'
-        path: k8s-rpi-apps-victoriam-backup
+        path: k8s-apps/victoriam-backup
       - helm:
           releaseName: victoriam-apps 
           values: |

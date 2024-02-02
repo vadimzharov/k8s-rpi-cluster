@@ -95,7 +95,7 @@ spec:
           startupProbe:
             tcpSocket:
               port: 8123
-            initialDelaySeconds: 300
+            initialDelaySeconds: 180
             failureThreshold: 30
             timeoutSeconds: 2
             periodSeconds: 5

@@ -107,7 +107,7 @@ spec:
               type: pvc
               enabled: false
             adminUser: admin
-            adminPassword: <path:k8secrets/grafana#adminpassword>
+            adminPassword: <path:k8secrets/apps/grafana#adminpassword>
             ingress:
               enabled: true
               hosts:

@@ -3,8 +3,6 @@ kind: ApplicationSet
 metadata:
   name: victoriam-k8s-remote-agent
   namespace: argocd
-  annotations:
-    avp.kubernetes.io/path: "k8secrets/infra/victoriametrics"
 spec:
   generators:
   - clusters:

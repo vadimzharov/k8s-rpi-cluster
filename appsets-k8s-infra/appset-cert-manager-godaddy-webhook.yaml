@@ -29,7 +29,7 @@ spec:
         chart: godaddy-webhook
         targetRevision: v1.27.1
       - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        path: k8s-infra-cert-manager-webhook
+        path: k8s-infra/cert-manager-webhook
         targetRevision: '{{values.revision}}'
       destination:
         server: https://kubernetes.default.svc

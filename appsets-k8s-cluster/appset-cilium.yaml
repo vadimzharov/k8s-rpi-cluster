@@ -49,6 +49,8 @@ spec:
                 service:
                   type: NodePort
                   nodePort: <mesh-api-port>
+                nodeSelector:
+                  node-role.kubernetes.io/control-plane: 
                 tls:
                   authMode: cluster
                   server:

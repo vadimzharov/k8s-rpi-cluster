@@ -40,7 +40,7 @@ spec:
         targetRevision: 13.4.1
       destination:
         server: '{{server}}' 
-        namespace: firefox
+        namespace: minio-external
       syncPolicy:
         automated:
           prune: true

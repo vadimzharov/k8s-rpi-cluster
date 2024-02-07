@@ -36,7 +36,7 @@ spec:
             persistence:
               enabled: false
         repoURL: https://charts.bitnami.com/bitnami
-        chart: bitnami
+        chart: minio
         targetRevision: 13.4.1
       destination:
         server: '{{server}}' 

@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: minio-external
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/apps/minio-external"  
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          minio-external: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-minio-external'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: minio
+          values: |
+            auth:
+              rootPassword: <miniopassword>
+            defaultBuckets: "my-bucket"
+            ingress:
+              enabled: true
+              ingressClassName: "nginx"
+              hostname: <path:k8secrets/ingresses#minioexternalconsolehostname>.<path:k8secrets/ingresses#domainname>
+            apiIngress:
+              enabled: true
+              ingressClassName: "nginx-external"
+              hostname: <path:k8secrets/ingresses#minioexternalapihostname>.<path:k8secrets/ingresses#domainname>              
+            persistence:
+              enabled: false
+        repoURL: https://charts.bitnami.com/bitnami
+        chart: bitnami
+        targetRevision: 13.4.1
+      destination:
+        server: '{{server}}' 
+        namespace: firefox
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

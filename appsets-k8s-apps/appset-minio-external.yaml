@@ -32,7 +32,9 @@ spec:
             apiIngress:
               enabled: true
               ingressClassName: "nginx-external"
-              hostname: <path:k8secrets/ingresses#minioexternalapihostname>.<path:k8secrets/ingresses#domainname>              
+              hostname: <path:k8secrets/ingresses#minioexternalapihostname>.<path:k8secrets/ingresses#domainname>
+              annotations:
+                nginx.ingress.kubernetes.io/proxy-body-size: "0"                
             persistence:
               enabled: false
         repoURL: https://charts.bitnami.com/bitnami

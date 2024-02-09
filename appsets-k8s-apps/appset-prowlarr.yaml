@@ -1,0 +1,159 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: prowlarr
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          prowlarr: "installed"  
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  - clusters:
+      selector:
+        matchLabels:
+          prowlarr: "passive"
+      template:
+        metadata: 
+          name: '{{name}}-prowlarr-passive' 
+        spec:
+          sources:
+          - helm:
+              releaseName: prowlarr
+              values: |
+                controller:
+                  enabled: false
+                service:
+                  main:
+                    ports:
+                      http:
+                        port: 9696
+                    annotations:
+                      service.cilium.io/global: "true"
+                ingress:
+                  main:
+                    enabled: true
+                    ingressClassName: nginx
+                    annotations:
+                      nginx.ingress.kubernetes.io/service-upstream: "true"
+                    hosts:
+                      - host: <prowlarrhostname>.<domainname>
+                        paths:
+                          - path: /
+                            pathType: Prefix
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 1.5.1                      
+          destination:
+            server: '{{server}}'
+            namespace: prowlarr
+          project: k8s-homelab-apps
+  template:
+    metadata:
+      name: '{{name}}-prowlarr'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-apps/arr/prowlarr
+      - helm:
+          releaseName: prowlarr
+          values: |
+            image:
+              repository: lscr.io/linuxserver/prowlarr
+              pullPolicy: IfNotPresent
+              tag: latest
+            service:
+              main:
+                ports:
+                  http:
+                    port: 9696
+                annotations:
+                  service.cilium.io/global: "true"                
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                hosts:
+                  - host: <prowlarrhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                mountPath: /config
+            secrets:
+              b-r-secret:
+                enabled: true
+                labels: {}
+                annotations: {}
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/backup/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/backup/minios3creds#miniosecretkey>
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "prowlarr-config"
+                  S3_FILE_PREFIX: "prowlarr-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "true"
+                  DIR_TO_BACKUP: /config
+                  DIR_TO_RESTORE: /config
+                  ARCHIVE_TYPE: targz
+            initContainers:
+              prowlarr-restore:
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - restore
+                envFrom:
+                - secretRef:
+                    name: prowlarr-b-r-secret
+                - configMapRef:
+                    name: prowlarr-b-r-settings
+                volumeMounts:
+                - name:  config
+                  mountPath: /config              
+            sidecars:
+              prowlarr-backup-daemon:
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - backup-daemon
+                envFrom:
+                - secretRef:
+                    name: prowlarr-b-r-secret
+                - configMapRef:
+                    name: prowlarr-b-r-settings
+                volumeMounts:
+                - name:  config
+                  mountPath: /config
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 1.5.1
+      destination:
+        server: '{{server}}' 
+        namespace: prowlarr
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

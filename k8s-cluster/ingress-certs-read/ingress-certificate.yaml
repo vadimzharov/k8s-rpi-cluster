@@ -1,0 +1,21 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: wildcard-apps-certificate
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore    
+  target:
+    name: wildcard-apps-certificate
+    creationPolicy: Owner
+  data:
+  - secretKey: tls.crt
+    remoteRef:
+      key: certs/ingress-wildcard-certificate
+      property: tls.crt
+  - secretKey: tls.key
+    remoteRef:
+      key: certs/ingress-wildcard-certificate
+      property: tls.key

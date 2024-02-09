@@ -1,0 +1,135 @@
+---  
+# Source: home-assistant/templates/common.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+  labels:
+    app.kubernetes.io/name: home-assistant
+    app.kubernetes.io/instance: home-assistant
+    app.kubernetes.io/version: "2021.6.3"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8123
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app.kubernetes.io/name: home-assistant
+    app.kubernetes.io/instance: home-assistant
+---
+# Source: home-assistant/templates/common.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+  labels:
+    helm.sh/chart: home-assistant-9.3.0
+    app.kubernetes.io/name: home-assistant
+    app.kubernetes.io/instance: home-assistant
+    app.kubernetes.io/version: "2021.6.3"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: home-assistant
+      app.kubernetes.io/instance: home-assistant
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: home-assistant
+        app.kubernetes.io/instance: home-assistant
+    spec:
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 90
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      volumes:
+        - name: hass-workingdir
+          emptyDir: {}
+      containers:
+        - name: home-assistant
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi        
+          image: "docker.io/homeassistant/home-assistant:2022.2.0"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: false
+          env:
+            - name: "TZ"
+              value: "UTC"
+          ports:
+            - name: http
+              containerPort: 8123
+              protocol: TCP
+          volumeMounts:
+            - name: hass-workingdir
+              mountPath: /config          
+          livenessProbe:
+            tcpSocket:
+              port: 8123
+            initialDelaySeconds: 30
+            failureThreshold: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 8123
+            initialDelaySeconds: 30
+            failureThreshold: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: 8123
+            initialDelaySeconds: 180
+            failureThreshold: 30
+            timeoutSeconds: 2
+            periodSeconds: 5
+        - name: hass-backup-daemon
+          image: quay.io/vadimzharov/podbackup:latest
+          command: ["podbackup"]
+          args: ["backup-daemon"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi
+          volumeMounts:
+            - name: hass-workingdir
+              mountPath: /hass-workdir
+          envFrom:
+          - configMapRef:
+              name: backup-restore-settings
+          - secretRef:
+              name: backup-restore-aws-creds          
+      initContainers:
+        - name: hass-restore
+          image: quay.io/vadimzharov/podbackup:latest
+          command: ["podbackup"]
+          args: ["restore"]
+          volumeMounts:
+            - name: hass-workingdir
+              mountPath: /hass-workdir
+          envFrom:
+          - configMapRef:
+              name: backup-restore-settings
+          - secretRef:
+              name: backup-restore-aws-creds                                   
+
+

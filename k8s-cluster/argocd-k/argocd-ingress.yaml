@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-ingress
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/cluster/network"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"    
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: <argocdhostname>
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: argocd-server
+              port:
+                number: 80
+

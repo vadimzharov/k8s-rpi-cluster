@@ -1,0 +1,288 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: immich-m
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/apps/immich"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          immich-m: "installed"
+          k8s-csi-nfs: "installed"          
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+        version: '{{metadata.labels.immich-tag}}'
+  - clusters:
+      selector:
+        matchLabels:
+          immich-m-db: "installed"
+          k8s-csi-nfs: "installed"          
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+      template:
+        metadata: 
+          name: '{{name}}-immich-m-db' 
+        spec:
+          sources:
+          - helm:
+              releaseName: immich-m
+              values: |
+                postgresqlSharedPreloadLibraries: "vectors.so"
+                enabled: true
+                image:
+                  registry: quay.io
+                  repository: vadimzharov/immich-psql
+                  tag: 15
+                  debug: true
+                global:
+                  storageClass: "sc-nfs"
+                  postgresql:
+                    auth:
+                      username: <pgsql_username>
+                      password: <pgsql_password>
+                      postgresPassword: <pgsql_password>
+                      database: <pgsql_database>
+                primary:
+                  nodeSelector:
+                    "kubernetes.io/arch": "amd64"
+                  podSecurityContext:
+                    enabled: true
+                    fsGroup: 1024
+                  containerSecurityContext:
+                    enabled: true
+                    runAsUser: 1024              
+                  initdb:
+                    scripts:
+                      user: postgres
+                      password:  <pgsql_password>
+                      create-extensions.sql: |
+                        \c immich;
+                        CREATE EXTENSION IF NOT EXISTS cube;
+                        CREATE EXTENSION IF NOT EXISTS earthdistance;
+                        CREATE EXTENSION IF NOT EXISTS vectors;
+            repoURL: https://charts.bitnami.com/bitnami
+            chart: postgresql
+            targetRevision: 13.2.24
+          destination:
+            server: '{{server}}'
+            namespace: immich-m
+          project: k8s-homelab-apps
+  - clusters:
+      selector:
+        matchLabels:
+          immich-m-db-backup: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+      template:
+        metadata: 
+          name: '{{name}}-immich-m-db-backup' 
+        spec:
+          sources:
+          - helm:
+              releaseName: db-backup
+              values: |
+                defaultPodOptions:
+                  securityContext:
+                    runAsUser: 1000
+                    runAsGroup: 1000
+                controllers:
+                  main:
+                    containers:
+                      main:
+                        image:
+                          repository: quay.io/vadimzharov/podbackup
+                          pullPolicy: IfNotPresent
+                          tag: latest
+                        command: ["podbackup"]
+                        args: ["backup-pgsql-daemon"]
+                        envFrom:
+                        - configMapRef:
+                            name: db-backup-br-settings
+                        - secretRef:
+                            name: db-backup-br-creds
+                service:
+                  main:
+                    enabled: false
+                secrets:
+                  br-creds:
+                    enabled: true
+                    stringData:
+                      S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                      AWS_KEY: <path:k8secrets/backup/minios3creds#miniokey>
+                      AWS_SECRET_KEY: <path:k8secrets/backup/minios3creds#miniosecretkey>
+                configMaps:
+                  br-settings:
+                    enabled: true
+                    data:
+                      AWS_BUCKET: "immich-m"
+                      S3_BUCKET_FOLDER: "immich-m-db"
+                      S3_FILE_PREFIX: "immich-m-db"
+                      BACKUP_INTERVAL: "1h"
+                      PRUNE_INTERVAL: "48h"
+                      COPIES_TO_KEEP: "35"
+                      PGSQL_DATABASE: <pgsql_database>
+                      PGSQL_HOST: "immich-m-postgresql"
+                      PGSQL_USER: <pgsql_username>
+                      PGSQL_PASSWORD: <pgsql_password>
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 2.3.0
+          destination:
+            server: '{{server}}'
+            namespace: immich-m
+          project: k8s-homelab-apps
+  - clusters:
+      selector:
+        matchLabels:
+          immich-m: "passive"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+      template:
+        metadata: 
+          name: '{{name}}-immich-m-passive' 
+        spec:
+          sources:
+            - helm:
+                releaseName: immich-m
+                values: |
+                  controllers:
+                    main:
+                      enabled: false
+                  service:
+                    main:
+                      enabled: true
+                      nameOverride: server
+                      ports:
+                        http:
+                          port: 3001
+                      annotations:
+                        service.cilium.io/global: "true"
+                  ingress:
+                    main:
+                      enabled: true
+                      ingressClassName: nginx
+                      annotations:
+                        nginx.ingress.kubernetes.io/service-upstream: "true"
+                        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                        nginx.ingress.kubernetes.io/proxy-body-size: "0"
+                        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+                        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+                        nginx.ingress.kubernetes.io/client-body-buffer-size: 1M
+                        nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "0"
+                        nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+                      hosts:
+                        - host: <path:k8secrets/ingresses#immich-m-hostname>.<path:k8secrets/ingresses#domainname>
+                          paths:
+                            - path: /
+                              pathType: Prefix
+                              service:
+                                name: main
+                                port: http                               
+              repoURL: https://bjw-s.github.io/helm-charts
+              chart: app-template
+              targetRevision: 2.4.0
+          destination:
+            server: '{{server}}'
+            namespace: immich-m
+          project: k8s-homelab-apps 
+  template:
+    metadata:
+      name: '{{name}}-immich-m'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: immich-m-deps
+          values: |
+            controllers:
+            service:
+              main:
+                enabled: false
+            persistence:
+              config:
+                nameOverride: "immich-m-library"
+                enabled: true
+                type: persistentVolumeClaim
+                storageClass: "sc-nfs"
+                accessMode: ReadWriteMany
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 2.4.0      
+      - helm:
+          releaseName: immich-m
+          values: |
+            env:
+              IMMICH_MACHINE_LEARNING_URL: "false"
+            image:
+              tag: '{{metadata.labels.immich-tag}}'
+            immich:
+              persistence:
+                library:
+                  existingClaim: immich-m-deps-immich-m-library
+            redis:
+              enabled: true
+              architecture: standalone
+              master:
+                persistence:
+                  enabled: false
+              auth:
+                enabled: false             
+            machine-learning:
+              enabled: false
+            postgresql:
+              enabled: false
+              global:
+                postgresql:
+                  auth:
+                    username: <pgsql_username>
+                    password: <pgsql_password>
+                    postgresPassword: <pgsql_password>
+                    database: <pgsql_database>
+            server:
+              enabled: true
+              service:
+                main:
+                  annotations:
+                    service.cilium.io/global: "true"
+              ingress:
+                main:
+                  enabled: true
+                  ingressClassName: nginx
+                  annotations:
+                    nginx.ingress.kubernetes.io/service-upstream: "true"
+                    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+                    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+                    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+                    nginx.ingress.kubernetes.io/client-body-buffer-size: 1M
+                    nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "0"
+                    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+                  hosts:
+                    - host: <path:k8secrets/ingresses#immich-m-hostname>.<path:k8secrets/ingresses#domainname>
+                      paths:
+                        - path: /
+                          pathType: Prefix                 
+              image:
+                repository: ghcr.io/immich-app/immich-server
+                pullPolicy: IfNotPresent
+            microservices:
+              enabled: true
+              image:
+                repository: ghcr.io/immich-app/immich-server
+                pullPolicy: IfNotPresent                
+        repoURL: https://immich-app.github.io/immich-charts
+        chart: immich
+        targetRevision: 0.3.1
+      destination:
+        server: '{{server}}' 
+        namespace: immich-m
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

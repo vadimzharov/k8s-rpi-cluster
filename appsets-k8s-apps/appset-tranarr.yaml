@@ -1,0 +1,213 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tranarr
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          tranarr: "installed"
+          k8s-csi-nfs: "installed"          
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  - clusters:
+      selector:
+        matchLabels:
+          tranarr: "passive"
+      template:
+        metadata: 
+          name: '{{name}}-tranarr-passive' 
+        spec:
+          sources:
+          - helm:
+              releaseName: tranarr
+              values: |
+                controller:
+                  enabled: false
+                service:
+                  main:
+                    ports:
+                      http:
+                        port: 9091
+                    annotations:
+                      service.cilium.io/global: "true"
+                ingress:
+                  main:
+                    enabled: true
+                    ingressClassName: nginx
+                    annotations:
+                      nginx.ingress.kubernetes.io/service-upstream: "true"
+                    hosts:
+                      - host: <tranarrhostname>.<domainname>
+                        paths:
+                          - path: /
+                            pathType: Prefix
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 1.5.1                      
+          destination:
+            server: '{{server}}'
+            namespace: tranarr
+          project: k8s-homelab-apps
+  template:
+    metadata:
+      name: '{{name}}-tranarr'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-apps/arr/tranarr
+      - helm:
+          releaseName: tranarr
+          values: |
+            image:
+              repository: ghcr.io/k8s-at-home/transmission
+              pullPolicy: IfNotPresent
+              tag: v3.00
+            service:
+              main:
+                ports:
+                  http:
+                    port: 9091
+                annotations:
+                  service.cilium.io/global: "true"
+            env:
+              TRANSMISSION_DOWNLOAD_DIR: "/downloads/complete"
+              TRANSMISSION_INCOMPLETE_DIR: "/downloads/incomplete"
+              TRANSMISSION_INCOMPLETE_DIR_ENABLED: "true"
+              TRANSMISSION_WATCH_DIR: "/watch"
+              TRANSMISSION_WATCH_DIR_ENABLED: "false"
+              TRANSMISSION_WEB_HOME: "/web"
+              TZ: "CDT"            
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                hosts:
+                  - host: <tranarrhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                mountPath: /config
+              downloads-incomplete:
+                enabled: true
+                type: emptyDir
+                mountPath: /downloads/incomplete
+              downloads-complete:
+                enabled: true
+                type: pvc
+                existingClaim: tranarr
+                mountPath: /downloads/complete
+              dedicated-movies:
+                enabled: true
+                type: pvc
+                existingClaim: tranarr-dedicated-movies
+                mountPath: /downloads/movies
+            secrets:
+              b-r-secret:
+                enabled: true
+                labels: {}
+                annotations: {}
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/backup/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/backup/minios3creds#miniosecretkey>
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "tranarr-config"
+                  S3_FILE_PREFIX: "tranarr-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "15"
+                  FORCE_RESTORE: "true"
+                  DIR_TO_BACKUP: /config
+                  DIR_TO_RESTORE: /config
+                  ARCHIVE_TYPE: targz
+            initContainers:
+              tranarr-restore:
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - restore
+                envFrom:
+                - secretRef:
+                    name: tranarr-b-r-secret
+                - configMapRef:
+                    name: tranarr-b-r-settings
+                volumeMounts:
+                - name:  config
+                  mountPath: /config              
+            sidecars:
+              tranarr-backup-daemon:
+                image: quay.io/vadimzharov/podbackup:latest
+                imagePullPolicy: Always
+                command:
+                  - podbackup
+                args:
+                  - backup-daemon
+                envFrom:
+                - secretRef:
+                    name: tranarr-b-r-secret
+                - configMapRef:
+                    name: tranarr-b-r-settings
+                volumeMounts:
+                - name:  config
+                  mountPath: /config
+            probes:
+              liveness:
+                enabled: true
+                type: TCP
+                spec:
+                  tcpSocket:
+                    port: 9091
+                  initialDelaySeconds: 0
+                  failureThreshold: 3
+                  timeoutSeconds: 30
+                  periodSeconds: 10
+              readiness:
+                enabled: true
+                type: TCP
+                spec:
+                  tcpSocket:
+                    port: 9091
+                  initialDelaySeconds: 0
+                  failureThreshold: 3
+                  timeoutSeconds: 30
+                  periodSeconds: 10
+              startup:
+                enabled: true
+                type: TCP
+                spec:
+                  tcpSocket:
+                    port: 9091
+                  initialDelaySeconds: 0
+                  failureThreshold: 30
+                  timeoutSeconds: 1
+                  periodSeconds: 5                
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 1.5.1
+      destination:
+        server: '{{server}}' 
+        namespace: tranarr
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

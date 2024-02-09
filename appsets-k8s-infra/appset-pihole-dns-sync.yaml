@@ -1,0 +1,82 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: pihole-external-dns
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/infra/pihole"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          pihole: "installed"
+          pihole-sync: "installed"
+  template:
+    metadata:
+      name: '{{name}}-pihole-external-dns' 
+    spec:
+      project: k8s-homelab-infra
+      sources:
+      - helm:
+          releaseName: pihole
+          values: |
+            controllers:
+              main:
+                enabled: false
+            service:
+              main:
+                enabled: true
+                nameOverride: '{{metadata.labels.neighbour-cluster-name}}-web'
+                ports:
+                  http:
+                    port: 80
+                annotations:
+                  service.cilium.io/global: "true"                            
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 2.4.0      
+      - helm:
+          releaseName: 'external-dns-{{metadata.labels.cluster-name}}'
+          values: |
+            sources:
+              - ingress
+            policy: '{{metadata.labels.external-dns-policy}}'
+            registry: noop
+            provider: pihole
+            env:
+              - name: "EXTERNAL_DNS_PIHOLE_SERVER"
+                #value: "http://pihole-{{metadata.labels.cluster-name}}-web"
+                value: <external-dns-hostname1>
+              - name: "EXTERNAL_DNS_PIHOLE_PASSWORD"
+                value: "<password>"
+        repoURL: https://kubernetes-sigs.github.io/external-dns/
+        chart: external-dns
+        targetRevision: 1.13.1
+      - helm:
+          releaseName: 'external-dns-{{metadata.labels.neighbour-cluster-name}}'
+          values: |
+            sources:
+              - ingress
+            policy: '{{metadata.labels.external-dns-policy}}'
+            registry: noop
+            provider: pihole
+            env:
+              - name: "EXTERNAL_DNS_PIHOLE_SERVER"
+                #value: "http://pihole-{{metadata.labels.neighbour-cluster-name}}-web"
+                value: <external-dns-hostname2>
+              - name: "EXTERNAL_DNS_PIHOLE_PASSWORD"
+                value: "<password>"  
+        repoURL: https://kubernetes-sigs.github.io/external-dns/
+        chart: external-dns
+        targetRevision: 1.13.1        
+      destination:
+        server: '{{server}}'
+        namespace: pihole
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

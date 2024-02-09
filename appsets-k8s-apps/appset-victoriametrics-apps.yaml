@@ -1,0 +1,158 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: victoriametrics-apps
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/apps/victoriametrics"  
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          victoriam-apps: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'          
+  template:
+    metadata:
+      name: '{{name}}-victoriam-apps'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
+        targetRevision: '{{values.revision}}'
+        path: k8s-apps/victoriam-backup
+      - helm:
+          releaseName: victoriam-apps 
+          values: |
+            rbac:
+              create: true
+              pspEnabled: false
+            server:
+              retentionPeriod: 2
+              persistentVolume:
+                enabled: false
+              extraVolumes:
+              - name: vmbackup-config-secret
+                secret:
+                  secretName: vmbackup-config-secret
+              - name: backup-script
+                configMap:
+                  name: vmbackup-script
+                  defaultMode: 0777
+              - name: restore-script
+                configMap:
+                  name: vmrestore-script
+                  defaultMode: 0777
+              extraContainers:
+              - name: victoriametrics-backup
+                command: ["/script/backup.sh"]
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 64Mi
+                  limits:
+                    cpu: 100m
+                    memory: 128Mi        
+                image: "docker.io/victoriametrics/vmbackup:latest"
+                imagePullPolicy: IfNotPresent
+                volumeMounts:
+                  - name: vmbackup-config-secret
+                    mountPath: /etc/vmbackup-config
+                  - name: server-volume
+                    mountPath: /storage
+                  - name: backup-script
+                    mountPath: /script/backup.sh
+                    subPath: backup.sh
+              initContainers:
+              - name: vm-restore
+                image: "docker.io/victoriametrics/vmrestore:latest"
+                command: ["/script/restore.sh"]
+                imagePullPolicy: IfNotPresent
+                volumeMounts:
+                  - name: vmbackup-config-secret
+                    mountPath: /etc/vmbackup-config
+                  - name: server-volume
+                    mountPath: /storage
+                  - name: restore-script
+                    mountPath: /script/restore.sh
+                    subPath: restore.sh
+              scrape:
+                enabled: true
+                config:
+                  global:
+                    scrape_interval: 30s
+                  scrape_configs: []
+                extraScrapeConfigs:
+                - job_name: "hass"
+                  scrape_interval: 30s
+                  metrics_path: /api/prometheus
+                  bearer_token: <hasstoken>
+                  scheme: http
+                  static_configs:
+                    - targets: ['home-assistant-shared.home-assistant.svc.cluster.local:8123']
+                - job_name: "mikrotik"
+                  scrape_interval: 30s
+                  metrics_path: /metrics
+                  scheme: http
+                  static_configs:
+                    - targets: ['mikrotik-exporter.mikrotik-exporter.svc.cluster.local:9436']                        
+        repoURL: https://victoriametrics.github.io/helm-charts/
+        chart: victoria-metrics-single
+        targetRevision: 0.9.0
+      - helm:
+          releaseName: grafana-apps     
+          values: |
+            persistence:
+              type: pvc
+              enabled: false
+            adminUser: admin
+            adminPassword: <path:k8secrets/apps/grafana#adminpassword>
+            ingress:
+              enabled: true
+              hosts:
+                - <path:k8secrets/ingresses#grafana-apps-k8shostname>.<path:k8secrets/ingresses#domainname>
+            plugins: 
+              - grafana-piechart-panel
+            datasources: 
+              datasources.yaml:
+                apiVersion: 1
+                datasources:
+                - name: victoriametrics
+                  type: prometheus
+                  url: http://victoriam-apps-victoria-metrics-single-server.victoriam-apps.svc.cluster.local:8428/
+                  access: proxy
+                  isDefault: true
+                  updateIntervalSeconds: 10
+                  editable: true
+            dashboardProviders: 
+              dashboardproviders.yaml:
+                apiVersion: 1
+                providers:
+                - name: 'default'
+                  orgId: 1
+                  folder: ''
+                  type: file
+                  disableDeletion: true
+                  editable: true
+                  options:
+                    path: /var/lib/grafana/dashboards/default
+            dashboards:
+              default:
+                mikrotik-exporter:
+                  gnetId: 10950
+                  revision: 1
+                  datasource: victoriametrics 
+        repoURL: https://grafana.github.io/helm-charts
+        chart: grafana
+        targetRevision: 6.40.3          
+      destination:
+        server: '{{server}}'
+        namespace: victoriam-apps
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

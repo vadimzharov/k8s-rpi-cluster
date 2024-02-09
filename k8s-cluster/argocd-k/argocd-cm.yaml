@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/cluster/network"      
+data:
+  url: https://<argocdhostname>
+  resource.exclusions: |
+    - apiGroups:
+        - cilium.io
+        - tekton.dev
+      kinds:
+        - CiliumIdentity
+        - TaskRun
+      clusters:
+        - "*"

@@ -1,0 +1,133 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: languagetool
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          languagetool: "passive"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+      template:
+        metadata: 
+          name: '{{name}}-languagetool-passive'
+        spec:
+          sources:
+          - helm:
+              releaseName: languagetool
+              values: |
+                controllers:
+                service:
+                  main:
+                    enabled: true
+                    ports:
+                      http:
+                        port: 8010
+                    annotations:
+                      service.cilium.io/global: "true"
+                ingress:
+                  main:
+                    enabled: true
+                    ingressClassName: nginx
+                    annotations:
+                      nginx.ingress.kubernetes.io/service-upstream: "true"
+                      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+                    hosts:
+                      - host: <path:k8secrets/ingresses#languagetoolhostname>.<path:k8secrets/ingresses#domainname>
+                        paths:
+                          - path: /
+                            pathType: Prefix
+                            service:
+                              name: main
+                              port: http
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 2.3.0
+          destination:
+            server: '{{server}}' 
+            namespace: languagetool
+          project: k8s-homelab-apps                    
+          syncPolicy:
+            automated:
+              prune: true
+              selfHeal: true
+            syncOptions:
+              - CreateNamespace=true
+  - clusters:
+      selector:
+        matchLabels:
+          languagetool: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-languagetool'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: languagetool
+          values: |
+            defaultPodOptions:
+              securityContext:
+                runAsUser: 1000
+                runAsGroup: 1000
+            controllers:
+              main:
+                containers:
+                  main:
+                    image:
+                      repository: docker.io/erikvl87/languagetool
+                      pullPolicy: IfNotPresent
+                      tag: latest                  
+                    ports:
+                    - name: http
+                      containerPort: 8010
+                      protocol: TCP
+                    env:
+                      EXTRAOPTIONS: "-Xmx382M"
+            service:
+              main:
+                primary: true              
+                enabled: true
+                controller: main
+                ports:
+                  http:
+                    port: 8010
+                annotations:
+                  service.cilium.io/global: "true"
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                annotations:
+                  nginx.ingress.kubernetes.io/service-upstream: "true"
+                  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                  nginx.ingress.kubernetes.io/proxy-body-size: "0"
+                hosts:
+                  - host: <path:k8secrets/ingresses#languagetoolhostname>.<path:k8secrets/ingresses#domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: main
+                          port: http
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 2.3.0
+      destination:
+        server: '{{server}}' 
+        namespace: languagetool
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

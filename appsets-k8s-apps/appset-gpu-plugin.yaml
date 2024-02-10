@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: gpu-plugin
+  namespace: argocd
+#  annotations:
+#    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          gpu-plugin: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-gpu-plugin'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - repoURL: https://github.com/intel/intel-device-plugins-for-kubernetes.git
+        targetRevision: release-0.29
+        path: deployments/nfd
+      destination:
+        server: '{{server}}' 
+        namespace: gpu
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

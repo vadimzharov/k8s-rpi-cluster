@@ -89,6 +89,7 @@ spec:
               JELLYFIN_DATA_DIR: "/jellyfin-data"
               JELLYFIN_CONFIG_DIR: "/jellyfin-data/config"
               TZ: "CST"
+              MALLOC_TRIM_THRESHOLD_: "131072"
             persistence:
               config:
                 enabled: true

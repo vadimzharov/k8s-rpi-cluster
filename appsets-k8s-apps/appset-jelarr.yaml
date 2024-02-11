@@ -88,12 +88,12 @@ spec:
                 mountPath: /jellyfin-data
               jelarr-arr:
                 enabled: true
-                type: pvc
+                type: persistentVolumeClaim
                 existingClaim: jelarr-arr
                 mountPath: /arr
               dedicated-movies:
                 enabled: true
-                type: pvc
+                type: persistentVolumeClaim
                 existingClaim: dedicated-movies
                 mountPath: /dedicated-movies/
             secrets:

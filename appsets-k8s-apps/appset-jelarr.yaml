@@ -155,6 +155,9 @@ spec:
                       JELLYFIN_CONFIG_DIR: "/jellyfin-data/config"
                       TZ: "CST"
                       MALLOC_TRIM_THRESHOLD_: "131072"
+                    resources:
+                      limits:
+                        gpu.intel.com/i915: 1
                   jelarr-backup-daemon:
                     image: 
                       repository: quay.io/vadimzharov/podbackup

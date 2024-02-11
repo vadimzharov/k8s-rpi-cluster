@@ -88,12 +88,14 @@ spec:
               config:
                 enabled: true
                 type: emptyDir
-                mountPath: /jellyfin-data
+                globalMounts: 
+                  - path: /jellyfin-data
               jelarr-arr:
                 enabled: true
                 type: persistentVolumeClaim
                 existingClaim: jelarr-arr
-                mountPath: /arr
+                globalMounts: 
+                  - path: /arr
               dedicated-movies:
                 enabled: true
                 type: persistentVolumeClaim

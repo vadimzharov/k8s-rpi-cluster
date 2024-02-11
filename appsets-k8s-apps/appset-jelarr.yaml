@@ -38,7 +38,7 @@ spec:
                 ingress:
                   main:
                     enabled: true
-                    ingressClassName: nginx
+                    className: nginx
                     annotations:
                       nginx.ingress.kubernetes.io/service-upstream: "true"
                     hosts:
@@ -48,7 +48,7 @@ spec:
                             pathType: Prefix
             repoURL: https://bjw-s.github.io/helm-charts
             chart: app-template
-            targetRevision: 1.5.1                      
+            targetRevision: 2.5.0
           destination:
             server: '{{server}}'
             namespace: jelarr
@@ -65,10 +65,6 @@ spec:
       - helm:
           releaseName: jelarr
           values: |
-            image:
-              repository: docker.io/jellyfin/jellyfin
-              pullPolicy: IfNotPresent
-              tag: latest
             service:
               main:
                 ports:
@@ -79,17 +75,12 @@ spec:
             ingress:
               main:
                 enabled: true
-                ingressClassName: nginx
+                className: nginx
                 hosts:
                   - host: <jelarrhostname>.<domainname>
                     paths:
                       - path: /
                         pathType: Prefix
-            env:
-              JELLYFIN_DATA_DIR: "/jellyfin-data"
-              JELLYFIN_CONFIG_DIR: "/jellyfin-data/config"
-              TZ: "CST"
-              MALLOC_TRIM_THRESHOLD_: "131072"
             persistence:
               config:
                 enabled: true
@@ -128,41 +119,51 @@ spec:
                   DIR_TO_BACKUP: /jellyfin-data
                   DIR_TO_RESTORE: /jellyfin-data
                   ARCHIVE_TYPE: targz
-            initContainers:
-              jelarr-restore:
-                image: quay.io/vadimzharov/podbackup:latest
-                imagePullPolicy: Always
-                command:
-                  - podbackup
-                args:
-                  - restore
-                envFrom:
-                - secretRef:
-                    name: jelarr-b-r-secret
-                - configMapRef:
-                    name: jelarr-b-r-settings
-                volumeMounts:
-                - name:  config
-                  mountPath: /jellyfin-data
-            sidecars:
-              jelarr-backup-daemon:
-                image: quay.io/vadimzharov/podbackup:latest
-                imagePullPolicy: Always
-                command:
-                  - podbackup
-                args:
-                  - backup-daemon
-                envFrom:
-                - secretRef:
-                    name: jelarr-b-r-secret
-                - configMapRef:
-                    name: jelarr-b-r-settings
-                volumeMounts:
-                - name:  config
-                  mountPath: /jellyfin-data
+            controllers:
+              main:
+                image:
+                  repository: docker.io/jellyfin/jellyfin
+                  pullPolicy: IfNotPresent
+                  tag: latest
+                env:
+                  JELLYFIN_DATA_DIR: "/jellyfin-data"
+                  JELLYFIN_CONFIG_DIR: "/jellyfin-data/config"
+                  TZ: "CST"
+                  MALLOC_TRIM_THRESHOLD_: "131072"                  
+                initContainers:
+                  jelarr-restore:
+                    image: quay.io/vadimzharov/podbackup:latest
+                    imagePullPolicy: Always
+                    command:
+                      - podbackup
+                    args:
+                      - restore
+                    envFrom:
+                    - secretRef:
+                        name: jelarr-b-r-secret
+                    - configMapRef:
+                        name: jelarr-b-r-settings
+                    volumeMounts:
+                    - name:  config
+                      mountPath: /jellyfin-data                
+                jelarr-backup-daemon:
+                  image: quay.io/vadimzharov/podbackup:latest
+                  imagePullPolicy: Always
+                  command:
+                    - podbackup
+                  args:
+                    - backup-daemon
+                  envFrom:
+                  - secretRef:
+                      name: jelarr-b-r-secret
+                  - configMapRef:
+                      name: jelarr-b-r-settings
+                  volumeMounts:
+                  - name:  config
+                    mountPath: /jellyfin-data
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
-        targetRevision: 1.5.1
+        targetRevision: 2.5.0
       destination:
         server: '{{server}}' 
         namespace: jelarr

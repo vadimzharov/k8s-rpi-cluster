@@ -1,31 +1,28 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: gpu-plugin
+  name: nfd
   namespace: argocd
 spec:
   generators:
   - clusters:
       selector:
         matchLabels:
-          gpu-plugin: "installed"
+          nfd: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}'
   template:
     metadata:
-      name: '{{name}}-gpu-plugin'
+      name: '{{name}}-nfd'
     spec:
       project: k8s-homelab-apps
       sources:
       - repoURL: https://github.com/intel/intel-device-plugins-for-kubernetes.git
         targetRevision: release-0.29
-        path: deployments/nfd/overlays/node-feature-rules
-      - repoURL: https://github.com/intel/intel-device-plugins-for-kubernetes.git
-        targetRevision: release-0.29
-        path: deployments/gpu_plugin/overlays/nfd_labeled_nodes
+        path: deployments/nfd
       destination:
         server: '{{server}}'
-        namespace: gpu
+        namespace: node-feature-discovery
       syncPolicy:
         automated:
           prune: true

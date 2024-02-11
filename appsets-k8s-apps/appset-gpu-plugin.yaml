@@ -22,8 +22,11 @@ spec:
       - repoURL: https://github.com/intel/intel-device-plugins-for-kubernetes.git
         targetRevision: release-0.29
         path: deployments/nfd
+      - repoURL: https://github.com/intel/intel-device-plugins-for-kubernetes.git
+        targetRevision: release-0.29
+        path: deployments/nfd/overlays/node-feature-rules
       destination:
-        server: '{{server}}' 
+        server: '{{server}}'
         namespace: gpu
       syncPolicy:
         automated:

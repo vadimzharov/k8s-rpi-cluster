@@ -121,19 +121,12 @@ spec:
                   ARCHIVE_TYPE: targz
             controllers:
               main:
-                image:
-                  repository: docker.io/jellyfin/jellyfin
-                  pullPolicy: IfNotPresent
-                  tag: latest
-                env:
-                  JELLYFIN_DATA_DIR: "/jellyfin-data"
-                  JELLYFIN_CONFIG_DIR: "/jellyfin-data/config"
-                  TZ: "CST"
-                  MALLOC_TRIM_THRESHOLD_: "131072"                  
                 initContainers:
                   jelarr-restore:
-                    image: quay.io/vadimzharov/podbackup:latest
-                    imagePullPolicy: Always
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
                     command:
                       - podbackup
                     args:
@@ -145,22 +138,35 @@ spec:
                         name: jelarr-b-r-settings
                     volumeMounts:
                     - name:  config
-                      mountPath: /jellyfin-data                
-                jelarr-backup-daemon:
-                  image: quay.io/vadimzharov/podbackup:latest
-                  imagePullPolicy: Always
-                  command:
-                    - podbackup
-                  args:
-                    - backup-daemon
-                  envFrom:
-                  - secretRef:
-                      name: jelarr-b-r-secret
-                  - configMapRef:
-                      name: jelarr-b-r-settings
-                  volumeMounts:
-                  - name:  config
-                    mountPath: /jellyfin-data
+                      mountPath: /jellyfin-data
+                containers:
+                  main:
+                    image:
+                      repository: docker.io/jellyfin/jellyfin
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    env:
+                      JELLYFIN_DATA_DIR: "/jellyfin-data"
+                      JELLYFIN_CONFIG_DIR: "/jellyfin-data/config"
+                      TZ: "CST"
+                      MALLOC_TRIM_THRESHOLD_: "131072"
+                  jelarr-backup-daemon:
+                      image: 
+                        repository: quay.io/vadimzharov/podbackup
+                        pullPolicy: IfNotPresent
+                        tag: latest
+                    command:
+                      - podbackup
+                    args:
+                      - backup-daemon
+                    envFrom:
+                    - secretRef:
+                        name: jelarr-b-r-secret
+                    - configMapRef:
+                        name: jelarr-b-r-settings
+                    volumeMounts:
+                    - name:  config
+                      mountPath: /jellyfin-data
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 2.5.0

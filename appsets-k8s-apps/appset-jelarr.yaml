@@ -151,10 +151,10 @@ spec:
                       TZ: "CST"
                       MALLOC_TRIM_THRESHOLD_: "131072"
                   jelarr-backup-daemon:
-                      image: 
-                        repository: quay.io/vadimzharov/podbackup
-                        pullPolicy: IfNotPresent
-                        tag: latest
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
                     command:
                       - podbackup
                     args:

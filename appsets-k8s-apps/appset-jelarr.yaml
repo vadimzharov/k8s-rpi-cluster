@@ -26,10 +26,12 @@ spec:
           - helm:
               releaseName: jelarr
               values: |
-                controller:
-                  enabled: false
+                controllers:
+                  main:
+                    enabled: false
                 service:
                   main:
+                    enabled: true
                     ports:
                       http:
                         port: 8096
@@ -46,6 +48,9 @@ spec:
                         paths:
                           - path: /
                             pathType: Prefix
+                            service:
+                              name: main
+                              port: http                               
             repoURL: https://bjw-s.github.io/helm-charts
             chart: app-template
             targetRevision: 2.5.0

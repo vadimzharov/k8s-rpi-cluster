@@ -1,0 +1,132 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: firefox-v
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/firefox-v"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          firefox-v: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-firefox-v'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: firefox
+          values: |
+            service:
+              enabled: true              
+              main:
+                ports:
+                  http:
+                    port: 5800
+                annotations:
+                  service.cilium.io/global: "true"
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                hosts:
+                  - host: <path:k8secrets/ingresses#firefox-v-hostname>.<path:k8secrets/ingresses#domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: main
+                          port: http
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                globalMounts: 
+                  - path: /config/profile/
+            secrets:
+              b-r-secret:
+                enabled: true
+                labels: {}
+                annotations: {}
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/backup/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/backup/minios3creds#miniosecretkey>
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "k8s-apps-backup"
+                  S3_BUCKET_FOLDER: "firefox-v-config"
+                  S3_FILE_PREFIX: "firefox-v-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "true"
+                  DIR_TO_BACKUP: /config/profile/
+                  DIR_TO_RESTORE: /config/profile/
+                  ARCHIVE_TYPE: targz
+            controllers:
+              main:
+                enabled: true
+                initContainers:
+                  firefox-restore:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command:
+                      - podbackup
+                    args:
+                      - restore
+                    envFrom:
+                    - secretRef:
+                        name: firefox-b-r-secret
+                    - configMapRef:
+                        name: firefox-b-r-settings
+                    volumeMounts:
+                    - name:  config
+                        mountPath: /config/profile/
+                containers:
+                  main:
+                    image:
+                      repository: docker.io/jlesage/firefox
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    env:
+                      VNC_PASSWORD: <password>
+                  firefox-backup-daemon:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command:
+                      - podbackup
+                    args:
+                      - backup-daemon
+                    envFrom:
+                    - secretRef:
+                        name: firefox-b-r-secret
+                    - configMapRef:
+                        name: firefox-b-r-settings
+                    volumeMounts:
+                    - name:  config
+                      mountPath: /config/profile/
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 2.5.0
+      destination:
+        server: '{{server}}' 
+        namespace: firefox-v
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

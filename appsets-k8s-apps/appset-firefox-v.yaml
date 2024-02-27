@@ -4,7 +4,7 @@ metadata:
   name: firefox-v
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/firefox-v"
+    avp.kubernetes.io/path: "k8secrets/apps/firefox-v"
 spec:
   generators:
   - clusters:

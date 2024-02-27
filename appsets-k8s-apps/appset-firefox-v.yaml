@@ -91,7 +91,7 @@ spec:
                         name: firefox-b-r-settings
                     volumeMounts:
                     - name:  config
-                        mountPath: /config/profile/
+                      mountPath: /config/profile/
                 containers:
                   main:
                     image:

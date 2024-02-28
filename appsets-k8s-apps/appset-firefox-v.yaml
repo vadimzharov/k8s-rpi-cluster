@@ -27,7 +27,7 @@ spec:
               main:
                 ports:
                   http:
-                    port: 5800
+                    port: 3000
                 annotations:
                   service.cilium.io/global: "true"
             ingress:
@@ -95,11 +95,11 @@ spec:
                 containers:
                   main:
                     image:
-                      repository: docker.io/jlesage/firefox
+                      repository: lscr.io/linuxserver/firefox
                       pullPolicy: IfNotPresent
                       tag: latest
                     env:
-                      VNC_PASSWORD: <password>
+                      PASSWORD: <password>
                   firefox-backup-daemon:
                     image: 
                       repository: quay.io/vadimzharov/podbackup

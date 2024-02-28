@@ -22,6 +22,10 @@ spec:
       - helm:
           releaseName: firefox
           values: |
+            defaultPodOptions:
+              securityContext:
+                runAsUser: 1000
+                runAsGroup: 1000          
             service:
               enabled: true              
               main:
@@ -99,6 +103,10 @@ spec:
                       pullPolicy: IfNotPresent
                       tag: latest
                     env:
+                      PUID: 1000
+                      PGID: 1000
+                      CUSTOM_USER: firefox
+                      TITLE: "Firefox browser"
                       PASSWORD: <password>
                   firefox-backup-daemon:
                     image: 

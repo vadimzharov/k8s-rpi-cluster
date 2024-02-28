@@ -47,7 +47,7 @@ spec:
                 enabled: true
                 type: emptyDir
                 globalMounts: 
-                  - path: /config/profile/
+                  - path: /config/
             secrets:
               b-r-secret:
                 enabled: true
@@ -68,8 +68,8 @@ spec:
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
                   FORCE_RESTORE: "false"
-                  DIR_TO_BACKUP: /config/profile/
-                  DIR_TO_RESTORE: /config/profile/
+                  DIR_TO_BACKUP: /config/
+                  DIR_TO_RESTORE: /config/
                   ARCHIVE_TYPE: targz
             controllers:
               main:
@@ -91,7 +91,7 @@ spec:
                         name: firefox-b-r-settings
                     volumeMounts:
                     - name:  config
-                      mountPath: /config/profile/
+                      mountPath: /config/
                 containers:
                   main:
                     image:
@@ -116,7 +116,7 @@ spec:
                         name: firefox-b-r-settings
                     volumeMounts:
                     - name:  config
-                      mountPath: /config/profile/
+                      mountPath: /config/
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 2.5.0

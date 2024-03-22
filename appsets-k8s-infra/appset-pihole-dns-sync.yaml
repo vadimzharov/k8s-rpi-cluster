@@ -69,6 +69,22 @@ spec:
                 value: "<password>"  
         repoURL: https://kubernetes-sigs.github.io/external-dns/
         chart: external-dns
+        targetRevision: 1.13.1
+      - helm:
+          releaseName: 'external-dns-edge-dns'
+          values: |
+            sources:
+              - ingress
+            policy: '{{metadata.labels.external-dns-policy}}'
+            registry: noop
+            provider: pihole
+            env:
+              - name: "EXTERNAL_DNS_PIHOLE_SERVER"
+                value: <edge-dns-server>
+              - name: "EXTERNAL_DNS_PIHOLE_PASSWORD"
+                value: "<password>"
+        repoURL: https://kubernetes-sigs.github.io/external-dns/
+        chart: external-dns
         targetRevision: 1.13.1        
       destination:
         server: '{{server}}'

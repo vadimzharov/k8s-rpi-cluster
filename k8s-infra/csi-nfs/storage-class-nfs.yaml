@@ -3,7 +3,8 @@ kind: StorageClass
 metadata:
   name: sc-nfs
   annotations:
-    avp.kubernetes.io/path: "k8secrets/infra/k8s-nfs-csi"  
+    avp.kubernetes.io/path: "k8secrets/infra/k8s-nfs-csi"
+    storageclass.kubernetes.io/is-default-class: "true"    
 provisioner: nfs.csi.k8s.io
 parameters:
   server: <k8s-nfs-server-name>

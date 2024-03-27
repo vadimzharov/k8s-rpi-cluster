@@ -10,17 +10,17 @@ spec:
   - clusters:
       selector:
         matchLabels:
-          minio-external: "installed"
+          harbor: "installed"
       values:
         revision: '{{metadata.annotations.branch-name}}'
   template:
     metadata:
-      name: '{{name}}-minio-external'
+      name: '{{name}}-harbor'
     spec:
       project: k8s-homelab-apps
       sources:
       - helm:
-          releaseName: minio
+          releaseName: harbor
           values: |
             expose:
               tls:
@@ -30,12 +30,12 @@ spec:
                 hosts:
                   core: <harborhostname>.<domainname>
             externalURL: https://<harborhostname>.<domainname>
-        repoURL: https://charts.bitnami.com/bitnami
-        chart: minio
-        targetRevision: 13.4.1
+        repoURL: https://helm.goharbor.io
+        chart: harbor
+        targetRevision: v1.14.1
       destination:
         server: '{{server}}' 
-        namespace: minio-external
+        namespace: harbor
       syncPolicy:
         automated:
           prune: true

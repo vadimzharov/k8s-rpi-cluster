@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: harbor
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          minio-external: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-minio-external'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: minio
+          values: |
+            expose:
+              tls:
+                enabled: true
+                certSource: none
+              ingress:
+                hosts:
+                  core: <harborhostname>.<domainname>
+            externalURL: https://<harborhostname>.<domainname>
+        repoURL: https://charts.bitnami.com/bitnami
+        chart: minio
+        targetRevision: 13.4.1
+      destination:
+        server: '{{server}}' 
+        namespace: minio-external
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

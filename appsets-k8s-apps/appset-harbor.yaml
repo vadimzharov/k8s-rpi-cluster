@@ -29,6 +29,7 @@ spec:
               ingress:
                 hosts:
                   core: <path:k8secrets/ingresses#harborhostname>.<path:k8secrets/ingresses#domainname>
+                className: '{{metadata.labels.harbor-ingress}}'
             externalURL: https://<path:k8secrets/ingresses#harborhostname>.<path:k8secrets/ingresses#domainname>
             database:
               type: external

@@ -35,6 +35,7 @@ spec:
         repoURL: https://github.com/goharbor/harbor-helm.git
 #        chart: harbor
         targetRevision: main
+        path: /
       destination:
         server: '{{server}}' 
         namespace: harbor

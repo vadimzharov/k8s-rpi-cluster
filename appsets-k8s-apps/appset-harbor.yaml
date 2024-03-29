@@ -1,0 +1,81 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: harbor
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/apps/harbor"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          harbor: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-harbor'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: harbor
+          values: |
+            expose:
+              tls:
+                enabled: true
+                certSource: none
+              ingress:
+                hosts:
+                  core: <path:k8secrets/ingresses#harborhostname>.<path:k8secrets/ingresses#domainname>
+            externalURL: https://<path:k8secrets/ingresses#harborhostname>.<path:k8secrets/ingresses#domainname>
+            database:
+              type: external
+              external:
+                host: "postgresql"
+                port: "5432"
+                username: "<harborpgusername>"
+                password: "<harborpgpassword>"
+                coreDatabase: "registry"                
+        repoURL: https://helm.goharbor.io
+        chart: harbor
+        targetRevision: 1.14.1
+      - helm:
+          releaseName: postgresql
+          values: |
+            global:
+              storageClass: "sc-nfs"
+              postgresql:
+                auth:
+                  postgresPassword: "<harborpgpassword>"
+                  username: "<harborpgusername>"
+                  password: "<harborpgpassword>"
+                  database: "registry"
+            primary:
+              containerSecurityContext:
+                enabled: true
+                seLinuxOptions: {}
+                runAsUser: 1024
+                runAsGroup: 1024
+                runAsNonRoot: true
+                privileged: false
+                readOnlyRootFilesystem: true
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+                seccompProfile:
+                  type: "RuntimeDefault"            
+        repoURL: https://charts.bitnami.com/bitnami
+        chart: postgresql
+        targetRevision: 15.1.4
+      destination:
+        server: '{{server}}' 
+        namespace: harbor
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

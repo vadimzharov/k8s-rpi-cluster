@@ -44,6 +44,20 @@ spec:
                   username: "<harborpgusername>"
                   password: "<harborpgpassword>"
                   database: "registry"
+            primary:
+              containerSecurityContext:
+                enabled: true
+                seLinuxOptions: {}
+                runAsUser: 1024
+                runAsGroup: 1024
+                runAsNonRoot: true
+                privileged: false
+                readOnlyRootFilesystem: true
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+                seccompProfile:
+                  type: "RuntimeDefault"            
         repoURL: https://charts.bitnami.com/bitnami
         chart: postgresql
         targetRevision: 15.1.4

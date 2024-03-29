@@ -32,9 +32,9 @@ spec:
             externalURL: https://<harborhostname>.<domainname>
             containerSecurityContext:
               runAsUser: 1024
-        repoURL: https://helm.goharbor.io
-        chart: harbor
-        targetRevision: v1.14.1
+        repoURL: https://github.com/goharbor/harbor-helm.git
+#        chart: harbor
+        targetRevision: main
       destination:
         server: '{{server}}' 
         namespace: harbor

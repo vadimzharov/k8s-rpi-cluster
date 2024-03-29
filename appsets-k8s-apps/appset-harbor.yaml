@@ -4,7 +4,7 @@ metadata:
   name: harbor
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/ingresses"
+    avp.kubernetes.io/path: "k8secrets/apps/harbor"
 spec:
   generators:
   - clusters:
@@ -28,14 +28,25 @@ spec:
                 certSource: none
               ingress:
                 hosts:
-                  core: <harborhostname>.<domainname>
-            externalURL: https://<harborhostname>.<domainname>
-            containerSecurityContext:
-              runAsUser: 1024
+                  core: <path:k8secrets/ingresses#harborhostname>.<path:k8secrets/ingresses#domainname>
+            externalURL: https://<path:k8secrets/ingresses#harborhostname>.<path:k8secrets/ingresses#domainname>
         repoURL: https://helm.goharbor.io
         chart: harbor
         targetRevision: 1.14.1
-        path: .
+      - helm:
+          releaseName: postgresql
+          values: |
+            global:
+              storageClass: "sc-nfs"
+              postgresql:
+                auth:
+                  postgresPassword: "<harborpgpassword>"
+                  username: "<harborpgusername>"
+                  password: "<harborpgpassword>"
+                  database: "registry"
+        repoURL: https://charts.bitnami.com/bitnami
+        chart: postgresql
+        targetRevision: 15.1.4
       destination:
         server: '{{server}}' 
         namespace: harbor

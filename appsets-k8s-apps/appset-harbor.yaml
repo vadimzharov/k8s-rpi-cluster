@@ -34,7 +34,7 @@ spec:
               runAsUser: 1024
         repoURL: https://github.com/goharbor/harbor-helm.git
         chart: harbor
-#        targetRevision: main
+        targetRevision: 1.14.1
         path: .
       destination:
         server: '{{server}}' 

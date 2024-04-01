@@ -30,7 +30,7 @@ spec:
                 hosts:
                   core: <path:k8secrets/ingresses#harborhostname>.<path:k8secrets/ingresses#domainname>
                 className: '{{metadata.labels.harbor-ingress}}'
-            externalURL: https://<path:k8secrets/ingresses#harborhostname>.<path:k8secrets/ingresses#domainname>
+            externalURL: https://<path:k8secrets/ingresses#harborhostname>.<path:k8secrets/ingresses#domainname>:5000
             logLevel: debug
             database:
               type: external

@@ -77,9 +77,9 @@ spec:
                           tag: pg14-v0.2.0
                         envFrom:
                         - secretRef:
-                            name: immich-d-pgsql-config
+                            name: immich-d-db-pgsql-config
                         - configMapRef:
-                            name: immich-d-pgsql-config
+                            name: immich-d-db-pgsql-config
             repoURL: https://bjw-s.github.io/helm-charts
             chart: app-template
             targetRevision: 2.5.0

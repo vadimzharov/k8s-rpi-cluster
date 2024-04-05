@@ -61,7 +61,7 @@ spec:
                   pgsql-config:
                     enabled: true
                     data:
-                      POSTGRESQL_PORT_NUMBER: 5432
+                      POSTGRESQL_PORT_NUMBER: "5432"
                 controllers:
                   main:
                     containers:

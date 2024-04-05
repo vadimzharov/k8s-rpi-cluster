@@ -64,7 +64,7 @@ spec:
                     containers:
                       main:
                         image:
-                          repository: tensorchord/pgvecto-rs:
+                          repository: tensorchord/pgvecto-rs
                           pullPolicy: IfNotPresent
                           tag: pg14-v0.2.0
                         envFrom:

@@ -28,6 +28,25 @@ spec:
         spec:
           sources:
           - helm:
+              releaseName: immich-d-pvc
+              values: |
+                controllers:
+                  main:
+                    enabled: false
+                service:
+                  main:
+                    enabled: false
+                ingress:
+                  main:
+                    enabled: false
+                persistence:
+                  photos:
+                    enabled: true
+                    type: persistentVolumeClaim
+                    storageClass: sc-nfs
+                    accessMode: ReadWriteMany
+                    size: 1G
+          - helm:
               releaseName: immich-d
               values: |
                 defaultPodOptions:
@@ -94,22 +113,70 @@ spec:
       project: k8s-homelab-apps
       sources:
       - helm:
-          releaseName: immich-d-deps
+          releaseName: immich-d
           values: |
-            controllers:
-            service:
-              main:
-                enabled: false
-            persistence:
-              config:
-                nameOverride: "immich-d-library"
-                enabled: true
-                type: persistentVolumeClaim
-                storageClass: "sc-nfs"
-                accessMode: ReadWriteMany
-        repoURL: https://bjw-s.github.io/helm-charts
-        chart: app-template
-        targetRevision: 2.4.0      
+            env:
+              IMMICH_MACHINE_LEARNING_URL: "false"
+            image:
+              tag: '{{metadata.labels.immich-tag}}'
+            immich:
+              persistence:
+                library:
+                  existingClaim: immich-d-deps-immich-d-library
+            redis:
+              enabled: true
+              architecture: standalone
+              master:
+                persistence:
+                  enabled: false
+              auth:
+                enabled: false             
+            machine-learning:
+              enabled: false
+            postgresql:
+              enabled: false
+              global:
+                postgresql:
+                  auth:
+                    username: <pgsql_username>
+                    password: <pgsql_password>
+                    postgresPassword: <pgsql_password>
+                    database: <pgsql_database>
+            server:
+              enabled: true
+              service:
+                main:
+                  annotations:
+                    service.cilium.io/global: "true"
+              ingress:
+                main:
+                  enabled: true
+                  ingressClassName: nginx
+                  annotations:
+                    nginx.ingress.kubernetes.io/service-upstream: "true"
+                    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+                    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+                    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+                    nginx.ingress.kubernetes.io/client-body-buffer-size: 1M
+                    nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "0"
+                    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+                  hosts:
+                    - host: <path:k8secrets/ingresses#immich-d-hostname>.<path:k8secrets/ingresses#domainname>
+                      paths:
+                        - path: /
+                          pathType: Prefix                 
+              image:
+                repository: ghcr.io/immich-app/immich-server
+                pullPolicy: IfNotPresent
+            microservices:
+              enabled: true
+              image:
+                repository: ghcr.io/immich-app/immich-server
+                pullPolicy: IfNotPresent                
+        repoURL: https://immich-app.github.io/immich-charts
+        chart: immich
+        targetRevision: 0.5.0
       destination:
         server: '{{server}}' 
         namespace: immich-d

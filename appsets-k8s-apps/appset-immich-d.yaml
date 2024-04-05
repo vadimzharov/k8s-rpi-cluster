@@ -42,6 +42,8 @@ spec:
                   pgdb:
                     enabled: true
                     type: persistentVolumeClaim
+                    storageClass: sc-nfs
+                    accessMode: ReadWriteMany
                     globalMounts: 
                       - path: /var/lib/postgresql/data
                 secrets:

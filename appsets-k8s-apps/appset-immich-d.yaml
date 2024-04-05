@@ -46,6 +46,9 @@ spec:
                     storageClass: sc-nfs
                     accessMode: ReadWriteMany
                     size: 1G
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 2.5.0                    
           - helm:
               releaseName: immich-d
               values: |

@@ -44,6 +44,7 @@ spec:
                     type: persistentVolumeClaim
                     storageClass: sc-nfs
                     accessMode: ReadWriteMany
+                    size: 1G
                     globalMounts: 
                       - path: /var/lib/postgresql/data
                 secrets:

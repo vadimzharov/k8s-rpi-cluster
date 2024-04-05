@@ -64,6 +64,7 @@ spec:
                       POSTGRESQL_PORT_NUMBER: "5432"
                 controllers:
                   main:
+                    type: statefulset
                     containers:
                       main:
                         image:

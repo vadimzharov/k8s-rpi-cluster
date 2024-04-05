@@ -28,7 +28,7 @@ spec:
         spec:
           sources:
           - helm:
-              releaseName: immich-d
+              releaseName: immich-d-db
               values: |
                 defaultPodOptions:
                   securityContext:
@@ -120,6 +120,7 @@ spec:
           values: |
             env:
               IMMICH_MACHINE_LEARNING_URL: "false"
+              DB_HOSTNAME: immich-d-db
             image:
               tag: '{{metadata.labels.immich-tag}}'
             immich:

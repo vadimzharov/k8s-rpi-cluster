@@ -30,6 +30,10 @@ spec:
           - helm:
               releaseName: immich-d
               values: |
+                defaultPodOptions:
+                  securityContext:
+                    runAsUser: 1024
+                    runAsGroup: 1024              
                 service:
                   main:
                     ports:

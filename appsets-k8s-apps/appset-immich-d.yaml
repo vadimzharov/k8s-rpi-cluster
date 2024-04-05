@@ -1,0 +1,114 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: immich-d
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/apps/immich"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          immich-d: "installed"
+          k8s-csi-nfs: "installed"          
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+        version: '{{metadata.labels.immich-tag}}'
+  - clusters:
+      selector:
+        matchLabels:
+          immich-d-db: "installed"
+          k8s-csi-nfs: "installed"          
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+      template:
+        metadata: 
+          name: '{{name}}-immich-d-db' 
+        spec:
+          sources:
+          - helm:
+              releaseName: immich-d
+              values: |
+                service:
+                  main:
+                    ports:
+                      http:
+                        port: 5432
+                ingress:
+                  main:
+                    enabled: false
+                persistence:
+                  pgdb:
+                    enabled: true
+                    type: persistentVolumeClaim
+                    globalMounts: 
+                      - path: /var/lib/postgresql/data
+                secrets:
+                  pgsql-config:
+                    enabled: true
+                    labels: {}
+                    annotations: {}
+                    stringData:
+                      POSTGRES_DATABASE: <pgsql_database>
+                      POSTGRES_PASSWORD: <pgsql_password>
+                      POSTGRES_POSTGRES_PASSWORD: <pgsql_password>
+                      POSTGRES_USER: <pgsql_username>
+                configMaps:
+                  pgsql-config:
+                    enabled: true
+                    data:
+                      POSTGRESQL_PORT_NUMBER: 5432
+                controllers:
+                  main:
+                    containers:
+                      main:
+                        image:
+                          repository: tensorchord/pgvecto-rs:
+                          pullPolicy: IfNotPresent
+                          tag: pg14-v0.2.0
+                        envFrom:
+                        - secretRef:
+                            name: pgsql-config
+                        - configMapRef:
+                            name: pgsql-config
+            repoURL: https://bjw-s.github.io/helm-charts
+            chart: app-template
+            targetRevision: 2.5.0
+          destination:
+            server: '{{server}}'
+            namespace: immich-d
+          project: k8s-homelab-apps
+  template:
+    metadata:
+      name: '{{name}}-immich-d'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: immich-d-deps
+          values: |
+            controllers:
+            service:
+              main:
+                enabled: false
+            persistence:
+              config:
+                nameOverride: "immich-d-library"
+                enabled: true
+                type: persistentVolumeClaim
+                storageClass: "sc-nfs"
+                accessMode: ReadWriteMany
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 2.4.0      
+      destination:
+        server: '{{server}}' 
+        namespace: immich-d
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

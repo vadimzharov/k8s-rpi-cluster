@@ -28,28 +28,6 @@ spec:
         spec:
           sources:
           - helm:
-              releaseName: immich-d-pvc
-              values: |
-                controllers:
-                  main:
-                    enabled: false
-                service:
-                  main:
-                    enabled: false
-                ingress:
-                  main:
-                    enabled: false
-                persistence:
-                  photos:
-                    enabled: true
-                    type: persistentVolumeClaim
-                    storageClass: sc-nfs
-                    accessMode: ReadWriteMany
-                    size: 1G
-            repoURL: https://bjw-s.github.io/helm-charts
-            chart: app-template
-            targetRevision: 2.5.0                    
-          - helm:
               releaseName: immich-d
               values: |
                 defaultPodOptions:
@@ -116,6 +94,28 @@ spec:
       project: k8s-homelab-apps
       sources:
       - helm:
+          releaseName: immich-d-pvc
+          values: |
+            controllers:
+              main:
+                enabled: false
+            service:
+              main:
+                enabled: false
+            ingress:
+              main:
+                enabled: false
+            persistence:
+              photos:
+                enabled: true
+                type: persistentVolumeClaim
+                storageClass: sc-nfs
+                accessMode: ReadWriteMany
+                size: 1G
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 2.5.0
+      - helm:
           releaseName: immich-d
           values: |
             env:
@@ -125,7 +125,7 @@ spec:
             immich:
               persistence:
                 library:
-                  existingClaim: immich-d-deps-immich-d-library
+                  existingClaim: immich-d-pvc-photos
             redis:
               enabled: true
               architecture: standalone

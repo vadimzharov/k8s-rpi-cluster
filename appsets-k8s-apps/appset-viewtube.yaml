@@ -47,7 +47,7 @@ spec:
             ingress:
               main:
                 enabled: true
-                ingressClassName: nginx
+                className: nginx
                 hosts:
                   - host: <path:k8secrets/ingresses#viewtube-hostname>.<path:k8secrets/ingresses#domainname>
                     paths:

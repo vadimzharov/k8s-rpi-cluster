@@ -85,6 +85,8 @@ spec:
                 enabled: true
                 type: deployment
                 replicas: 1
+                labels:
+                  vpn: required
                 containers:
                   main:
                     image:

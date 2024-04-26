@@ -1,0 +1,117 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: viewtube
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          viewtube: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-viewtube'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: viewtube
+          values: |      
+            service:
+              enabled: true              
+              main:
+                ports:
+                  http:
+                    port: 8066
+                annotations:
+                  service.cilium.io/global: "true"
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                hosts:
+                  - host: <path:k8secrets/ingresses#viewtube-hostname>.<path:k8secrets/ingresses#domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: main
+                          port: http
+            persistence:
+              viewtube-data:
+                enabled: true
+                type: emptyDir
+                advancedMounts:
+                  main:
+                    main:
+                      - path: /data
+              redis-data:
+                enabled: true
+                type: emptyDir
+                advancedMounts:
+                  redis:
+                    main:
+                      - path: /data
+              mongodb-data:
+                enabled: true
+                type: emptyDir
+                advancedMounts:
+                  mongodb:
+                    main:
+                      - path: /data/db
+            controllers:
+              main:
+                enabled: true
+                type: deployment
+                replicas: 1
+                containers:
+                  main:
+                    image:
+                      repository: mauriceo/viewtube
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    # env:
+                      # CUSTOM_USER: firefox
+                      # TITLE: "Firefox browser"
+                      # PASSWORD: <password>
+                    # volumeMounts:
+                    # - name:  config
+                    #   mountPath: /config/
+              redis:
+                enabled: true
+                type: deployment
+                replicas: 1
+                containers:
+                  main:
+                    image:
+                      repository: redis
+                      pullPolicy: IfNotPresent
+                      tag: 7
+              mongodb:
+                enabled: true
+                type: deployment
+                replicas: 1
+                containers:
+                  main:
+                    image:
+                      repository: mongo
+                      pullPolicy: IfNotPresent
+                      tag: 7                      
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 3.1.0
+      destination:
+        server: '{{server}}' 
+        namespace: viewtube
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

@@ -91,9 +91,9 @@ spec:
                       repository: mauriceo/viewtube
                       pullPolicy: IfNotPresent
                       tag: latest
-                    # env:
-                      # CUSTOM_USER: firefox
-                      # TITLE: "Firefox browser"
+                    env:
+                      VIEWTUBE_DATABASE_HOST: viewtube-mongodb
+                      VIEWTUBE_REDIS_HOST: viewtube-redis
                     # volumeMounts:
                     # - name:  config
                     #   mountPath: /config/

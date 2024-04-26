@@ -57,8 +57,7 @@ spec:
                       - path: /
                         pathType: Prefix
                         service:
-                          name: main
-                          port: http
+                          identifier: main
             persistence:
               viewtube-data:
                 enabled: true

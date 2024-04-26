@@ -1,0 +1,18 @@
+apiVersion: cilium.io/v2
+kind: CiliumEgressGatewayPolicy
+metadata:
+  name: vpn-egress
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/egresses"  
+spec:
+  selectors:
+  - podSelector:
+      matchLabels:
+        vpn: required
+  destinationCIDRs:
+    - 0.0.0.0/0
+  egressGateway:
+    egressIP: <egressipvpn>
+    nodeSelector:
+      matchLabels:
+        node-role.kubernetes.io/egress-gw: vpn        

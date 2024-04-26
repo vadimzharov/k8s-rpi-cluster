@@ -92,7 +92,6 @@ spec:
                     # env:
                       # CUSTOM_USER: firefox
                       # TITLE: "Firefox browser"
-                      # PASSWORD: <password>
                     # volumeMounts:
                     # - name:  config
                     #   mountPath: /config/

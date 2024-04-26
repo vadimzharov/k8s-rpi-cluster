@@ -37,16 +37,12 @@ spec:
                 ports:
                   http:
                     port: 6379
-                annotations:
-                  service.cilium.io/global: "true"
               mongodb:
                 controller: mongodb
                 enabled: true
                 ports:
                   http:
                     port: 27017
-                annotations:
-                  service.cilium.io/global: "true"
             ingress:
               main:
                 enabled: true

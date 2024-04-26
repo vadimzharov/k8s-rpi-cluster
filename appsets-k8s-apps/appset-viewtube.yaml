@@ -22,12 +22,26 @@ spec:
       - helm:
           releaseName: viewtube
           values: |      
-            service:
-              enabled: true              
+            service:           
               main:
+                enabled: true
                 ports:
                   http:
                     port: 8066
+                annotations:
+                  service.cilium.io/global: "true"
+              redis:
+                enabled: true
+                ports:
+                  http:
+                    port: 6379
+                annotations:
+                  service.cilium.io/global: "true"
+              mongodb:
+                enabled: true
+                ports:
+                  http:
+                    port: 27017
                 annotations:
                   service.cilium.io/global: "true"
             ingress:

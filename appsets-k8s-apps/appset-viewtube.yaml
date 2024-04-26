@@ -24,6 +24,7 @@ spec:
           values: |      
             service:           
               main:
+                controller: main
                 enabled: true
                 ports:
                   http:
@@ -32,12 +33,14 @@ spec:
                   service.cilium.io/global: "true"
               redis:
                 enabled: true
+                controller: redis
                 ports:
                   http:
                     port: 6379
                 annotations:
                   service.cilium.io/global: "true"
               mongodb:
+                controller: mongodb
                 enabled: true
                 ports:
                   http:

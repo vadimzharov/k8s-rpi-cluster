@@ -29,8 +29,6 @@ spec:
               enabled: true
               ingressClassName: '{{metadata.labels.keycloak-ingress}}'
               hostname: <path:k8secrets/ingresses#keycloakhostname>.<path:k8secrets/ingresses#domainname>
-                enabled: true
-                certSource: none
             adminIngress:
               enabled: true
               ingressClassName: nginx

@@ -33,6 +33,7 @@ spec:
               enabled: true
               ingressClassName: nginx
               hostname: <path:k8secrets/ingresses#keycloakadminhostname>.<path:k8secrets/ingresses#domainname>
+            proxy: edge
             postgresql:
               auth:
                 postgresPassword: <keycloakadminpassword>

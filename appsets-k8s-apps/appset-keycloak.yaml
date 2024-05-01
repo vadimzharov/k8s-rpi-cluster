@@ -33,7 +33,7 @@ spec:
               enabled: true
               ingressClassName: nginx
               hostname: <path:k8secrets/ingresses#keycloakadminhostname>.<path:k8secrets/ingresses#domainname>
-            posgresql:
+            postgresql:
               auth:
                 postgresPassword: <keycloakadminpassword>
                 username: bn_keycloak

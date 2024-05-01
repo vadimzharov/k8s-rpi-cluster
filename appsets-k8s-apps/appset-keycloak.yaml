@@ -40,7 +40,7 @@ spec:
         targetRevision: 19.3.3
       destination:
         server: '{{server}}' 
-        namespace: kaycloak
+        namespace: keycloak
       syncPolicy:
         automated:
           prune: true

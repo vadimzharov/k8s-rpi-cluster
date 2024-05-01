@@ -21,13 +21,7 @@ spec:
       sources:
       - helm:
           releaseName: keycloak
-          values: |
-            podSecurityContext:
-              enabled: true
-              fsGroup: 1024
-            containerSecurityContext:
-              enabled: true
-              runAsUser: 1024          
+          values: |          
             auth:
               adminUser: <keycloakadminuser>
               adminPassword: <keycloakadminpassword>
@@ -45,12 +39,15 @@ spec:
                 username: bn_keycloak
                 password: <keycloakadminpassword>
                 database: bitnami_keycloak 
-              podSecurityContext:
-                enabled: true
-                fsGroup: 1024
-              containerSecurityContext:
-                enabled: true
-                runAsUser: 1024
+              primary:
+                nodeSelector:
+                  "kubernetes.io/arch": "amd64"
+                podSecurityContext:
+                  enabled: true
+                  fsGroup: 1024
+                containerSecurityContext:
+                  enabled: true
+                  runAsUser: 1024
         repoURL: https://charts.bitnami.com/bitnami
         chart: keycloak
         targetRevision: 19.3.3

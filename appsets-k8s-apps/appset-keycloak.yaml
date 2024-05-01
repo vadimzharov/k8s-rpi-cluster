@@ -22,6 +22,12 @@ spec:
       - helm:
           releaseName: keycloak
           values: |
+            podSecurityContext:
+              enabled: true
+              fsGroup: 1024
+            containerSecurityContext:
+              enabled: true
+              runAsUser: 1024          
             auth:
               adminUser: <keycloakadminuser>
               adminPassword: <keycloakadminpassword>

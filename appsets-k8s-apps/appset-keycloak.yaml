@@ -32,7 +32,19 @@ spec:
             adminIngress:
               enabled: true
               ingressClassName: nginx
-              hostname: <path:k8secrets/ingresses#keycloakadminhostname>.<path:k8secrets/ingresses#domainname>              
+              hostname: <path:k8secrets/ingresses#keycloakadminhostname>.<path:k8secrets/ingresses#domainname>
+            posgresql:
+              auth:
+                postgresPassword: <keycloakadminpassword>
+                username: bn_keycloak
+                password: <keycloakadminpassword>
+                database: bitnami_keycloak 
+              podSecurityContext:
+                enabled: true
+                fsGroup: 1024
+              containerSecurityContext:
+                enabled: true
+                runAsUser: 1024
         repoURL: https://charts.bitnami.com/bitnami
         chart: keycloak
         targetRevision: 19.3.3

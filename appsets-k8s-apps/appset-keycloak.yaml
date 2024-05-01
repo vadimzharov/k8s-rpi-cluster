@@ -29,6 +29,10 @@ spec:
               enabled: true
               ingressClassName: '{{metadata.labels.keycloak-ingress}}'
               hostname: <path:k8secrets/ingresses#keycloakhostname>.<path:k8secrets/ingresses#domainname>
+              annotations:
+                nginx.ingress.kubernetes.io/proxy-buffering: "on"
+                nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
+                nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
             adminIngress:
               enabled: true
               ingressClassName: nginx

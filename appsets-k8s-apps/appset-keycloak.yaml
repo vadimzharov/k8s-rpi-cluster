@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: keycloak
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/apps/keycloak"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          keycloak: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-keycloak'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: keycloak
+          values: |          
+            auth:
+              adminUser: <keycloakadminuser>
+              adminPassword: <keycloakadminpassword>
+            ingress:
+              enabled: true
+              ingressClassName: '{{metadata.labels.keycloak-ingress}}'
+              hostname: <path:k8secrets/ingresses#keycloakhostname>.<path:k8secrets/ingresses#domainname>
+              annotations:
+                nginx.ingress.kubernetes.io/proxy-buffering: "on"
+                nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
+                nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+            adminIngress:
+              enabled: true
+              ingressClassName: nginx
+              hostname: <path:k8secrets/ingresses#keycloakadminhostname>.<path:k8secrets/ingresses#domainname>
+            proxy: edge
+            postgresql:
+              auth:
+                postgresPassword: <keycloakadminpassword>
+                username: bn_keycloak
+                password: <keycloakadminpassword>
+                database: bitnami_keycloak 
+              primary:
+                nodeSelector:
+                  "kubernetes.io/arch": "amd64"
+                podSecurityContext:
+                  enabled: true
+                  fsGroup: 1024
+                containerSecurityContext:
+                  enabled: true
+                  runAsUser: 1024
+        repoURL: https://charts.bitnami.com/bitnami
+        chart: keycloak
+        targetRevision: 19.3.3
+      destination:
+        server: '{{server}}' 
+        namespace: keycloak
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

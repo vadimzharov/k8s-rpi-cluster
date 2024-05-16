@@ -12,3 +12,7 @@ spec:
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
   workloadUpdateStrategy: {}
+  workloads:
+    nodePlacement:
+      nodeSelector:
+        virt-host: true

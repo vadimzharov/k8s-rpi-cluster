@@ -27,6 +27,8 @@ spec:
                   prometheus.io/scrape: "true"
                   prometheus.io/port: "8481"
             vminsert:
+              extraArgs:
+                maxLabelsPerTimeseries: "45"            
               service:
                 annotations:
                   service.cilium.io/global: "true"

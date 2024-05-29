@@ -1,0 +1,22 @@
+---
+apiVersion: kubevirt.io/v1
+kind: KubeVirt
+metadata:
+  name: kubevirt
+  namespace: kubevirt
+spec:
+  certificateRotateStrategy: {}
+  configuration:
+    developerConfiguration:
+      featureGates: []
+  customizeComponents: {}
+  imagePullPolicy: IfNotPresent
+  workloadUpdateStrategy: {}
+  infra:
+    nodePlacement:
+      nodeSelector:
+        virt-ctrl: enabled
+  workloads:
+    nodePlacement:
+      nodeSelector:
+        virt-host: enabled

@@ -180,7 +180,7 @@ spec:
                 pullPolicy: IfNotPresent                
         repoURL: https://immich-app.github.io/immich-charts
         chart: immich
-        targetRevision: 0.5.0
+        targetRevision: 0.7.0
       destination:
         server: '{{server}}' 
         namespace: immich-d

@@ -28,7 +28,26 @@ spec:
                 hosts: ['<path:k8secrets/ingresses#artifactoryhostname>.<path:k8secrets/ingresses#domainname>']
                 className: '{{metadata.labels.artifactory-ingress}}'
                 annotations: 
-                  nginx.ingress.kubernetes.io/proxy-body-size: "0"   
+                  nginx.ingress.kubernetes.io/proxy-body-size: "0"
+            postgresql:
+              enabled: true
+              persistence:
+                enabled: true
+                size: 200Gi
+                storageClass: "sc-nfs"
+              containerSecurityContext:
+                enabled: true
+                seLinuxOptions: {}
+                runAsUser: 1024
+                runAsGroup: 1024
+                runAsNonRoot: true
+                privileged: false
+                readOnlyRootFilesystem: true
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+                seccompProfile:
+                  type: "RuntimeDefault"              
         repoURL: https://charts.jfrog.io
         chart: artifactory-oss
         targetRevision: 107.90.6

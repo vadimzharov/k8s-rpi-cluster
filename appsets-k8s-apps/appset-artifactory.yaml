@@ -64,11 +64,38 @@ spec:
                   capabilities:
                     drop: ["ALL"]
                   seccompProfile:
-                    type: "RuntimeDefault"  
-          
+                    type: "RuntimeDefault"            
         repoURL: https://charts.jfrog.io
         chart: artifactory-oss
         targetRevision: 107.90.6
+      - helm:
+          releaseName: postgresql
+          values: |
+            global:
+              storageClass: "sc-nfs"
+              postgresql:
+                auth:
+                  postgresPassword: "<artifactorypgpassword>"
+                  username: "<artifactorypgusername>"
+                  password: "<artifactorypgpassword>"
+                  database: "registry"
+            primary:
+              containerSecurityContext:
+                enabled: true
+                seLinuxOptions: {}
+                runAsUser: 1024
+                runAsGroup: 1024
+                runAsNonRoot: true
+                privileged: false
+                readOnlyRootFilesystem: true
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+                seccompProfile:
+                  type: "RuntimeDefault"            
+        repoURL: https://charts.bitnami.com/bitnami
+        chart: postgresql
+        targetRevision: 15.1.4
       destination:
         server: '{{server}}' 
         namespace: artifactory

@@ -48,6 +48,22 @@ spec:
                   drop: ["ALL"]
                 seccompProfile:
                   type: "RuntimeDefault"
+              podSecurityContext:
+                enable: true
+                fsGroup: 1024
+              containerSecurityContext:
+                enabled: true
+                seLinuxOptions: {}
+                runAsUser: 1024
+                runAsGroup: 1024
+                runAsNonRoot: true
+                privileged: false
+                readOnlyRootFilesystem: true
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+                seccompProfile:
+                  type: "RuntimeDefault"  
               primary:
                 podSecurityContext:
                   enable: true

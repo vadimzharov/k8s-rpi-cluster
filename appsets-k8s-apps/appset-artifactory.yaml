@@ -31,26 +31,13 @@ spec:
                   nginx.ingress.kubernetes.io/proxy-body-size: "0"
               postgresql:
                 enabled: true
-                primary:
-                  containerSecurityContext:
-                    enabled: true
-                    seLinuxOptions: {}
-                    runAsUser: 1024
-                    runAsGroup: 1024
-                    runAsNonRoot: true
-                    privileged: false
-                    readOnlyRootFilesystem: true
-                    allowPrivilegeEscalation: false
-                    capabilities:
-                      drop: ["ALL"]
-                    seccompProfile:
-                      type: "RuntimeDefault"
                 persistence:
                   enabled: true
                   size: 20Gi
                   storageClass: "sc-nfs"
                 securityContext:
                   enabled: true
+                  fsGroup: 1024
                   seLinuxOptions: {}
                   runAsUser: 1024
                   runAsGroup: 1024

@@ -32,9 +32,6 @@ spec:
               postgresql:
                 enabled: true
                 primary:
-                  podSecurityContext:
-                    enabled: true
-                    fsGroup: 1024                    
                   containerSecurityContext:
                     enabled: true
                     seLinuxOptions: {}

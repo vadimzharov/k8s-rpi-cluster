@@ -33,7 +33,7 @@ spec:
                 enabled: true
                 persistence:
                   enabled: true
-                  size: 200Gi
+                  size: 20Gi
                   storageClass: "sc-nfs"
                 securityContext:
                   enabled: true

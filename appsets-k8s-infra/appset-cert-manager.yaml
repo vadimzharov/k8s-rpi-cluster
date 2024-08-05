@@ -20,7 +20,7 @@ spec:
             installCRD: true
             extraArgs:
               - --dns01-recursive-nameservers-only
-              - --dns01-recursive-nameservers=ns31.domaincontrol.com:53,ns32.domaincontrol.com:53
+              - --dns01-recursive-nameservers=jen.ns.cloudflare.com:53,venkat.ns.cloudflare.com:53
           parameters:
             - name: installCRDs
               value: "true"

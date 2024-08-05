@@ -48,7 +48,10 @@ spec:
                   drop: ["ALL"]
                 seccompProfile:
                   type: "RuntimeDefault"
-              primary:            
+              primary:
+                podSecurityContext:
+                  enable: true
+                  fsGroup: 1024
                 containerSecurityContext:
                   enabled: true
                   seLinuxOptions: {}

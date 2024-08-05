@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: artifactory
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/apps/artifactory"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          artifactory: "installed"
+  template:
+    metadata:
+      name: '{{name}}-artifactory'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: artifactory
+          values: |
+            artifactory:
+              nginx:
+                enabled: false
+              ingress:
+                enabled: true
+                hosts: ['<path:k8secrets/ingresses#artifactoryhostname>.<path:k8secrets/ingresses#domainname>']
+                className: '{{metadata.labels.artifactory-ingress}}'
+                annotations: 
+                  nginx.ingress.kubernetes.io/proxy-body-size: "0"   
+        repoURL: https://charts.jfrog.io
+        chart: artifactory-oss
+        targetRevision: 107.90.6
+      destination:
+        server: '{{server}}' 
+        namespace: artifactory
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

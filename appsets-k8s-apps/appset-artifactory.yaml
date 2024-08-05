@@ -35,6 +35,19 @@ spec:
                 enabled: true
                 size: 200Gi
                 storageClass: "sc-nfs"
+              securityContext:
+                enabled: true
+                seLinuxOptions: {}
+                runAsUser: 1024
+                runAsGroup: 1024
+                runAsNonRoot: true
+                privileged: false
+                readOnlyRootFilesystem: true
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+                seccompProfile:
+                  type: "RuntimeDefault"                 
               containerSecurityContext:
                 enabled: true
                 seLinuxOptions: {}

@@ -48,7 +48,37 @@ spec:
                 persistence:
                   enabled: true
                   size: 20Gi
-                  storageClass: "sc-nfs"          
+                  storageClass: "sc-nfs"
+                securityContext:
+                  enabled: true
+                  seLinuxOptions: {}
+                  runAsUser: 1024
+                  runAsGroup: 1024
+                  runAsNonRoot: true
+                  privileged: false
+                  readOnlyRootFilesystem: true
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop: ["ALL"]
+                  seccompProfile:
+                    type: "RuntimeDefault"
+                podSecurityContext:
+                  enable: true
+                  fsGroup: 1024
+                containerSecurityContext:
+                  enabled: true
+                  seLinuxOptions: {}
+                  runAsUser: 1024
+                  runAsGroup: 1024
+                  runAsNonRoot: true
+                  privileged: false
+                  readOnlyRootFilesystem: true
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop: ["ALL"]
+                  seccompProfile:
+                    type: "RuntimeDefault"  
+          
         repoURL: https://charts.jfrog.io
         chart: artifactory-oss
         targetRevision: 107.90.6

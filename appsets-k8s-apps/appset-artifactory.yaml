@@ -30,7 +30,7 @@ spec:
                 annotations: 
                   nginx.ingress.kubernetes.io/proxy-body-size: "0"
               postgresql:
-                enabled: true
+                enabled: false
               database:
                 user: <artifactorypgusername>
                 password: <artifactorypgpassword>

@@ -50,7 +50,7 @@ spec:
               # synology-iscsi-storage-delete:
               #   reclaimPolicy: DeleteVolume
             volumeSnapshotClasses:
-              synology-csi-delete:
+              delete:
                 disabled: false
                 deletionPolicy: Delete
         repoURL: https://christian-schlichtherle.github.io/synology-csi-chart

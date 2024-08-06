@@ -21,8 +21,6 @@ spec:
           releaseName: artifactory
           values: |
             artifactory:
-              postgresql:
-                enabled: true
               nginx:
                 enabled: false
               ingress:
@@ -32,7 +30,7 @@ spec:
                 annotations: 
                   nginx.ingress.kubernetes.io/proxy-body-size: "0"
               postgresql:
-                enabled: false
+                enabled: true
               database:
                 user: <artifactorypgusername>
                 password: <artifactorypgpassword>

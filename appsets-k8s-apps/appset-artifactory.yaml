@@ -40,7 +40,7 @@ spec:
         chart: artifactory-oss
         targetRevision: 107.90.6
       - helm:
-          releaseName: postgresql
+          releaseName: artifactory-postgresql
           values: |
             global:
               storageClass: "sc-nfs"

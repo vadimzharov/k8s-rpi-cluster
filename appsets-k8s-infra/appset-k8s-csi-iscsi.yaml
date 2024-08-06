@@ -48,7 +48,7 @@ spec:
                   fsType: ext4
                   location: /volume1
               delete:
-                reclaimPolicy: DeleteVolume
+                reclaimPolicy: Delete
                 parameters:
                   dsm: "<synasip>"
                   fsType: ext4

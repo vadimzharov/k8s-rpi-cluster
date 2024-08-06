@@ -7,7 +7,7 @@ metadata:
     avp.kubernetes.io/path: "k8secrets/infra/synas"    
 spec:
   syncPolicy:
-    preserveResourcesOnDeletion: true
+    preserveResourcesOnDeletion: false
   generators:
   - clusters:
       selector:
@@ -51,7 +51,7 @@ spec:
             volumeSnapshotClasses:
               synology-csi-delete:
                 disabled: false
-                deletionPolicy: Delete       
+                deletionPolicy: Delete
         repoURL: https://christian-schlichtherle.github.io/synology-csi-chart
         chart: synology-csi
         targetRevision: 0.9.10

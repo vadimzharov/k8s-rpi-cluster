@@ -53,6 +53,12 @@ spec:
                   dsm: "<synasip>"
                   fsType: ext4
                   location: /volume1
+              retain:
+                reclaimPolicy: Retain
+                parameters:
+                  dsm: "<synasip>"
+                  fsType: ext4
+                  location: /volume1                  
             volumeSnapshotClasses:
               delete:
                 disabled: false

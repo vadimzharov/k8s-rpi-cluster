@@ -47,7 +47,10 @@ spec:
                   fsType: ext4
                   location: /volume1
               # synology-iscsi-storage-delete:
-              #   reclaimPolicy: Delete              
+              #   reclaimPolicy: DeleteVolume
+            volumeSnapshotClasses:
+              synology-snapshotclass:
+                disabled: true          
         repoURL: https://christian-schlichtherle.github.io/synology-csi-chart
         chart: synology-csi
         targetRevision: 0.9.10

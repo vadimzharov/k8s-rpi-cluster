@@ -23,6 +23,7 @@ spec:
       sources:
       - helm:
           values: |
+            fullnameOverride: "synas-csi"
             clientInfoSecret:
               clients:
                 - host: <synasip>

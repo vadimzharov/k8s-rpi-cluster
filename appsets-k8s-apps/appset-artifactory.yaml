@@ -30,41 +30,12 @@ spec:
                 annotations: 
                   nginx.ingress.kubernetes.io/proxy-body-size: "0"
               postgresql:
-                enabled: true
-                persistence:
-                  enabled: true
-                  size: 20Gi
-                  storageClass: "sc-nfs"
-                securityContext:
-                  enabled: true
-                  fsGroup: 1024
-                  seLinuxOptions: {}
-                  runAsUser: 1024
-                  runAsGroup: 1024
-                  runAsNonRoot: true
-                  privileged: false
-                  readOnlyRootFilesystem: true
-                  allowPrivilegeEscalation: false
-                  capabilities:
-                    drop: ["ALL"]
-                  seccompProfile:
-                    type: "RuntimeDefault"
-                podSecurityContext:
-                  enable: true
-                  fsGroup: 1024
-                containerSecurityContext:
-                  enabled: true
-                  seLinuxOptions: {}
-                  runAsUser: 1024
-                  runAsGroup: 1024
-                  runAsNonRoot: true
-                  privileged: false
-                  readOnlyRootFilesystem: true
-                  allowPrivilegeEscalation: false
-                  capabilities:
-                    drop: ["ALL"]
-                  seccompProfile:
-                    type: "RuntimeDefault"            
+                enabled: false
+              database:
+                user: <artifactorypgusername>
+                password: <artifactorypgpassword>
+            postgresql:
+              enabled: true
         repoURL: https://charts.jfrog.io
         chart: artifactory-oss
         targetRevision: 107.90.6
@@ -78,7 +49,7 @@ spec:
                   postgresPassword: "<artifactorypgpassword>"
                   username: "<artifactorypgusername>"
                   password: "<artifactorypgpassword>"
-                  database: "registry"
+                  database: "artifactory"
             primary:
               containerSecurityContext:
                 enabled: true

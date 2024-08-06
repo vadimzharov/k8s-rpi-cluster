@@ -31,9 +31,9 @@ spec:
                   nginx.ingress.kubernetes.io/proxy-body-size: "0"
               postgresql:
                 enabled: false
-              database:
-                user: <artifactorypgusername>
-                password: <artifactorypgpassword>
+              #database:
+              #  user: <artifactorypgusername>
+              #  password: <artifactorypgpassword>
             postgresql:
               enabled: true
         repoURL: https://charts.jfrog.io

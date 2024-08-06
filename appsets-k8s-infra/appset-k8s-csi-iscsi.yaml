@@ -1,0 +1,63 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: k8s-csi-iscsi
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/infra/synas"    
+spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          k8s-csi-iscsi: "installed"
+      values:
+        revision: '{{metadata.annotations.branch-name}}'           
+  template:
+    metadata:
+      name: '{{name}}-k8s-csi-iscsi' 
+    spec:
+      project: k8s-homelab-infra
+      sources:
+      - helm:
+          values: |
+            clientInfoSecret:
+              clients:
+                - host: <synasip>
+                  https: false        
+                  password: <synaspassword>
+                  port: 5000          
+                  username: <synasuser>
+              create: true
+              name: "client-info-secret"
+            storageClasses:
+              synology-iscsi-storage:
+                # One of true or false (default):
+                ##disabled: false
+                # One of true or false (default):
+                ##isDefault: false
+                # One of "Retain" or "Delete" (default):
+                reclaimPolicy: Retain
+                # One of "WaitForFirstConsumer" or "Immediate" (default):
+                ##volumeBindingMode: Immediate
+                parameters:
+                  dsm: "<synasip>"
+                  fsType: ext4
+                  location: /volume1
+              # synology-iscsi-storage-delete:
+              #   reclaimPolicy: Delete              
+        repoURL: https://christian-schlichtherle.github.io/synology-csi-chart
+        chart: synology-csi-chart
+        targetRevision: 0.9.10
+      destination:
+        server: '{{server}}'
+        namespace: synology-csi
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          

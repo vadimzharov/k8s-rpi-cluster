@@ -47,8 +47,12 @@ spec:
                   dsm: "<synasip>"
                   fsType: ext4
                   location: /volume1
-              # synology-iscsi-storage-delete:
-              #   reclaimPolicy: DeleteVolume
+              delete:
+                reclaimPolicy: DeleteVolume
+                parameters:
+                  dsm: "<synasip>"
+                  fsType: ext4
+                  location: /volume1
             volumeSnapshotClasses:
               delete:
                 disabled: false

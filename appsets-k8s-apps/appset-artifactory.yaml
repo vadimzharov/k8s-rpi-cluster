@@ -34,6 +34,7 @@ spec:
               database:
                 user: <artifactorypgusername>
                 password: <artifactorypgpassword>
+                url: postgresql:5432
             postgresql:
               enabled: true
         repoURL: https://charts.jfrog.io

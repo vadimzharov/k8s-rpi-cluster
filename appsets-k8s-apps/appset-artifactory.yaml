@@ -21,6 +21,8 @@ spec:
           releaseName: artifactory
           values: |
             artifactory:
+              postgresql:
+                enabled: true
               nginx:
                 enabled: false
               ingress:

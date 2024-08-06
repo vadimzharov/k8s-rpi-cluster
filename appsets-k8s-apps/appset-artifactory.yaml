@@ -32,8 +32,9 @@ spec:
               postgresql:
                 enabled: true
                 persistence:
-                  enabled: false
-                  size: 2Gi
+                  enabled: true
+                  size: 20Gi
+                  storageClass: "synas-csi-delete"
             postgresql:
               enabled: true
         repoURL: https://charts.jfrog.io

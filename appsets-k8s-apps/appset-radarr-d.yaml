@@ -261,7 +261,6 @@ spec:
                       TRANSMISSION_INCOMPLETE_DIR_ENABLED: "true"
                       TRANSMISSION_WATCH_DIR: "/watch"
                       TRANSMISSION_WATCH_DIR_ENABLED: "false"
-                      TRANSMISSION_WEB_HOME: "/web"
                       TZ: "CDT"
                   arr-d-backup-config-daemon:
                     image: 

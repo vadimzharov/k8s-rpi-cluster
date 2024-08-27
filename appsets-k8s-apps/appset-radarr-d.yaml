@@ -68,10 +68,19 @@ spec:
                   http:
                     port: 7878
             ingress:
-              {}
-            route:
               main:
                 enabled: true
+                  hosts: 
+                  - host: <radarr-dhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: main
+                          port: http                  
+            route:
+              main:
+                enabled: false
                 hostnames:
                   - <radarr-dhostname>.<domainname>
             persistence:

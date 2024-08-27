@@ -79,11 +79,16 @@ spec:
               config:
                 enabled: true
                 type: emptyDir
-                mountPath: /config
+                globalMounts:
+                  - path: /config
+                    readonly: false
               root-folder:
                 enabled: true
                 type: persistentVolumeClaim
-                mountPath: /arr-d
+                storageClass: sc-nfs
+                globalMounts:
+                  - path: /arr-d
+                    readonly: false
             secrets:
               b-r-creds:
                 enabled: true

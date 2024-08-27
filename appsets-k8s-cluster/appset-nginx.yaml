@@ -36,7 +36,7 @@ spec:
                   ingressClass: nginx-external
             repoURL: https://kubernetes.github.io/ingress-nginx
             chart: ingress-nginx
-            targetRevision: 4.7.1
+            targetRevision: 4.11.2
           destination:
             server: '{{server}}'
             namespace: ingress-nginx-external
@@ -60,7 +60,7 @@ spec:
                 default: true
         repoURL: https://kubernetes.github.io/ingress-nginx
         chart: ingress-nginx
-        targetRevision: 4.7.1
+        targetRevision: 4.11.2
       destination:
         server: '{{server}}'
         namespace: ingress-nginx

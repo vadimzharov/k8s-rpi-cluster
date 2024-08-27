@@ -145,7 +145,7 @@ spec:
                 containers:
                   main:
                    image: 
-                    repository: lscr.io/linuxserver/radarr
+                    repository: lscr.io/linuxserver/sonarr
                     pullPolicy: IfNotPresent
                     tag: latest
                   arr-d-backup-config-daemon:

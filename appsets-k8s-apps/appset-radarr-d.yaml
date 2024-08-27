@@ -77,7 +77,7 @@ spec:
                       - path: /
                         pathType: Prefix
                         service:
-                          name: main
+                          name: arr-d
                           port: 7878
             persistence:
               config:

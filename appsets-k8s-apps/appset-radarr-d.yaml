@@ -61,6 +61,9 @@ spec:
                         name: arr-d-b-r-creds
             service:
               main:
+                primary: true
+                enabled: true
+                controller: main
                 ports:
                   http:
                     port: 7878

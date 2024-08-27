@@ -78,11 +78,6 @@ spec:
                         service:
                           name: main
                           port: http                  
-            route:
-              main:
-                enabled: false
-                hostnames:
-                  - <radarr-dhostname>.<domainname>
             persistence:
               config:
                 enabled: true

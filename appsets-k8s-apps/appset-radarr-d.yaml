@@ -71,7 +71,7 @@ spec:
               main:
                 enable: true
                 hostnames:
-                  - <arr-dhostname>.<domainname>
+                  - <radarr-dhostname>.<domainname>
             persistence:
               config:
                 enabled: true

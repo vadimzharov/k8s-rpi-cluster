@@ -85,7 +85,7 @@ spec:
                 type: emptyDir
                 globalMounts:
                   - path: /config
-                    readOnly: false
+                    readOnly: false                    
               root-folder:
                 enabled: true
                 type: persistentVolumeClaim
@@ -94,6 +94,13 @@ spec:
                 storageClass: sc-nfs
                 globalMounts:
                   - path: /arr-d
+                    readOnly: false
+              transmission:
+                enabled: true
+                type: persistentVolumeClaim
+                existingClaim: trans-d-donwloads-complete
+                globalMounts:
+                  - path: /transmission
                     readOnly: false
             secrets:
               b-r-creds:
@@ -194,6 +201,13 @@ spec:
                 globalMounts:
                   - path: /arr-d
                     readOnly: false
+              transmission:
+                enabled: true
+                type: persistentVolumeClaim
+                existingClaim: trans-d-donwloads-complete
+                globalMounts:
+                  - path: /transmission
+                    readOnly: false                    
             configMaps:
               b-r-settings:
                 enabled: true
@@ -210,23 +224,7 @@ spec:
                   ARCHIVE_TYPE: targz
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
-        targetRevision: 3.4.0
-      - helm:
-          releaseName: trans-pvc
-          values: |
-            controllers:
-              main:
-                enabled: false
-            persistence:
-              download:
-                enabled: true
-                type: persistentVolumeClaim
-                storageClass: sc-nfs
-                accessMode: ReadWriteMany
-                size: 1G
-        repoURL: https://bjw-s.github.io/helm-charts
-        chart: app-template
-        targetRevision: 3.4.0        
+        targetRevision: 3.4.0      
       - helm:
           releaseName: trans-d
           values: |
@@ -309,6 +307,15 @@ spec:
                 type: emptyDir
                 globalMounts:
                   - path: /downloads/incomplete
+                    readOnly: false
+              donwloads-complete:
+                enabled: true
+                type: persistentVolumeClaim
+                size: 1Gi
+                accessMode: ReadWriteMany
+                storageClass: sc-nfs
+                globalMounts:
+                  - path: /downloads/complete
                     readOnly: false
             configMaps:
               b-r-settings:

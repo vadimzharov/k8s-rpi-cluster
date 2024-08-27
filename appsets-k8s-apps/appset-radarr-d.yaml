@@ -1,0 +1,119 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: arr-d
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          arr-d: "installed"
+          k8s-csi-nfs: "installed"          
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-arr-d'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: arr-d
+          values: |
+            controllers:            
+              main:
+                type: deployment
+                initContainers:
+                  arr-d-restore-config:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command:
+                      - podbackup
+                    args: 
+                      - restore
+                    envFrom:
+                    - configMapRef:
+                        name: arr-d-b-r-settings
+                    - secretRef:
+                        name: arr-d-b-r-creds                
+                containers:
+                  main:
+                   image: 
+                    repository: lscr.io/linuxserver/radarr
+                    pullPolicy: IfNotPresent
+                    tag: latest
+                  arr-d-backup-config-daemon:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command: ["podbackup"]
+                    args: ["backup-daemon"]
+                    envFrom:
+                    - configMapRef:
+                        name: arr-d-b-r-settings
+                    - secretRef:
+                        name: arr-d-b-r-creds
+            service:
+              main:
+                ports:
+                  http:
+                    port: 7878
+            ingress:
+              main:
+                enable: false
+            route:
+              main:
+                enable: true
+                hostnames:
+                  - <arr-dhostname>.<domainname>
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                mountPath: /config
+              root-folder:
+                enabled: true
+                type: persistentVolumeClaim
+                mountPath: /arr-d
+            secrets:
+              b-r-creds:
+                enabled: true
+                labels: {}
+                annotations: {}
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/backup/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/backup/minios3creds#miniosecretkey>
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "arr-d-config"
+                  S3_FILE_PREFIX: "arr-d-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "true"
+                  DIR_TO_BACKUP: /config
+                  DIR_TO_RESTORE: /config
+                  ARCHIVE_TYPE: targz
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 3.4.0
+      destination:
+        server: '{{server}}' 
+        namespace: arr-d
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

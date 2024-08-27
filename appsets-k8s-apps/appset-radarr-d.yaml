@@ -38,9 +38,9 @@ spec:
                       - restore
                     envFrom:
                     - configMapRef:
-                        name: arr-d-b-r-settings
+                        name: radarr-d-b-r-settings
                     - secretRef:
-                        name: arr-d-b-r-creds                
+                        name: radarr-d-b-r-creds                
                 containers:
                   main:
                    image: 
@@ -56,9 +56,9 @@ spec:
                     args: ["backup-daemon"]
                     envFrom:
                     - configMapRef:
-                        name: arr-d-b-r-settings
+                        name: radarr-d-b-r-settings
                     - secretRef:
-                        name: arr-d-b-r-creds
+                        name: radarr-d-b-r-creds
             service:
               main:
                 primary: true

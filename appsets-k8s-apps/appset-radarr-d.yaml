@@ -217,12 +217,6 @@ spec:
             controllers:
               main:
                 enabled: false
-            service:
-              main:
-                enabled: false
-            ingress:
-              main:
-                enabled: false
             persistence:
               download:
                 enabled: true

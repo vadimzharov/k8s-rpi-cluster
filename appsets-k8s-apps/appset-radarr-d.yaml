@@ -70,6 +70,7 @@ spec:
             ingress:
               main:
                 enabled: true
+                className: nginx
                 hosts: 
                   - host: <radarr-dhostname>.<domainname>
                     paths:
@@ -77,7 +78,6 @@ spec:
                         pathType: Prefix
                         service:
                           name: main
-                          port: http                  
             persistence:
               config:
                 enabled: true

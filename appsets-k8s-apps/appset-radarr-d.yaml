@@ -78,6 +78,7 @@ spec:
                         pathType: Prefix
                         service:
                           name: main
+                          port: 7878
             persistence:
               config:
                 enabled: true

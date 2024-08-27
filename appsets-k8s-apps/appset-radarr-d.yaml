@@ -228,7 +228,7 @@ spec:
         chart: app-template
         targetRevision: 3.4.0        
       - helm:
-          releaseName: trans
+          releaseName: trans-d
           values: |
             controllers:            
               main:
@@ -295,7 +295,7 @@ spec:
                       - path: /
                         pathType: Prefix
                         service:
-                          name: trans
+                          name: trans-d
                           port: 9091
             persistence:
               config:

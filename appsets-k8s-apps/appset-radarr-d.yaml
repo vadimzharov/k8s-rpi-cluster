@@ -43,10 +43,10 @@ spec:
                         name: radarr-d-b-r-creds                
                 containers:
                   main:
-                   image: 
-                    repository: lscr.io/linuxserver/radarr
-                    pullPolicy: IfNotPresent
-                    tag: latest
+                    image: 
+                      repository: lscr.io/linuxserver/radarr
+                      pullPolicy: IfNotPresent
+                      tag: latest
                   arr-d-backup-config-daemon:
                     image: 
                       repository: quay.io/vadimzharov/podbackup
@@ -144,10 +144,10 @@ spec:
                         name: radarr-d-b-r-creds                
                 containers:
                   main:
-                   image: 
-                    repository: lscr.io/linuxserver/sonarr
-                    pullPolicy: IfNotPresent
-                    tag: latest
+                    image: 
+                      repository: lscr.io/linuxserver/sonarr
+                      pullPolicy: IfNotPresent
+                      tag: latest
                   arr-d-backup-config-daemon:
                     image: 
                       repository: quay.io/vadimzharov/podbackup
@@ -210,7 +210,129 @@ spec:
                   ARCHIVE_TYPE: targz
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
+        targetRevision: 3.4.0
+      - helm:
+          releaseName: trans-pvc
+          values: |
+            controllers:
+              main:
+                enabled: false
+            service:
+              main:
+                enabled: false
+            ingress:
+              main:
+                enabled: false
+            persistence:
+              download:
+                enabled: true
+                type: persistentVolumeClaim
+                storageClass: sc-nfs
+                accessMode: ReadWriteMany
+                size: 1G
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
         targetRevision: 3.4.0        
+      - helm:
+          releaseName: trans
+          values: |
+            controllers:            
+              main:
+                type: deployment
+                pod:
+                  labels:
+                    vpn: required                
+                initContainers:
+                  arr-d-restore-config:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command:
+                      - podbackup
+                    args: 
+                      - restore
+                    envFrom:
+                    - configMapRef:
+                        name: trans-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds                
+                containers:
+                  main:
+                    image: 
+                      repository: docker.io/linuxserver/transmission
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    env:
+                      TRANSMISSION_DOWNLOAD_DIR: "/downloads/complete"
+                      TRANSMISSION_INCOMPLETE_DIR: "/downloads/incomplete"
+                      TRANSMISSION_INCOMPLETE_DIR_ENABLED: "true"
+                      TRANSMISSION_WATCH_DIR: "/watch"
+                      TRANSMISSION_WATCH_DIR_ENABLED: "false"
+                      TRANSMISSION_WEB_HOME: "/web"
+                      TZ: "CDT"
+                  arr-d-backup-config-daemon:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command: ["podbackup"]
+                    args: ["backup-daemon"]
+                    envFrom:
+                    - configMapRef:
+                        name: trans-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds
+            service:
+              main:
+                primary: true
+                enabled: true
+                controller: main
+                ports:
+                  http:
+                    port: 9091
+            ingress:
+              main:
+                enabled: true
+                className: nginx
+                hosts: 
+                  - host: <trans-dhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: trans
+                          port: 9091
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                globalMounts:
+                  - path: /config
+                    readOnly: false
+              downloads-incomplete:
+                enabled: true
+                type: emptyDir
+                globalMounts:
+                  - path: /downloads/incomplete
+                    readOnly: false
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "trans-d-config"
+                  S3_FILE_PREFIX: "trans-d-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "false"
+                  DIR_TO_BACKUP: /config
+                  DIR_TO_RESTORE: /config
+                  ARCHIVE_TYPE: targz
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 3.4.0
       destination:
         server: '{{server}}' 
         namespace: arr-d

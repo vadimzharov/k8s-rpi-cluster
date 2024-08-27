@@ -69,10 +69,11 @@ spec:
                     port: 7878
             ingress:
               main:
-                enable: false
+                enabled: false
+                ingressClassName: nginx
             route:
               main:
-                enable: true
+                enabled: true
                 hostnames:
                   - <radarr-dhostname>.<domainname>
             persistence:
@@ -81,14 +82,14 @@ spec:
                 type: emptyDir
                 globalMounts:
                   - path: /config
-                    readonly: false
+                    readOnly: false
               root-folder:
                 enabled: true
                 type: persistentVolumeClaim
                 storageClass: sc-nfs
                 globalMounts:
                   - path: /arr-d
-                    readonly: false
+                    readOnly: false
             secrets:
               b-r-creds:
                 enabled: true

@@ -109,8 +109,8 @@ spec:
                 enabled: true
                 data:
                   AWS_BUCKET: "arr-bkp"
-                  S3_BUCKET_FOLDER: "arr-d-config"
-                  S3_FILE_PREFIX: "arr-d-config"
+                  S3_BUCKET_FOLDER: "radarr-d-config"
+                  S3_FILE_PREFIX: "radarr-d-config"
                   BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
@@ -121,6 +121,96 @@ spec:
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 3.4.0
+      - helm:
+          releaseName: sonarr-d
+          values: |
+            controllers:            
+              main:
+                type: deployment
+                initContainers:
+                  arr-d-restore-config:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command:
+                      - podbackup
+                    args: 
+                      - restore
+                    envFrom:
+                    - configMapRef:
+                        name: sonarr-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds                
+                containers:
+                  main:
+                   image: 
+                    repository: lscr.io/linuxserver/radarr
+                    pullPolicy: IfNotPresent
+                    tag: latest
+                  arr-d-backup-config-daemon:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command: ["podbackup"]
+                    args: ["backup-daemon"]
+                    envFrom:
+                    - configMapRef:
+                        name: sonarr-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds
+            service:
+              main:
+                primary: true
+                enabled: true
+                controller: main
+                ports:
+                  http:
+                    port: 8989
+            ingress:
+              main:
+                enabled: true
+                className: nginx
+                hosts: 
+                  - host: <sonarr-dhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: sonarr-d
+                          port: 8989
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                globalMounts:
+                  - path: /config
+                    readOnly: false
+              root-folder:
+                enabled: true
+                type: persistentVolumeClaim
+                existingClaim: radarr-d-root-folder
+                globalMounts:
+                  - path: /arr-d
+                    readOnly: false
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "sonarr-d-config"
+                  S3_FILE_PREFIX: "sonarr-d-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "false"
+                  DIR_TO_BACKUP: /config
+                  DIR_TO_RESTORE: /config
+                  ARCHIVE_TYPE: targz
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 3.4.0        
       destination:
         server: '{{server}}' 
         namespace: arr-d

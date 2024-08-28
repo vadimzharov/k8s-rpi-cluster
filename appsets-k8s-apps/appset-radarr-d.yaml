@@ -334,7 +334,7 @@ spec:
         chart: app-template
         targetRevision: 3.4.0
       - helm:
-          releaseName: overseerr-d
+          releaseName: jellyseerr-d
           values: |
             controllers:            
               main:
@@ -351,13 +351,13 @@ spec:
                       - restore
                     envFrom:
                     - configMapRef:
-                        name: overseerr-d-b-r-settings
+                        name: jellyseerr-d-b-r-settings
                     - secretRef:
                         name: radarr-d-b-r-creds                
                 containers:
                   main:
                     image: 
-                      repository: docker.io/sctx/overseerr
+                      repository: docker.io/fallenbagel/jellyseerr
                       pullPolicy: IfNotPresent
                       tag: latest
                   arr-d-backup-config-daemon:
@@ -369,7 +369,7 @@ spec:
                     args: ["backup-daemon"]
                     envFrom:
                     - configMapRef:
-                        name: overseerr-d-b-r-settings
+                        name: jellyseerr-d-b-r-settings
                     - secretRef:
                         name: radarr-d-b-r-creds
             service:
@@ -385,12 +385,12 @@ spec:
                 enabled: true
                 className: nginx
                 hosts: 
-                  - host: <overseerr-dhostname>.<domainname>
+                  - host: <jellyseerr-dhostname>.<domainname>
                     paths:
                       - path: /
                         pathType: Prefix
                         service:
-                          name: overseerr-d
+                          name: jellyseerr-d
                           port: 5055
             persistence:
               config:
@@ -413,8 +413,8 @@ spec:
                 enabled: true
                 data:
                   AWS_BUCKET: "arr-bkp"
-                  S3_BUCKET_FOLDER: "overseerr-d-config"
-                  S3_FILE_PREFIX: "overseerr-d-config"
+                  S3_BUCKET_FOLDER: "jellyseerr-d-config"
+                  S3_FILE_PREFIX: "jellyseerr-d-config"
                   BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"

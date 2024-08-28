@@ -333,6 +333,98 @@ spec:
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
         targetRevision: 3.4.0
+      - helm:
+          releaseName: overseerr-d
+          values: |
+            controllers:            
+              main:
+                type: deployment
+                initContainers:
+                  arr-d-restore-config:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command:
+                      - podbackup
+                    args: 
+                      - restore
+                    envFrom:
+                    - configMapRef:
+                        name: overseerr-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds                
+                containers:
+                  main:
+                    image: 
+                      repository: docker.io/sctx/overseerr
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                  arr-d-backup-config-daemon:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command: ["podbackup"]
+                    args: ["backup-daemon"]
+                    envFrom:
+                    - configMapRef:
+                        name: overseerr-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds
+            service:
+              main:
+                primary: true
+                enabled: true
+                controller: main
+                ports:
+                  http:
+                    port: 5055
+            ingress:
+              main:
+                enabled: true
+                className: nginx
+                hosts: 
+                  - host: <overseerr-dhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: overseerr-d
+                          port: 5055
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                globalMounts:
+                  - path: /app/config
+                    readOnly: false
+            secrets:
+              b-r-creds:
+                enabled: true
+                labels: {}
+                annotations: {}
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/backup/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/backup/minios3creds#miniosecretkey>
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "overseerr-d-config"
+                  S3_FILE_PREFIX: "overseerr-d-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "false"
+                  DIR_TO_BACKUP: /app/config
+                  DIR_TO_RESTORE: /app/config
+                  ARCHIVE_TYPE: targz
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 3.4.0
       destination:
         server: '{{server}}' 
         namespace: arr-d

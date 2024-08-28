@@ -4,7 +4,7 @@ metadata:
   name: firefox
   namespace: argocd
   annotations:
-    avp.kubernetes.io/path: "k8secrets/ingresses"
+    avp.kubernetes.io/path: "k8secrets/apps/firefox-v"
 spec:
   generators:
   - clusters:
@@ -34,6 +34,10 @@ spec:
                       repository: lscr.io/linuxserver/firefox
                       pullPolicy: IfNotPresent
                       tag: latest
+                    env:
+                      CUSTOM_USER: firefox
+                      TITLE: "Firefox browser"
+                      PASSWORD: <password>                      
             service:
               main:
                 primary: true
@@ -47,7 +51,7 @@ spec:
                 enabled: true
                 className: nginx
                 hosts: 
-                  - host: <firefoxhostname>.<domainname>
+                  - host: <path:k8secrets/ingresses#firefoxhostname>.<path:k8secrets/ingresses#domainname>
                     paths:
                       - path: /
                         pathType: Prefix

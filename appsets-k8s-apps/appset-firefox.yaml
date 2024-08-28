@@ -19,33 +19,44 @@ spec:
     spec:
       project: k8s-homelab-apps
       sources:
-      - repoURL: https://github.com/vadimzharov/k8s-rpi-cluster.git
-        targetRevision: '{{values.revision}}'
-        path: k8s-apps/firefox
       - helm:
           releaseName: firefox
           values: |
-            image:
-              repository: docker.io/jlesage/firefox
-              pullPolicy: IfNotPresent
-              tag: latest
+            controllers:            
+              main:
+                type: deployment
+                pod:
+                  labels:
+                    vpn: required
+                containers:
+                  main:
+                    image: 
+                      repository: lscr.io/linuxserver/firefox
+                      pullPolicy: IfNotPresent
+                      tag: latest
             service:
               main:
+                primary: true
+                enabled: true
+                controller: main
                 ports:
                   http:
-                    port: 5800
+                    port: 3000
             ingress:
               main:
                 enabled: true
-                ingressClassName: nginx
-                hosts:
+                className: nginx
+                hosts: 
                   - host: <firefoxhostname>.<domainname>
                     paths:
                       - path: /
                         pathType: Prefix
+                        service:
+                          name: firefox
+                          port: 3000
         repoURL: https://bjw-s.github.io/helm-charts
         chart: app-template
-        targetRevision: 1.5.1
+        targetRevision: 3.4.0
       destination:
         server: '{{server}}' 
         namespace: firefox

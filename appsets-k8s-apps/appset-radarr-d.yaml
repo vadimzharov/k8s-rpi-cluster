@@ -121,7 +121,7 @@ spec:
                   BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
-                  FORCE_RESTORE: "false"
+                  FORCE_RESTORE: "true"
                   DIR_TO_BACKUP: /config
                   DIR_TO_RESTORE: /config
                   ARCHIVE_TYPE: targz
@@ -218,7 +218,7 @@ spec:
                   BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
-                  FORCE_RESTORE: "false"
+                  FORCE_RESTORE: "true"
                   DIR_TO_BACKUP: /config
                   DIR_TO_RESTORE: /config
                   ARCHIVE_TYPE: targz
@@ -326,7 +326,7 @@ spec:
                   BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
-                  FORCE_RESTORE: "false"
+                  FORCE_RESTORE: "true"
                   DIR_TO_BACKUP: /config
                   DIR_TO_RESTORE: /config
                   ARCHIVE_TYPE: targz
@@ -419,7 +419,7 @@ spec:
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
                   SKIP_PATH: "/app/config/logs"
-                  FORCE_RESTORE: "false"
+                  FORCE_RESTORE: "true"
                   DIR_TO_BACKUP: /app/config
                   DIR_TO_RESTORE: /app/config
                   ARCHIVE_TYPE: targz

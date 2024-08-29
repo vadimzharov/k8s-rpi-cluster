@@ -344,7 +344,7 @@ spec:
                     image: 
                       repository: quay.io/vadimzharov/podbackup
                       pullPolicy: IfNotPresent
-                      tag: latest
+                      tag: 0.0.3
                     command:
                       - podbackup
                     args: 
@@ -364,7 +364,7 @@ spec:
                     image: 
                       repository: quay.io/vadimzharov/podbackup
                       pullPolicy: IfNotPresent
-                      tag: latest
+                      tag: 0.0.3
                     command: ["podbackup"]
                     args: ["backup-daemon"]
                     envFrom:
@@ -418,6 +418,7 @@ spec:
                   BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
+                  SKIP_PATH: "/app/config/logs"
                   FORCE_RESTORE: "false"
                   DIR_TO_BACKUP: /app/config
                   DIR_TO_RESTORE: /app/config

@@ -1,0 +1,438 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: arr-d
+  namespace: argocd
+  annotations:
+    avp.kubernetes.io/path: "k8secrets/ingresses"
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          arr-d: "installed"
+          k8s-csi-nfs: "installed"          
+      values:
+        revision: '{{metadata.annotations.branch-name}}'
+  template:
+    metadata:
+      name: '{{name}}-arr-d'
+    spec:
+      project: k8s-homelab-apps
+      sources:
+      - helm:
+          releaseName: radarr-d
+          values: |
+            controllers:            
+              main:
+                type: deployment
+                initContainers:
+                  arr-d-restore-config:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command:
+                      - podbackup
+                    args: 
+                      - restore
+                    envFrom:
+                    - configMapRef:
+                        name: radarr-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds                
+                containers:
+                  main:
+                    image: 
+                      repository: lscr.io/linuxserver/radarr
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                  arr-d-backup-config-daemon:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command: ["podbackup"]
+                    args: ["backup-daemon"]
+                    envFrom:
+                    - configMapRef:
+                        name: radarr-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds
+            service:
+              main:
+                primary: true
+                enabled: true
+                controller: main
+                ports:
+                  http:
+                    port: 7878
+            ingress:
+              main:
+                enabled: true
+                className: nginx
+                hosts: 
+                  - host: <radarr-dhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: radarr-d
+                          port: 7878
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                globalMounts:
+                  - path: /config
+                    readOnly: false                    
+              root-folder:
+                enabled: true
+                type: persistentVolumeClaim
+                size: 1Gi
+                accessMode: ReadWriteMany
+                storageClass: sc-nfs
+                globalMounts:
+                  - path: /arr-d
+                    readOnly: false
+              transmission:
+                enabled: true
+                type: persistentVolumeClaim
+                existingClaim: trans-d-donwloads-complete
+                globalMounts:
+                  - path: /transmission
+                    readOnly: false
+            secrets:
+              b-r-creds:
+                enabled: true
+                labels: {}
+                annotations: {}
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/backup/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/backup/minios3creds#miniosecretkey>
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "radarr-d-config"
+                  S3_FILE_PREFIX: "radarr-d-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "true"
+                  DIR_TO_BACKUP: /config
+                  DIR_TO_RESTORE: /config
+                  ARCHIVE_TYPE: targz
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 3.4.0
+      - helm:
+          releaseName: sonarr-d
+          values: |
+            controllers:            
+              main:
+                type: deployment
+                initContainers:
+                  arr-d-restore-config:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command:
+                      - podbackup
+                    args: 
+                      - restore
+                    envFrom:
+                    - configMapRef:
+                        name: sonarr-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds                
+                containers:
+                  main:
+                    image: 
+                      repository: lscr.io/linuxserver/sonarr
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                  arr-d-backup-config-daemon:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command: ["podbackup"]
+                    args: ["backup-daemon"]
+                    envFrom:
+                    - configMapRef:
+                        name: sonarr-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds
+            service:
+              main:
+                primary: true
+                enabled: true
+                controller: main
+                ports:
+                  http:
+                    port: 8989
+            ingress:
+              main:
+                enabled: true
+                className: nginx
+                hosts: 
+                  - host: <sonarr-dhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: sonarr-d
+                          port: 8989
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                globalMounts:
+                  - path: /config
+                    readOnly: false
+              root-folder:
+                enabled: true
+                type: persistentVolumeClaim
+                existingClaim: radarr-d-root-folder
+                globalMounts:
+                  - path: /arr-d
+                    readOnly: false
+              transmission:
+                enabled: true
+                type: persistentVolumeClaim
+                existingClaim: trans-d-donwloads-complete
+                globalMounts:
+                  - path: /transmission
+                    readOnly: false                    
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "sonarr-d-config"
+                  S3_FILE_PREFIX: "sonarr-d-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "true"
+                  DIR_TO_BACKUP: /config
+                  DIR_TO_RESTORE: /config
+                  ARCHIVE_TYPE: targz
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 3.4.0      
+      - helm:
+          releaseName: trans-d
+          values: |
+            controllers:            
+              main:
+                type: deployment
+                pod:
+                  labels:
+                    vpn: required                
+                initContainers:
+                  arr-d-restore-config:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command:
+                      - podbackup
+                    args: 
+                      - restore
+                    envFrom:
+                    - configMapRef:
+                        name: trans-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds                
+                containers:
+                  main:
+                    image: 
+                      repository: docker.io/linuxserver/transmission
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    env:
+                      TRANSMISSION_DOWNLOAD_DIR: "/downloads/complete"
+                      TRANSMISSION_INCOMPLETE_DIR: "/downloads/incomplete"
+                      TRANSMISSION_INCOMPLETE_DIR_ENABLED: "true"
+                      TRANSMISSION_WATCH_DIR: "/watch"
+                      TRANSMISSION_WATCH_DIR_ENABLED: "false"
+                      TZ: "CDT"
+                  arr-d-backup-config-daemon:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                    command: ["podbackup"]
+                    args: ["backup-daemon"]
+                    envFrom:
+                    - configMapRef:
+                        name: trans-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds
+            service:
+              main:
+                primary: true
+                enabled: true
+                controller: main
+                ports:
+                  http:
+                    port: 9091
+            ingress:
+              main:
+                enabled: true
+                className: nginx
+                hosts: 
+                  - host: <trans-dhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: trans-d
+                          port: 9091
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                globalMounts:
+                  - path: /config
+                    readOnly: false
+              downloads-incomplete:
+                enabled: true
+                type: emptyDir
+                globalMounts:
+                  - path: /downloads/incomplete
+                    readOnly: false
+              donwloads-complete:
+                enabled: true
+                type: persistentVolumeClaim
+                size: 1Gi
+                accessMode: ReadWriteMany
+                storageClass: sc-nfs
+                globalMounts:
+                  - path: /downloads/complete
+                    readOnly: false
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "trans-d-config"
+                  S3_FILE_PREFIX: "trans-d-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  FORCE_RESTORE: "true"
+                  DIR_TO_BACKUP: /config
+                  DIR_TO_RESTORE: /config
+                  ARCHIVE_TYPE: targz
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 3.4.0
+      - helm:
+          releaseName: jellyseerr-d
+          values: |
+            controllers:            
+              main:
+                type: deployment
+                initContainers:
+                  arr-d-restore-config:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: 0.0.3
+                    command:
+                      - podbackup
+                    args: 
+                      - restore
+                    envFrom:
+                    - configMapRef:
+                        name: jellyseerr-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds                
+                containers:
+                  main:
+                    image: 
+                      repository: docker.io/fallenbagel/jellyseerr
+                      pullPolicy: IfNotPresent
+                      tag: latest
+                  arr-d-backup-config-daemon:
+                    image: 
+                      repository: quay.io/vadimzharov/podbackup
+                      pullPolicy: IfNotPresent
+                      tag: 0.0.3
+                    command: ["podbackup"]
+                    args: ["backup-daemon"]
+                    envFrom:
+                    - configMapRef:
+                        name: jellyseerr-d-b-r-settings
+                    - secretRef:
+                        name: radarr-d-b-r-creds
+            service:
+              main:
+                primary: true
+                enabled: true
+                controller: main
+                ports:
+                  http:
+                    port: 5055
+            ingress:
+              main:
+                enabled: true
+                className: nginx
+                hosts: 
+                  - host: <jellyseerr-dhostname>.<domainname>
+                    paths:
+                      - path: /
+                        pathType: Prefix
+                        service:
+                          name: jellyseerr-d
+                          port: 5055
+            persistence:
+              config:
+                enabled: true
+                type: emptyDir
+                globalMounts:
+                  - path: /app/config
+                    readOnly: false
+            secrets:
+              b-r-creds:
+                enabled: true
+                labels: {}
+                annotations: {}
+                stringData:
+                  S3_ENDPOINT: <path:k8secrets/backup/minios3creds#minioendpoint>
+                  AWS_KEY: <path:k8secrets/backup/minios3creds#miniokey>
+                  AWS_SECRET_KEY: <path:k8secrets/backup/minios3creds#miniosecretkey>
+            configMaps:
+              b-r-settings:
+                enabled: true
+                data:
+                  AWS_BUCKET: "arr-bkp"
+                  S3_BUCKET_FOLDER: "jellyseerr-d-config"
+                  S3_FILE_PREFIX: "jellyseerr-d-config"
+                  BACKUP_INTERVAL: "1h"
+                  PRUNE_INTERVAL: "48h"
+                  COPIES_TO_KEEP: "35"
+                  SKIP_PATH: "/app/config/logs"
+                  FORCE_RESTORE: "true"
+                  DIR_TO_BACKUP: /app/config
+                  DIR_TO_RESTORE: /app/config
+                  ARCHIVE_TYPE: targz
+        repoURL: https://bjw-s.github.io/helm-charts
+        chart: app-template
+        targetRevision: 3.4.0
+      destination:
+        server: '{{server}}' 
+        namespace: arr-d
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      

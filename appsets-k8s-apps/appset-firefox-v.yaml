@@ -64,6 +64,7 @@ spec:
                   AWS_BUCKET: "k8s-apps-backup"
                   S3_BUCKET_FOLDER: "firefox-v-config"
                   S3_FILE_PREFIX: "firefox-v-config"
+                  SKIP_PATH: "/config/.mozilla/firefox/fawoh5h3.default-release/lock"
                   BACKUP_INTERVAL: "1h"
                   PRUNE_INTERVAL: "48h"
                   COPIES_TO_KEEP: "35"
